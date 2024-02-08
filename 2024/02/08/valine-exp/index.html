@@ -173,13 +173,32 @@
 											
 													
 														<section id="comments" class="comments">
-															<link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css" />
+															<!-- <link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css" />
 <div id="waline"></div>
 <script type="module">
   import { init } from 'https://unpkg.com/@waline/client@v2/dist/waline.mjs';
   var walineConfig = 
     walineConfig.el='#waline';
-  init(walineConfig);
+  Waline.init(walineConfig);
+</script> -->
+
+<link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css" />
+<div id="waline"></div>
+<script type="module">
+  import { init } from 'https://unpkg.com/@waline/client@v2/dist/waline.mjs';
+
+  init({
+    el: '#waline',
+    serverURL: 'https://blog-s-comment-three.vercel.app',
+    dark: true,
+    enable: true,
+    pageview: true,
+    lang: 'zh-CN',
+    requiredMeta: ['nick', 'mail'],
+    // locale:
+    //   placeholder: 'Say something……' 
+    highlighter: true,
+  });
 </script>
 														</section>
 														
