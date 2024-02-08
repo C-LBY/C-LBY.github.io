@@ -4,6 +4,25 @@
   
     
     <entry>
+      <title>waline_test</title>
+      <link href="/2024/02/08/waline-test/"/>
+      <url>/2024/02/08/waline-test/</url>
+      
+        <content type="html"><![CDATA[<p>这是一个waline引入测试</p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> trying </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>valine_exp</title>
       <link href="/2024/02/08/valine-exp/"/>
       <url>/2024/02/08/valine-exp/</url>
