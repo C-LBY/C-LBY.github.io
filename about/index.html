@@ -161,16 +161,23 @@
   import { init } from 'https://unpkg.com/@waline/client@v2/dist/waline.mjs';
 
   init({
+    enable: true,
     el: '#waline',
     serverURL: 'https://blog-s-comment-three.vercel.app',
     dark: true,
-    enable: true,
     pageview: true,
     lang: 'zh-CN',
     requiredMeta: ['nick', 'mail'],
-    // locale:
-    //   placeholder: 'Say something……' 
+    locale:
+      { placeholder: 'Say something……' },
     highlighter: true,
+    search: false,
+    emoji: [
+      '//unpkg.com/@waline/emojis@1.2.0/weibo',
+      '//unpkg.com/@waline/emojis@1.2.0/bmoji',
+      '//unpkg.com/@waline/emojis@1.2.0/bilibili',
+      'https://unpkg.com/@waline/emojis@1.2.0/qq',
+    ],
   });
 </script>
 														</section>
