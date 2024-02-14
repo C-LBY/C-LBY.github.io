@@ -13,14 +13,18 @@
       
       <categories>
           
-          <category> try test </category>
+          <category> try </category>
+          
+          <category> test </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> trying test </tag>
+            <tag> trying </tag>
+            
+            <tag> test </tag>
             
         </tags>
       
