@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>tags_test</title>
+      <link href="/2024/02/14/tags-test/"/>
+      <url>/2024/02/14/tags-test/</url>
+      
+        <content type="html"><![CDATA[<p>hey hey hey test. Multiple tags?</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> try test </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> trying test </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>image_test</title>
       <link href="/2024/02/13/image-test/"/>
       <url>/2024/02/13/image-test/</url>
