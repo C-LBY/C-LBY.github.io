@@ -128,179 +128,21 @@
 </ul>
 <p>每一个bin（不是每种）就是一条储存一定数量chunk的链表。</p>
 <h2 id="TcacheBin"><a href="#TcacheBin" class="headerlink" title="TcacheBin"></a>TcacheBin</h2><p>TcacheBin是从glibc2.26才开始加入的，访问速度比fastbin更快，相对的检查机制也比较弱，容易攻击。</p>
-<h3 id="TcacheBin相关数据结构"><a href="#TcacheBin相关数据结构" class="headerlink" title="TcacheBin相关数据结构"></a>TcacheBin相关数据结构</h3><pre class="line-numbers language-C" data-language="C"><code class="language-C">#if USE_TCACHE
-&#x2F;* We want 64 entries.  This is an arbitrary limit, which tunables can reduce.  *&#x2F;
-# define TCACHE_MAX_BINS		64
-# define MAX_TCACHE_SIZE	tidx2usize (TCACHE_MAX_BINS-1)
+<h3 id="TcacheBin相关数据结构"><a href="#TcacheBin相关数据结构" class="headerlink" title="TcacheBin相关数据结构"></a>TcacheBin相关数据结构</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">if</span> USE_TCACHE</span></span><br><span class="line"><span class="comment">/* We want 64 entries.  This is an arbitrary limit, which tunables can reduce.  */</span></span><br><span class="line"><span class="meta"># <span class="keyword">define</span> TCACHE_MAX_BINS		64</span></span><br><span class="line"><span class="meta"># <span class="keyword">define</span> MAX_TCACHE_SIZE	tidx2usize (TCACHE_MAX_BINS-1)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Only used to pre-fill the tunables.  */</span></span><br><span class="line"><span class="meta"># <span class="keyword">define</span> tidx2usize(idx)	(((size_t) idx) * MALLOC_ALIGNMENT + MINSIZE - SIZE_SZ)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* When &quot;x&quot; is from chunksize().  */</span></span><br><span class="line"><span class="meta"># <span class="keyword">define</span> csize2tidx(x) (((x) - MINSIZE + MALLOC_ALIGNMENT - 1) / MALLOC_ALIGNMENT)</span></span><br><span class="line"><span class="comment">/* When &quot;x&quot; is a user-provided size.  */</span></span><br><span class="line"><span class="meta"># <span class="keyword">define</span> usize2tidx(x) csize2tidx (request2size (x))</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* With rounding and alignment, the bins are...</span></span><br><span class="line"><span class="comment">   idx 0   bytes 0..24 (64-bit) or 0..12 (32-bit)</span></span><br><span class="line"><span class="comment">   idx 1   bytes 25..40 or 13..20</span></span><br><span class="line"><span class="comment">   idx 2   bytes 41..56 or 21..28</span></span><br><span class="line"><span class="comment">   etc.  */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* This is another arbitrary limit, which tunables can change.  Each</span></span><br><span class="line"><span class="comment">   tcache bin will hold at most this number of chunks.  */</span></span><br><span class="line"><span class="meta"># <span class="keyword">define</span> TCACHE_FILL_COUNT 7</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Maximum chunks in tcache bins for tunables.  This value must fit the range</span></span><br><span class="line"><span class="comment">   of tcache-&gt;counts[] entries, else they may overflow.  */</span></span><br><span class="line"><span class="meta"># <span class="keyword">define</span> MAX_TCACHE_COUNT UINT16_MAX</span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/* We overlay this structure on the user-data portion of a chunk when</span></span><br><span class="line"><span class="comment">   the chunk is stored in the per-thread cache.  */</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">tcache_entry</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">tcache_entry</span> *<span class="title">next</span>;</span></span><br><span class="line">  <span class="comment">/* This field exists to detect double frees.  */</span></span><br><span class="line">  <span class="type">uintptr_t</span> key;</span><br><span class="line">&#125; tcache_entry;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* There is one of these for each thread, which contains the</span></span><br><span class="line"><span class="comment">   per-thread cache (hence &quot;tcache_perthread_struct&quot;).  Keeping</span></span><br><span class="line"><span class="comment">   overall size low is mildly important.  Note that COUNTS and ENTRIES</span></span><br><span class="line"><span class="comment">   are redundant (we could have just counted the linked list each</span></span><br><span class="line"><span class="comment">   time), this is for performance reasons.  */</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">tcache_perthread_struct</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">  <span class="type">uint16_t</span> counts[TCACHE_MAX_BINS];</span><br><span class="line">  tcache_entry *entries[TCACHE_MAX_BINS];</span><br><span class="line">&#125; tcache_perthread_struct;</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> __thread <span class="type">bool</span> tcache_shutting_down = <span class="literal">false</span>;</span><br><span class="line"><span class="type">static</span> __thread tcache_perthread_struct *tcache = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Process-wide key to try and catch a double-free in the same thread.  */</span></span><br><span class="line"><span class="type">static</span> <span class="type">uintptr_t</span> tcache_key;</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">void</span></span><br><span class="line"><span class="title function_">tcache_key_initialize</span> <span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">if</span> (__getrandom (&amp;tcache_key, <span class="keyword">sizeof</span>(tcache_key), GRND_NONBLOCK)</span><br><span class="line">      != <span class="keyword">sizeof</span> (tcache_key))</span><br><span class="line">    &#123;</span><br><span class="line">      tcache_key = random_bits ();</span><br><span class="line"><span class="meta">#<span class="keyword">if</span> __WORDSIZE == 64</span></span><br><span class="line">      tcache_key = (tcache_key &lt;&lt; <span class="number">32</span>) | random_bits ();</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-&#x2F;* Only used to pre-fill the tunables.  *&#x2F;
-# define tidx2usize(idx)	(((size_t) idx) * MALLOC_ALIGNMENT + MINSIZE - SIZE_SZ)
-
-&#x2F;* When &quot;x&quot; is from chunksize().  *&#x2F;
-# define csize2tidx(x) (((x) - MINSIZE + MALLOC_ALIGNMENT - 1) &#x2F; MALLOC_ALIGNMENT)
-&#x2F;* When &quot;x&quot; is a user-provided size.  *&#x2F;
-# define usize2tidx(x) csize2tidx (request2size (x))
-
-&#x2F;* With rounding and alignment, the bins are...
-   idx 0   bytes 0..24 (64-bit) or 0..12 (32-bit)
-   idx 1   bytes 25..40 or 13..20
-   idx 2   bytes 41..56 or 21..28
-   etc.  *&#x2F;
-
-&#x2F;* This is another arbitrary limit, which tunables can change.  Each
-   tcache bin will hold at most this number of chunks.  *&#x2F;
-# define TCACHE_FILL_COUNT 7
-
-&#x2F;* Maximum chunks in tcache bins for tunables.  This value must fit the range
-   of tcache-&gt;counts[] entries, else they may overflow.  *&#x2F;
-# define MAX_TCACHE_COUNT UINT16_MAX
-#endif
-
-
-&#x2F;* We overlay this structure on the user-data portion of a chunk when
-   the chunk is stored in the per-thread cache.  *&#x2F;
-typedef struct tcache_entry
-&#123;
-  struct tcache_entry *next;
-  &#x2F;* This field exists to detect double frees.  *&#x2F;
-  uintptr_t key;
-&#125; tcache_entry;
-
-&#x2F;* There is one of these for each thread, which contains the
-   per-thread cache (hence &quot;tcache_perthread_struct&quot;).  Keeping
-   overall size low is mildly important.  Note that COUNTS and ENTRIES
-   are redundant (we could have just counted the linked list each
-   time), this is for performance reasons.  *&#x2F;
-typedef struct tcache_perthread_struct
-&#123;
-  uint16_t counts[TCACHE_MAX_BINS];
-  tcache_entry *entries[TCACHE_MAX_BINS];
-&#125; tcache_perthread_struct;
-
-static __thread bool tcache_shutting_down &#x3D; false;
-static __thread tcache_perthread_struct *tcache &#x3D; NULL;
-
-&#x2F;* Process-wide key to try and catch a double-free in the same thread.  *&#x2F;
-static uintptr_t tcache_key;
-
-static void
-tcache_key_initialize (void)
-&#123;
-  if (__getrandom (&amp;tcache_key, sizeof(tcache_key), GRND_NONBLOCK)
-      !&#x3D; sizeof (tcache_key))
-    &#123;
-      tcache_key &#x3D; random_bits ();
-#if __WORDSIZE &#x3D;&#x3D; 64
-      tcache_key &#x3D; (tcache_key &lt;&lt; 32) | random_bits ();
-#endif
-    &#125;
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>每个线程都会被分配一个&#x3D;&#x3D;TcacheBin&#x3D;&#x3D;数组，数组大小为64，也就是每个TcacheBin里会有64个bin单向链表，每个bin最多可以缓存7个相同大小的空闲chunk。chunk在64位机器以16字节递增，从24到1024(MAX_TCACHE_COUNT)字节。在32位机器上以8字节递增，从12到512字节。TcacheBin由tcache_perthread_struct结构体维护，一般大小是0x250，放在堆头；counts数组记录了每个bin上chunk的数量，entries数组记录每个bin的地址。tcache_entry结构体用来连接空闲的chunk结构体形成链表。在这里有几个需要注意的问题，其一是next指针指向的是同一个bin中下一个chunk（大小一定相同的chunk）的user_data处，而在fastbin中chunk的fd指针的是下一个chunk的头部，即prev_size处；其二是key是为了防止double free而从glibc2.29才开始加入的，在glibc2.34前key是指向TcacheBin的指针，储存在空闲chunk的bk位置上，而2.34之后的key是由tcache_key_initialize函数生成的。</p>
+<p>每个线程都会被分配一个TcacheBin数组，数组大小为64，也就是每个TcacheBin里会有64个bin单向链表，每个bin最多可以缓存7个相同大小的空闲chunk。chunk在64位机器以16字节递增，从24到1024(MAX_TCACHE_COUNT)字节。在32位机器上以8字节递增，从12到512字节。TcacheBin由tcache_perthread_struct结构体维护，一般大小是0x250，放在堆头；counts数组记录了每个bin上chunk的数量，entries数组记录每个bin的地址。tcache_entry结构体用来连接空闲的chunk结构体形成链表。在这里有几个需要注意的问题，其一是next指针指向的是同一个bin中下一个chunk（大小一定相同的chunk）的user_data处，而在fastbin中chunk的fd指针的是下一个chunk的头部，即prev_size处；其二是key是为了防止double free而从glibc2.29才开始加入的，在glibc2.34前key是指向TcacheBin的指针，储存在空闲chunk的bk位置上，而2.34之后的key是由tcache_key_initialize函数生成的。</p>
 <p>tidx2usize(idx)通过bin索引计算chunk大小<br>csize2tidx(x)通过chunk大小找到相应的bin索引<br>usize2tidx(x)通过用户的需求size计算相应的bin索引</p>
 <p>TcacheBin有很多特性和FastBin很像，LIFO的单向链表结构，PREV_INUSE标志位不清零，严格限制每个bin内chunk的大小相同，且chunk没法在bin内合并，要由malloc_consolidate函数释放并合并。</p>
-<h3 id="TcacheBin初始化"><a href="#TcacheBin初始化" class="headerlink" title="TcacheBin初始化"></a>TcacheBin初始化</h3><pre class="line-numbers language-C" data-language="C"><code class="language-C">static void
-tcache_init(void)
-&#123;
-  mstate ar_ptr;
-  void *victim &#x3D; 0;
-  const size_t bytes &#x3D; sizeof (tcache_perthread_struct);
+<h3 id="TcacheBin初始化"><a href="#TcacheBin初始化" class="headerlink" title="TcacheBin初始化"></a>TcacheBin初始化</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">static</span> <span class="type">void</span></span><br><span class="line"><span class="title function_">tcache_init</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">  mstate ar_ptr;</span><br><span class="line">  <span class="type">void</span> *victim = <span class="number">0</span>;</span><br><span class="line">  <span class="type">const</span> <span class="type">size_t</span> bytes = <span class="keyword">sizeof</span> (tcache_perthread_struct);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (tcache_shutting_down)</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">  arena_get (ar_ptr, bytes);</span><br><span class="line">  victim = _int_malloc (ar_ptr, bytes); <span class="comment">//分配内存给tcache_perthread_struct</span></span><br><span class="line">  <span class="keyword">if</span> (!victim &amp;&amp; ar_ptr != <span class="literal">NULL</span>) <span class="comment">//如果分配失败则尝试再分配一次</span></span><br><span class="line">    &#123;</span><br><span class="line">      ar_ptr = arena_get_retry (ar_ptr, bytes);</span><br><span class="line">      victim = _int_malloc (ar_ptr, bytes);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (ar_ptr != <span class="literal">NULL</span>)</span><br><span class="line">    __libc_lock_unlock (ar_ptr-&gt;mutex); <span class="comment">//释放一个互斥锁</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/* In a low memory situation, we may not be able to allocate memory</span></span><br><span class="line"><span class="comment">     - in which case, we just keep trying later.  However, we</span></span><br><span class="line"><span class="comment">     typically do this very early, so either there is sufficient</span></span><br><span class="line"><span class="comment">     memory, or there isn&#x27;t enough memory to do non-trivial</span></span><br><span class="line"><span class="comment">     allocations anyway.  */</span></span><br><span class="line">  <span class="comment">/* 在内存不足的情况下，我们可能无法分配内存 -这样的话，我们稍后再试。(๑ゝڡ◕๑) */</span></span><br><span class="line">  <span class="keyword">if</span> (victim)</span><br><span class="line">    &#123;</span><br><span class="line">      tcache = (tcache_perthread_struct *) victim;</span><br><span class="line">      <span class="built_in">memset</span> (tcache, <span class="number">0</span>, <span class="keyword">sizeof</span> (tcache_perthread_struct));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-  if (tcache_shutting_down)
-    return;
+<h3 id="TcacheBin释放"><a href="#TcacheBin释放" class="headerlink" title="TcacheBin释放"></a>TcacheBin释放</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">static</span> <span class="type">void</span></span><br><span class="line"><span class="title function_">tcache_thread_shutdown</span> <span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">int</span> i;</span><br><span class="line">  tcache_perthread_struct *tcache_tmp = tcache;</span><br><span class="line"></span><br><span class="line">  tcache_shutting_down = <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (!tcache)</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* Disable the tcache and prevent it from being reinitialized.  */</span></span><br><span class="line">  tcache = <span class="literal">NULL</span>; <span class="comment">//将TcacheBin堆头置空</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/* Free all of the entries and the tcache itself back to the arena</span></span><br><span class="line"><span class="comment">     heap for coalescing.  */</span></span><br><span class="line">  <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; TCACHE_MAX_BINS; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="keyword">while</span> (tcache_tmp-&gt;entries[i])</span><br><span class="line">	&#123;</span><br><span class="line">	  tcache_entry *e = tcache_tmp-&gt;entries[i]; <span class="comment">//释放每一个bin</span></span><br><span class="line">	  <span class="keyword">if</span> (__glibc_unlikely (!aligned_OK (e)))</span><br><span class="line">	    malloc_printerr (<span class="string">&quot;tcache_thread_shutdown(): &quot;</span></span><br><span class="line">			     <span class="string">&quot;unaligned tcache chunk detected&quot;</span>);</span><br><span class="line">	  tcache_tmp-&gt;entries[i] = REVEAL_PTR (e-&gt;next);</span><br><span class="line">	  __libc_free (e);</span><br><span class="line">	&#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  __libc_free (tcache_tmp); <span class="comment">//释放临时堆头</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-  arena_get (ar_ptr, bytes);
-  victim &#x3D; _int_malloc (ar_ptr, bytes); &#x2F;&#x2F;分配内存给tcache_perthread_struct
-  if (!victim &amp;&amp; ar_ptr !&#x3D; NULL) &#x2F;&#x2F;如果分配失败则尝试再分配一次
-    &#123;
-      ar_ptr &#x3D; arena_get_retry (ar_ptr, bytes);
-      victim &#x3D; _int_malloc (ar_ptr, bytes);
-    &#125;
-
-
-  if (ar_ptr !&#x3D; NULL)
-    __libc_lock_unlock (ar_ptr-&gt;mutex); &#x2F;&#x2F;释放一个互斥锁
-
-  &#x2F;* In a low memory situation, we may not be able to allocate memory
-     - in which case, we just keep trying later.  However, we
-     typically do this very early, so either there is sufficient
-     memory, or there isn&#39;t enough memory to do non-trivial
-     allocations anyway.  *&#x2F;
-  &#x2F;* 在内存不足的情况下，我们可能无法分配内存 -这样的话，我们稍后再试。(๑ゝڡ◕๑) *&#x2F;
-  if (victim)
-    &#123;
-      tcache &#x3D; (tcache_perthread_struct *) victim;
-      memset (tcache, 0, sizeof (tcache_perthread_struct));
-    &#125;
-
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h3 id="TcacheBin释放"><a href="#TcacheBin释放" class="headerlink" title="TcacheBin释放"></a>TcacheBin释放</h3><pre class="line-numbers language-C" data-language="C"><code class="language-C">static void
-tcache_thread_shutdown (void)
-&#123;
-  int i;
-  tcache_perthread_struct *tcache_tmp &#x3D; tcache;
-
-  tcache_shutting_down &#x3D; true;
-
-  if (!tcache)
-    return;
-
-  &#x2F;* Disable the tcache and prevent it from being reinitialized.  *&#x2F;
-  tcache &#x3D; NULL; &#x2F;&#x2F;将TcacheBin堆头置空
-
-  &#x2F;* Free all of the entries and the tcache itself back to the arena
-     heap for coalescing.  *&#x2F;
-  for (i &#x3D; 0; i &lt; TCACHE_MAX_BINS; ++i)
-    &#123;
-      while (tcache_tmp-&gt;entries[i])
-	&#123;
-	  tcache_entry *e &#x3D; tcache_tmp-&gt;entries[i]; &#x2F;&#x2F;释放每一个bin
-	  if (__glibc_unlikely (!aligned_OK (e)))
-	    malloc_printerr (&quot;tcache_thread_shutdown(): &quot;
-			     &quot;unaligned tcache chunk detected&quot;);
-	  tcache_tmp-&gt;entries[i] &#x3D; REVEAL_PTR (e-&gt;next);
-	  __libc_free (e);
-	&#125;
-    &#125;
-
-  __libc_free (tcache_tmp); &#x2F;&#x2F;释放临时堆头
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h3 id="TcacheBin存取chunk"><a href="#TcacheBin存取chunk" class="headerlink" title="TcacheBin存取chunk"></a>TcacheBin存取chunk</h3><pre class="line-numbers language-C" data-language="C"><code class="language-C">&#x2F;* Caller must ensure that we know tc_idx is valid and there&#39;s room
-   for more chunks.  *&#x2F;
-static __always_inline void
-tcache_put (mchunkptr chunk, size_t tc_idx) &#x2F;&#x2F;空闲chunk存入tcachebin
-&#123;
-  tcache_entry *e &#x3D; (tcache_entry *) chunk2mem (chunk); 
-
-  &#x2F;* Mark this chunk as &quot;in the tcache&quot; so the test in _int_free will
-     detect a double free.  *&#x2F;
-  e-&gt;key &#x3D; tcache_key; &#x2F;&#x2F;防止double free的key
-
-  e-&gt;next &#x3D; PROTECT_PTR (&amp;e-&gt;next, tcache-&gt;entries[tc_idx]); &#x2F;&#x2F;将当前bin头部chunk的指针赋给next
-  tcache-&gt;entries[tc_idx] &#x3D; e; &#x2F;&#x2F;将这个chunk存进相应索引的bin链表头部（更新bin头部）
-  ++(tcache-&gt;counts[tc_idx]); &#x2F;&#x2F;chunk计数器+1
-&#125;
-
-&#x2F;* Caller must ensure that we know tc_idx is valid and there&#39;s
-   available chunks to remove.  *&#x2F;
-static __always_inline void *
-tcache_get (size_t tc_idx) &#x2F;&#x2F;从tcachebin取出chunk
-&#123;
-  tcache_entry *e &#x3D; tcache-&gt;entries[tc_idx]; &#x2F;&#x2F;根据计算好的索引取出链表头部的chunk
-  if (__glibc_unlikely (!aligned_OK (e)))
-    malloc_printerr (&quot;malloc(): unaligned tcache chunk detected&quot;);
-  tcache-&gt;entries[tc_idx] &#x3D; REVEAL_PTR (e-&gt;next); &#x2F;&#x2F;将头部地址改成下一个chunk
-  --(tcache-&gt;counts[tc_idx]); &#x2F;&#x2F;计数器-1
-  e-&gt;key &#x3D; 0; &#x2F;&#x2F;key位置置空
-  return (void *) e;
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="TcacheBin存取chunk"><a href="#TcacheBin存取chunk" class="headerlink" title="TcacheBin存取chunk"></a>TcacheBin存取chunk</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Caller must ensure that we know tc_idx is valid and there&#x27;s room</span></span><br><span class="line"><span class="comment">   for more chunks.  */</span></span><br><span class="line"><span class="type">static</span> __always_inline <span class="type">void</span></span><br><span class="line"><span class="title function_">tcache_put</span> <span class="params">(mchunkptr chunk, <span class="type">size_t</span> tc_idx)</span> <span class="comment">//空闲chunk存入tcachebin</span></span><br><span class="line">&#123;</span><br><span class="line">  tcache_entry *e = (tcache_entry *) chunk2mem (chunk); </span><br><span class="line"></span><br><span class="line">  <span class="comment">/* Mark this chunk as &quot;in the tcache&quot; so the test in _int_free will</span></span><br><span class="line"><span class="comment">     detect a double free.  */</span></span><br><span class="line">  e-&gt;key = tcache_key; <span class="comment">//防止double free的key</span></span><br><span class="line"></span><br><span class="line">  e-&gt;next = PROTECT_PTR (&amp;e-&gt;next, tcache-&gt;entries[tc_idx]); <span class="comment">//将当前bin头部chunk的指针赋给next</span></span><br><span class="line">  tcache-&gt;entries[tc_idx] = e; <span class="comment">//将这个chunk存进相应索引的bin链表头部（更新bin头部）</span></span><br><span class="line">  ++(tcache-&gt;counts[tc_idx]); <span class="comment">//chunk计数器+1</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Caller must ensure that we know tc_idx is valid and there&#x27;s</span></span><br><span class="line"><span class="comment">   available chunks to remove.  */</span></span><br><span class="line"><span class="type">static</span> __always_inline <span class="type">void</span> *</span><br><span class="line"><span class="title function_">tcache_get</span> <span class="params">(<span class="type">size_t</span> tc_idx)</span> <span class="comment">//从tcachebin取出chunk</span></span><br><span class="line">&#123;</span><br><span class="line">  tcache_entry *e = tcache-&gt;entries[tc_idx]; <span class="comment">//根据计算好的索引取出链表头部的chunk</span></span><br><span class="line">  <span class="keyword">if</span> (__glibc_unlikely (!aligned_OK (e)))</span><br><span class="line">    malloc_printerr (<span class="string">&quot;malloc(): unaligned tcache chunk detected&quot;</span>);</span><br><span class="line">  tcache-&gt;entries[tc_idx] = REVEAL_PTR (e-&gt;next); <span class="comment">//将头部地址改成下一个chunk</span></span><br><span class="line">  --(tcache-&gt;counts[tc_idx]); <span class="comment">//计数器-1</span></span><br><span class="line">  e-&gt;key = <span class="number">0</span>; <span class="comment">//key位置置空</span></span><br><span class="line">  <span class="keyword">return</span> (<span class="type">void</span> *) e;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
 
 <h2 id="FastBin"><a href="#FastBin" class="headerlink" title="FastBin"></a>FastBin</h2><p>从malloc.c第1729行开始可以得知，fastbin采用LIFO的单向链表维护。在fastbin中的chunk会保持PREV_INUSE标志位不变，所以chunk没法在fastbin里进行合并，合并的工作交给了malloc_consolidate函数进行。</p>
-<pre class="line-numbers language-C" data-language="C"><code class="language-C">&#x2F;*To be continued...*&#x2F;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*To be continued...*/</span></span><br></pre></td></tr></table></figure>
 
 
 											<div class="article-footer-copyright">
@@ -414,7 +256,7 @@ tcache_get (size_t tc_idx) &#x2F;&#x2F;从tcachebin取出chunk
     <ul id="categorys" class="tag_box list-unstyled collapse in">
           
   <li>
-    <li><a href="/categories/PWN/">PWN<span>1</span></a></li>
+    <li><a href="/categories/PWN/">PWN<span>2</span></a></li>
   </li>
 
     </ul>
