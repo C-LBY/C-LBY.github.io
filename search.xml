@@ -4,93 +4,6 @@
   
     
     <entry>
-      <title>『glibc源码补完计划』free</title>
-      <link href="/2024/02/15/glibc-free/"/>
-      <url>/2024/02/15/glibc-free/</url>
-      
-        <content type="html"><![CDATA[<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*To be continued...*/</span></span><br></pre></td></tr></table></figure><p>（_int_free从4416开始</p><p>（__libc_free从3351开始</p>]]></content>
-      
-      
-      <categories>
-          
-          <category> PWN </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> CTF </tag>
-            
-            <tag> PWN </tag>
-            
-            <tag> heap </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>『glibc源码补完计划』malloc</title>
-      <link href="/2024/02/15/glibc-malloc/"/>
-      <url>/2024/02/15/glibc-malloc/</url>
-      
-        <content type="html"><![CDATA[<h2 id="bin的分类"><a href="#bin的分类" class="headerlink" title="bin的分类"></a>bin的分类</h2><p>在ptmalloc2堆内存管理机制中，管理空闲chunk的bins一共有6种：</p><ul><li>tcachebin</li><li>fastbin</li><li>unsortedbin</li><li>smallbin</li><li>largebin</li></ul><p>每一个bin（不是每种）就是一条储存一定数量chunk的链表。</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*To be continued...*/</span></span><br></pre></td></tr></table></figure><p>（ Chunk representations 从1143行开始</p><p>（malloc从3766开始</p><p>（malloc_consolidate从4705开始</p>]]></content>
-      
-      
-      <categories>
-          
-          <category> PWN </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> CTF </tag>
-            
-            <tag> PWN </tag>
-            
-            <tag> heap </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>『glibc源码补完计划』FastBin</title>
-      <link href="/2024/02/15/glibc-fastbin/"/>
-      <url>/2024/02/15/glibc-fastbin/</url>
-      
-        <content type="html"><![CDATA[<h2 id="FastBin"><a href="#FastBin" class="headerlink" title="FastBin"></a>FastBin</h2><p>从malloc.c第1729行开始可以得知，fastbin采用LIFO的单向链表维护。在fastbin中的chunk会保持PREV_INUSE标志位不变，所以chunk没法在fastbin里进行合并。</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*To be continued...*/</span></span><br></pre></td></tr></table></figure>]]></content>
-      
-      
-      <categories>
-          
-          <category> PWN </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> CTF </tag>
-            
-            <tag> PWN </tag>
-            
-            <tag> heap </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>『glibc源码补完计划』TcacheBin</title>
       <link href="/2024/02/14/glibc_tcachebin/"/>
       <url>/2024/02/14/glibc_tcachebin/</url>
@@ -110,31 +23,6 @@
             <tag> CTF </tag>
             
             <tag> PWN </tag>
-            
-            <tag> heap </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>fastbin attack</title>
-      <link href="/2024/02/14/fastbin_attack/"/>
-      <url>/2024/02/14/fastbin_attack/</url>
-      
-        <content type="html"><![CDATA[<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*To be continued...*/</span></span><br></pre></td></tr></table></figure>]]></content>
-      
-      
-      <categories>
-          
-          <category> PWN </category>
-          
-      </categories>
-      
-      
-        <tags>
             
             <tag> heap </tag>
             
