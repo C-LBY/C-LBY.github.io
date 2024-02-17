@@ -1,0 +1,358 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>『Heap Exploitation』tcache_attack | C_LBY&#39;s BLOG</title>
+  <meta name="author" content="鎏柏鱼">
+  
+  <meta name="description" content="除非特别说明，默认为glibc_2.35">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="『Heap Exploitation』tcache_attack"/>
+  <meta property="og:site_name" content="C_LBY&#39;s BLOG"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+    <link rel="alternative" href="/atom.xml" title="C_LBY&#39;s BLOG" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">C_LBY&#39;s BLOG</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class="fa fa-rss"></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> 『Heap Exploitation』tcache_attack</h1>
+		</div>
+	
+
+
+
+	<div class="row post">
+		<!-- cols -->
+		
+			<div id="top_meta"></div>
+			<div class="col-md-9">
+				
+
+							<!-- content -->
+							<div class="mypage">
+								
+									<div class="alert alert-success description">
+										<i class="fa fa-info-circle"></i> 除非特别说明，默认为glibc_2.35
+									</div> <!-- alert -->
+									
+
+										<h2 id="TcacheBin-Attack"><a href="#TcacheBin-Attack" class="headerlink" title="TcacheBin Attack"></a>TcacheBin Attack</h2><p>根据源代码我们可以得知，高版本的glibc给tcachebin引入了检查机制，使得攻击没那么方便了，但正所谓道高一尺魔高一丈，没有攻不破的系统，只有不努力的黑客。tcache的检查机制主要有两个：对double free的检查和对chunk对齐的检查。前者的分析见<a href="https://c-lby.github.io/2024/02/14/glibc_tcachebin/#TcacheBin%E5%AD%98%E5%8F%96chunk">TcacheBin存取chunk</a>。这里对chunk对齐的机制进行溯源。</p>
+<h3 id="chunk对齐检查机制"><a href="#chunk对齐检查机制" class="headerlink" title="chunk对齐检查机制"></a>chunk对齐检查机制</h3><p>tcache通过aligned_OK(e)函数来检查chunk对齐。在malloc.c第1322行有宏定义：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> aligned_OK(m)  (((unsigned long)(m) &amp; MALLOC_ALIGN_MASK) == 0)</span></span><br></pre></td></tr></table></figure>
+
+<p>然后在sysdeps&#x2F;generic&#x2F;malloc-size.h里可以看到</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> MALLOC_ALIGN_MASK (MALLOC_ALIGNMENT - 1)</span></span><br></pre></td></tr></table></figure>
+
+<p>在malloc-alignment.h里有</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* MALLOC_ALIGNMENT is the minimum alignment for malloc&#x27;ed chunks.  It must be a power of two at least 2 * SIZE_SZ, even on machines for which smaller alignments would suffice. It may be defined as larger than this though. Note however that code and data structures are optimized for the case of 8-byte alignment.  */</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MALLOC_ALIGNMENT (2 * SIZE_SZ &lt; __alignof__ (long double) \</span></span><br><span class="line"><span class="meta">			  ? __alignof__ (long double) : 2 * SIZE_SZ)</span></span><br></pre></td></tr></table></figure>
+
+<p>alignof函数就不看了，这里基本上可以看出来chunk的对齐要求是2*SIZE_SZ的倍数，在64位中具体是32的倍数。需要注意的是这里检查的地址是mem的地址而不是chunk的地址。所以在利用的时候，比如劫持chunk的fd进行任意地址读写时，要挑选符合对齐要求的地址。在2.31及之前的glibc版本不需要进行检查。</p>
+<p>检查代码参考：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">size_t</span> stack_var[<span class="number">0x10</span>];</span><br><span class="line"><span class="type">size_t</span>* target = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>; i&lt;<span class="number">0x10</span>; i++) </span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">if</span>(((<span class="type">long</span>)&amp;stack_var[i] &amp; <span class="number">0xf</span>) == <span class="number">0</span>) </span><br><span class="line">    &#123;</span><br><span class="line">		target = &amp;stack_var[i];</span><br><span class="line">		<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	assert(target != <span class="literal">NULL</span>);</span><br></pre></td></tr></table></figure>
+
+<h3 id="double-free中key的绕过"><a href="#double-free中key的绕过" class="headerlink" title="double free中key的绕过"></a>double free中key的绕过</h3><h4 id="方法一：破坏key"><a href="#方法一：破坏key" class="headerlink" title="方法一：破坏key"></a>方法一：破坏key</h4><p>空闲chunk进入tcache时会被赋予key，从tcache取出时会被置空，以此区分该chunk是否在tcache中。如果程序中存在UAF漏洞或者堆溢出漏洞，我们就可以将key位置置空或者换个数字，这样就可以直接绕过_int_free的第一个if判断，下面的count和对齐检查直接跳过。</p>
+<h4 id="方法二：劫持size"><a href="#方法二：劫持size" class="headerlink" title="方法二：劫持size"></a>方法二：劫持size</h4><p>tcache会根据chunk的size来计算bin索引，而chunk只会在对应的bin内进行比较。如果在第一次释放victim后，利用uaf或者溢出修改victim的size，那么第二次释放的时候_int_free就会去检查修改后的索引对应的bin里有没有victim，从而绕过了检查。</p>
+<h4 id="方法三：利用fastbin"><a href="#方法三：利用fastbin" class="headerlink" title="方法三：利用fastbin"></a>方法三：利用fastbin</h4><p>假如现在我们希望可以double free victim这个内存块，那么我们可以先申请7个和victim一样大的内存块，然后将它们全部释放以填满tcache中对应的那条bin，这时候再释放掉victim就可以使其进入fastbin。<br>这时候申请一个一样大的内存块，因为tcache的优先级大于fastbin，这个chunk会从tcachebin里取，而bin中只有6个chunk且不包含victim，这时可以对victim进行第二次释放就可以使它同时存在于tcachebin和fastbin。<br>其实也可以直接填满tcachebin之后，直接在fastbin里进行double free，因为fastbin只会对链表头部的chunk进行检查，相对比较好绕过，只需要在两次释放中间释放一个无关chunk就行。当然这受限于程序允许我们创建的chunk个数。</p>
+<h4 id="方法四：house-of-botcake"><a href="#方法四：house-of-botcake" class="headerlink" title="方法四：house of botcake"></a>方法四：house of botcake</h4><p>这个方法和上一个方法有点像，但是是利用unsortedbin来实现。fastbin只能存0x80以下大小的chunk，并且想要取出来的话，需要先把tcachebin中的chunk取完才能轮得到fastbin，在一些自定义堆分配的菜单题里不太好用。利用过程如下:</p>
+<ul>
+<li>申请 7 个大小相同，大小大于 0x80 的 chunk，再申请三个，分别为 chunk A 和 chunkB 和 chunk C</li>
+<li>释放前 7 个和 chunk A，前面 7 个都会进入到 tcachebin 里面，chunk A 进入到 unsortedbin</li>
+<li>释放 chunk B，则 chunk B 会和 chunk A 合并</li>
+<li>申请一个与前七个一样大的chunk，空出一个位置来</li>
+<li>再次释放 chunk B，此时 B 同时存在与 unsortedbin 和 tcachebin</li>
+<li>利用时，修改完chunk B的fd指针之后，只需要申请一块稍微比chunk B大一点点的内存，就能把我们想要进行读写操作的地址malloc出来了。</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*To be continued...*/</span></span><br></pre></td></tr></table></figure>
+
+<p>参考阅读：<br>- <a target="_blank" rel="noopener" href="https://jiaweihawk.gitee.io/2021/09/03/tcache%E4%B8%AD%E7%9A%84double-free/#%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90">tcache中的double free</a><br>- <a target="_blank" rel="noopener" href="https://www.yuque.com/xswlhhh/ctf/gvg9gbmc0mwsvq6k">xswlhhh爷的博客！</a></p>
+
+											<div class="article-footer-copyright">
+
+    本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0
+        国际许可协议(CC BY-NC-SA 4.0) 发布.</a></br>
+    因本人技术水平和知识面有限, 内容如有纰漏或者需要修正的地方, 欢迎大家指正。转载请注明来自<a href="https://c-lby.github.io" target="_blank">C_LBY's blog</a>！
+</div>
+							</div>
+
+							
+									
+										<span data-path="/2024/02/17/tcache-attack/">
+											<em class="post-meta-item-text"> Page View <i
+													class="waline-pageview-count"></i></em>
+										</span>
+
+										
+											<div>
+												<center>
+
+													<div class="pagination">
+
+    
+    
+    <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>上一页</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2024/02/14/glibc_tcachebin/" type="button" class="btn btn-default ">下一页<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+
+												</center>
+											</div>
+
+											<!-- comment -->
+											<!--
+<section id="comment">
+    <h2 class="title">留言</h2>
+
+    
+</section>
+
+-->
+											
+													
+														<section id="comments" class="comments">
+															<!-- <link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css" />
+<div id="waline"></div>
+<script type="module">
+  import { init } from 'https://unpkg.com/@waline/client@v2/dist/waline.mjs';
+  var walineConfig = 
+    walineConfig.el='#waline';
+  Waline.init(walineConfig);
+</script> -->
+
+<link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css" />
+<div id="waline"></div>
+<script type="module">
+  import { init } from 'https://unpkg.com/@waline/client@v2/dist/waline.mjs';
+
+  init({
+    enable: true,
+    el: '#waline',
+    serverURL: 'https://blog-s-comment-three.vercel.app',
+    dark: true,
+    pageview: true,
+    lang: 'zh-CN',
+    requiredMeta: ['nick', 'mail'],
+    locale:
+      { placeholder: 'Say something……' },
+    highlighter: true,
+    search: false,
+    emoji: [
+      '//unpkg.com/@waline/emojis@1.2.0/weibo',
+      '//unpkg.com/@waline/emojis@1.2.0/bmoji',
+      '//unpkg.com/@waline/emojis@1.2.0/bilibili',
+      'https://unpkg.com/@waline/emojis@1.2.0/qq',
+    ],
+    imageUploader: false,
+  });
+</script>
+														</section>
+														
+															
+					</div> <!-- col-md-9/col-md-12 -->
+
+
+					
+						<div id="side_meta">
+							<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2024-02-17 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/PWN/">PWN<span>2</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/CTF/">CTF<span>2</span></a></li> <li><a href="/tags/PWN/">PWN<span>2</span></a></li> <li><a href="/tags/heap/">heap<span>2</span></a></li>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+		   <span class="toc-title">Contents</span>
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#TcacheBin-Attack"><span class="toc-article-text">TcacheBin Attack</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#chunk%E5%AF%B9%E9%BD%90%E6%A3%80%E6%9F%A5%E6%9C%BA%E5%88%B6"><span class="toc-article-text">chunk对齐检查机制</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#double-free%E4%B8%ADkey%E7%9A%84%E7%BB%95%E8%BF%87"><span class="toc-article-text">double free中key的绕过</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E6%96%B9%E6%B3%95%E4%B8%80%EF%BC%9A%E7%A0%B4%E5%9D%8Fkey"><span class="toc-article-text">方法一：破坏key</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E6%96%B9%E6%B3%95%E4%BA%8C%EF%BC%9A%E5%8A%AB%E6%8C%81size"><span class="toc-article-text">方法二：劫持size</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E6%96%B9%E6%B3%95%E4%B8%89%EF%BC%9A%E5%88%A9%E7%94%A8fastbin"><span class="toc-article-text">方法三：利用fastbin</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E6%96%B9%E6%B3%95%E5%9B%9B%EF%BC%9Ahouse-of-botcake"><span class="toc-article-text">方法四：house of botcake</span></a></li></ol></li></ol></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+
+
+						</div>
+
+						
+
+			</div><!-- row -->
+
+			<!--
+ -->
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+    &copy; 2024
+      鎏柏鱼's Blog
+        
+                powered by <a href="http://hexo.io/" target="_blank">Hexo</a> | Theme by <a
+                  href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>
