@@ -45,7 +45,7 @@ pre code {
     background: 0;
     text-shadow: none;
     padding: 0;
-    color: white; 
+    color: white;
 }
 
 .highlight pre {
@@ -135,9 +135,9 @@ pre code {
     float: right
 }
 
-pre .comment{
-        color: #8b949e
-    }
+pre .comment {
+    color: #8b949e
+}
 
 pre .title {
     color: #d2a8ff
@@ -158,8 +158,8 @@ pre .css .pseudo {
     color: #79c0ff
 }
 
-pre .number{
-        color: #79c0ff
+pre .number {
+    color: #79c0ff
 }
 
 pre .preprocessor,
@@ -203,4 +203,8 @@ pre .coffeescript .title {
 pre .keyword,
 pre .javascript .function {
     color: #ff7b72
+}
+
+.my-button {
+    display: none;
 }

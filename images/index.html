@@ -125,7 +125,7 @@ document.getElementById(&#34;readButton&#34;).addEventListener(&#34;click&#34;, 
 
 										<p>你想淦甚么？</p>
 <p><img src="https://c-lby.github.io/images/%E7%BB%99%E6%88%91%E7%8E%A9%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F.jpg" alt="给我玩明日方舟"></p>
-<p><button id="readButton" disabled>读取文件</button></p>
+<p><button id="readButton" class="my-button">读取文件</button></p>
 <script>
 document.getElementById("readButton").addEventListener("click", function() {
   fetch('/readfile')
@@ -144,6 +144,8 @@ function disableButton() {
   document.getElementById("readButton").disabled = true;
 }
 </script>
+
+
 
 
 
