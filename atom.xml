@@ -3,11 +3,11 @@
   <title>C_LBY&#39;s BLOG</title>
   
   
-  <link href="https://c-lby.github.io/atom.xml" rel="self"/>
+  <link href="https://c-lby.top/atom.xml" rel="self"/>
   
-  <link href="https://c-lby.github.io/"/>
+  <link href="https://c-lby.top/"/>
   <updated>2024-03-04T05:23:23.660Z</updated>
-  <id>https://c-lby.github.io/</id>
+  <id>https://c-lby.top/</id>
   
   <author>
     <name>鎏柏鱼</name>
@@ -18,8 +18,8 @@
   
   <entry>
     <title>『glibc源码补完计划』UnsortedBin</title>
-    <link href="https://c-lby.github.io/2024/03/02/glibc-unsortedbin/"/>
-    <id>https://c-lby.github.io/2024/03/02/glibc-unsortedbin/</id>
+    <link href="https://c-lby.top/2024/03/02/glibc-unsortedbin/"/>
+    <id>https://c-lby.top/2024/03/02/glibc-unsortedbin/</id>
     <published>2024-03-02T15:46:40.000Z</published>
     <updated>2024-03-04T05:23:23.660Z</updated>
     
@@ -30,21 +30,21 @@
     
     
     
-    <category term="glibc源码补完计划" scheme="https://c-lby.github.io/categories/glibc%E6%BA%90%E7%A0%81%E8%A1%A5%E5%AE%8C%E8%AE%A1%E5%88%92/"/>
+    <category term="glibc源码补完计划" scheme="https://c-lby.top/categories/glibc%E6%BA%90%E7%A0%81%E8%A1%A5%E5%AE%8C%E8%AE%A1%E5%88%92/"/>
     
     
-    <category term="CTF" scheme="https://c-lby.github.io/tags/CTF/"/>
+    <category term="heap" scheme="https://c-lby.top/tags/heap/"/>
     
-    <category term="PWN" scheme="https://c-lby.github.io/tags/PWN/"/>
+    <category term="CTF" scheme="https://c-lby.top/tags/CTF/"/>
     
-    <category term="heap" scheme="https://c-lby.github.io/tags/heap/"/>
+    <category term="PWN" scheme="https://c-lby.top/tags/PWN/"/>
     
   </entry>
   
   <entry>
     <title>『NewStarCTF2024』_week4 PWN WP</title>
-    <link href="https://c-lby.github.io/2024/03/01/newstar-week4-wp/"/>
-    <id>https://c-lby.github.io/2024/03/01/newstar-week4-wp/</id>
+    <link href="https://c-lby.top/2024/03/01/newstar-week4-wp/"/>
+    <id>https://c-lby.top/2024/03/01/newstar-week4-wp/</id>
     <published>2024-03-01T09:35:50.000Z</published>
     <updated>2024-03-04T04:33:56.642Z</updated>
     
@@ -55,21 +55,21 @@
     
     
     
-    <category term="WP" scheme="https://c-lby.github.io/categories/WP/"/>
+    <category term="WP" scheme="https://c-lby.top/categories/WP/"/>
     
     
-    <category term="CTF" scheme="https://c-lby.github.io/tags/CTF/"/>
+    <category term="CTF" scheme="https://c-lby.top/tags/CTF/"/>
     
-    <category term="PWN" scheme="https://c-lby.github.io/tags/PWN/"/>
+    <category term="PWN" scheme="https://c-lby.top/tags/PWN/"/>
     
-    <category term="WP" scheme="https://c-lby.github.io/tags/WP/"/>
+    <category term="WP" scheme="https://c-lby.top/tags/WP/"/>
     
   </entry>
   
   <entry>
     <title>『Heap Exploitation』tcache_attack</title>
-    <link href="https://c-lby.github.io/2024/02/17/tcache-attack/"/>
-    <id>https://c-lby.github.io/2024/02/17/tcache-attack/</id>
+    <link href="https://c-lby.top/2024/02/17/tcache-attack/"/>
+    <id>https://c-lby.top/2024/02/17/tcache-attack/</id>
     <published>2024-02-17T03:52:16.000Z</published>
     <updated>2024-03-04T04:33:43.718Z</updated>
     
@@ -80,21 +80,21 @@
     
     
     
-    <category term="Heap Exploitation" scheme="https://c-lby.github.io/categories/Heap-Exploitation/"/>
+    <category term="Heap Exploitation" scheme="https://c-lby.top/categories/Heap-Exploitation/"/>
     
     
-    <category term="CTF" scheme="https://c-lby.github.io/tags/CTF/"/>
+    <category term="heap" scheme="https://c-lby.top/tags/heap/"/>
     
-    <category term="PWN" scheme="https://c-lby.github.io/tags/PWN/"/>
+    <category term="CTF" scheme="https://c-lby.top/tags/CTF/"/>
     
-    <category term="heap" scheme="https://c-lby.github.io/tags/heap/"/>
+    <category term="PWN" scheme="https://c-lby.top/tags/PWN/"/>
     
   </entry>
   
   <entry>
     <title>『glibc源码补完计划』TcacheBin</title>
-    <link href="https://c-lby.github.io/2024/02/14/glibc_tcachebin/"/>
-    <id>https://c-lby.github.io/2024/02/14/glibc_tcachebin/</id>
+    <link href="https://c-lby.top/2024/02/14/glibc_tcachebin/"/>
+    <id>https://c-lby.top/2024/02/14/glibc_tcachebin/</id>
     <published>2024-02-14T10:24:46.000Z</published>
     <updated>2024-03-04T04:33:27.158Z</updated>
     
@@ -105,14 +105,14 @@
     
     
     
-    <category term="glibc源码补完计划" scheme="https://c-lby.github.io/categories/glibc%E6%BA%90%E7%A0%81%E8%A1%A5%E5%AE%8C%E8%AE%A1%E5%88%92/"/>
+    <category term="glibc源码补完计划" scheme="https://c-lby.top/categories/glibc%E6%BA%90%E7%A0%81%E8%A1%A5%E5%AE%8C%E8%AE%A1%E5%88%92/"/>
     
     
-    <category term="CTF" scheme="https://c-lby.github.io/tags/CTF/"/>
+    <category term="heap" scheme="https://c-lby.top/tags/heap/"/>
     
-    <category term="PWN" scheme="https://c-lby.github.io/tags/PWN/"/>
+    <category term="CTF" scheme="https://c-lby.top/tags/CTF/"/>
     
-    <category term="heap" scheme="https://c-lby.github.io/tags/heap/"/>
+    <category term="PWN" scheme="https://c-lby.top/tags/PWN/"/>
     
   </entry>
   

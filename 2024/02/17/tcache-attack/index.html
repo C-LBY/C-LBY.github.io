@@ -124,7 +124,7 @@
 									</div> <!-- alert -->
 									
 
-										<h2 id="TcacheBin-Attack"><a href="#TcacheBin-Attack" class="headerlink" title="TcacheBin Attack"></a>TcacheBin Attack</h2><p>根据源代码我们可以得知，高版本的glibc给tcachebin引入了检查机制，使得攻击没那么方便了，但正所谓道高一尺魔高一丈，没有攻不破的系统，只有不努力的黑客。tcache的检查机制主要有两个：对double free的检查和对chunk对齐的检查。前者的分析见<a href="https://c-lby.github.io/2024/02/14/glibc_tcachebin/#TcacheBin%E5%AD%98%E5%8F%96chunk">TcacheBin存取chunk</a>。这里对chunk对齐的机制进行溯源。</p>
+										<h2 id="TcacheBin-Attack"><a href="#TcacheBin-Attack" class="headerlink" title="TcacheBin Attack"></a>TcacheBin Attack</h2><p>根据源代码我们可以得知，高版本的glibc给tcachebin引入了检查机制，使得攻击没那么方便了，但正所谓道高一尺魔高一丈，没有攻不破的系统，只有不努力的黑客。tcache的检查机制主要有两个：对double free的检查和对chunk对齐的检查。前者的分析见<a target="_blank" rel="noopener" href="https://c-lby.github.io/2024/02/14/glibc_tcachebin/#TcacheBin%E5%AD%98%E5%8F%96chunk">TcacheBin存取chunk</a>。这里对chunk对齐的机制进行溯源。</p>
 <h3 id="chunk对齐检查机制"><a href="#chunk对齐检查机制" class="headerlink" title="chunk对齐检查机制"></a>chunk对齐检查机制</h3><p>tcache通过aligned_OK(e)函数来检查chunk对齐。在malloc.c第1322行有宏定义：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> aligned_OK(m)  (((unsigned long)(m) &amp; MALLOC_ALIGN_MASK) == 0)</span></span><br></pre></td></tr></table></figure>
 
@@ -311,7 +311,7 @@
 	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
     <ul id="tags" class="tag_box list-unstyled collapse in">	  
 	    
-  <li><a href="/tags/CTF/">CTF<span>4</span></a></li> <li><a href="/tags/PWN/">PWN<span>4</span></a></li> <li><a href="/tags/heap/">heap<span>3</span></a></li>
+  <li><a href="/tags/heap/">heap<span>3</span></a></li> <li><a href="/tags/CTF/">CTF<span>4</span></a></li> <li><a href="/tags/PWN/">PWN<span>4</span></a></li>
     </ul>
 	</div>
 		
