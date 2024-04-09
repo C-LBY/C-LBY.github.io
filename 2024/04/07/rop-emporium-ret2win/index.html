@@ -188,9 +188,9 @@
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">gdb-multiarch -q ./your_exec_file</span></span><br><span class="line"><span class="meta prompt_">pwndbg&gt; </span><span class="language-bash"><span class="built_in">set</span> solib-search-path /usr/mipsel-linux-gnu/lib/</span></span><br><span class="line"><span class="meta prompt_">pwndbg&gt; </span><span class="language-bash">target remote :9999</span></span><br></pre></td></tr></table></figure>
 
 <p>和arm调试是一样的。</p>
-<h5 id="题目分析-1"><a href="#题目分析-1" class="headerlink" title="题目分析"></a>题目分析</h5><p><img src="D:\LBY_BLOG\LBY_BLOG\source\images\ROPEmporium\ret2win_mipselRA入栈.png" alt="ret2win_mipselRA入栈"></p>
-<p><img src="D:\LBY_BLOG\LBY_BLOG\source\images\ROPEmporium\ret2win_mipsel汇编代码.png" alt="ret2win_mipsel汇编代码"></p>
-<p><img src="D:\LBY_BLOG\LBY_BLOG\source\images\ROPEmporium\ret2win_mipselRA出栈.png" alt="ret2win_mipselRA出栈"></p>
+<h5 id="题目分析-1"><a href="#题目分析-1" class="headerlink" title="题目分析"></a>题目分析</h5><p><img src="https://c-lby.top/images/ROPEmporium/ret2win_mipselRA%E5%85%A5%E6%A0%88.png" alt="ret2win_mipselRA入栈"></p>
+<p><img src="https://c-lby.top/images/ROPEmporium/ret2win_mipsel%E6%B1%87%E7%BC%96%E4%BB%A3%E7%A0%81.png" alt="ret2win_mipsel汇编代码"></p>
+<p><img src="https://c-lby.top/images/ROPEmporium/ret2win_mipselRA%E5%87%BA%E6%A0%88.png" alt="ret2win_mipselRA出栈"></p>
 <p>mips的指令和x86、arm的指令长得差很远。先来看一些基础的知识。</p>
 <ol>
 <li>MIPS32 架构中是没有 EBP 寄存器的，程序函数调用的时候是将当前栈指针向下移动 n 比特到该函数的 stack frame 存储组空间，函数返回的时候再加上偏移量恢复栈</li>
