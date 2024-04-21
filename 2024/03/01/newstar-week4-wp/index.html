@@ -134,6 +134,8 @@
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">patchelf --set-interpreter ~/glibc-all-in-one/libs/2.23-0ubuntu3_amd64/ld-linux-x86-64.so.2 Double</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">patchelf --set-rpath ~/glibc-all-in-one/libs/2.23-0ubuntu3_amd64 Double</span></span><br></pre></td></tr></table></figure>
 
 <p>这样就能成功patch了。</p>
+<p><code>--set-interpreter</code>后面的参数是对应libc的解释器ld文件。注意是ld文件不是libc.so.6！！！</p>
+<p><code>--set-rpath</code>后面的参数是对应libc的目录。然后最后是你要patch的程序。</p>
 <h3 id="0x01-Double"><a href="#0x01-Double" class="headerlink" title="0x01 Double"></a>0x01 Double</h3><h5 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h5><p>这是一道经典菜单堆题，题目名字已经明显提示了要用double free，并且给出的libc版本是2.23，没有tcachebin，0x28大小的chunk释放完直接就会进fastbin。题目只有add和del两个可以操作chunk的函数，在add的同时可以向chunk写入内容。</p>
 <p>现在题目有个后门，只要在0x604070出写入0x666就可以getshell，也就是要满足任意地址写。观察程序发现del函数里free完chunk之后没有置空指针，存在UAF漏洞，但是只能在add的时候编辑chunk内容。所以我们利用UAF来实现doublefree，然后伪造劫持fd，修改fastbin链表，达到申请到目标地址的目的。需要注意的是，fastbin链表中存的地址是chunk地址，也就是说，我们要写入fd的地址应该是target-0x10。</p>
 <p>下面来思考利用方式。我们申请两个chunk，再释放掉这两个chunk之后，fastbin长这样：</p>
