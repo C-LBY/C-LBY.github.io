@@ -1,6 +1,6 @@
-https://c-lby.top/2024/04/28/xyctf-pwn-wp/
+https://c-lby.top/2024/04/28/2024xyctf-pwn-wp/
 https://c-lby.top/2024/02/14/glibc_tcachebin/
-https://c-lby.top/2024/03/01/newstar-week4-wp/
+https://c-lby.top/2024/03/01/2023newstar-week4-wp/
 https://c-lby.top/2024/04/07/rop-emporium-ret2win/
 https://c-lby.top/2024/03/05/pwnable-WP/
 https://c-lby.top/2024/03/28/2016HCTF-fheap/
