@@ -1,3 +1,4 @@
+https://c-lby.top/2024/05/15/glibc-exit-hook/
 https://c-lby.top/2024/05/12/exit-hook-first-try/
 https://c-lby.top/2024/04/28/2024xyctf-pwn-wp/
 https://c-lby.top/2024/02/14/glibc_tcachebin/
@@ -14,10 +15,10 @@ https://c-lby.top/categories/index.html
 https://c-lby.top/
 https://c-lby.top/tags/CTF/
 https://c-lby.top/tags/PWN/
-https://c-lby.top/tags/heap/
 https://c-lby.top/tags/WP/
 https://c-lby.top/tags/exit-hook/
 https://c-lby.top/tags/ROP/
-https://c-lby.top/categories/glibc%E6%BA%90%E7%A0%81%E8%A1%A5%E5%AE%8C%E8%AE%A1%E5%88%92/
+https://c-lby.top/tags/heap/
 https://c-lby.top/categories/WP/
+https://c-lby.top/categories/glibc%E6%BA%90%E7%A0%81%E8%A1%A5%E5%AE%8C%E8%AE%A1%E5%88%92/
 https://c-lby.top/categories/Heap-Exploitation/
