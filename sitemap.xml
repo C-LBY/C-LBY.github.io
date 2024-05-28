@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://c-lby.top/2024/05/29/buu-wp-1/</loc>
+    
+    <lastmod>2024-05-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://c-lby.top/2024/05/15/glibc-exit-hook/</loc>
     
     <lastmod>2024-05-16</lastmod>
@@ -130,7 +139,7 @@
 
   <url>
     <loc>https://c-lby.top/</loc>
-    <lastmod>2024-05-16</lastmod>
+    <lastmod>2024-05-28</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -138,42 +147,42 @@
   
   <url>
     <loc>https://c-lby.top/tags/CTF/</loc>
-    <lastmod>2024-05-16</lastmod>
+    <lastmod>2024-05-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/tags/PWN/</loc>
-    <lastmod>2024-05-16</lastmod>
+    <lastmod>2024-05-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/tags/WP/</loc>
-    <lastmod>2024-05-16</lastmod>
+    <lastmod>2024-05-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/tags/exit-hook/</loc>
-    <lastmod>2024-05-16</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://c-lby.top/tags/ROP/</loc>
-    <lastmod>2024-05-16</lastmod>
+    <lastmod>2024-05-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/tags/heap/</loc>
-    <lastmod>2024-05-16</lastmod>
+    <lastmod>2024-05-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://c-lby.top/tags/ROP/</loc>
+    <lastmod>2024-05-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
@@ -182,21 +191,21 @@
   
   <url>
     <loc>https://c-lby.top/categories/WP/</loc>
-    <lastmod>2024-05-16</lastmod>
+    <lastmod>2024-05-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/categories/glibc%E6%BA%90%E7%A0%81%E8%A1%A5%E5%AE%8C%E8%AE%A1%E5%88%92/</loc>
-    <lastmod>2024-05-16</lastmod>
+    <lastmod>2024-05-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/categories/Heap-Exploitation/</loc>
-    <lastmod>2024-05-16</lastmod>
+    <lastmod>2024-05-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
