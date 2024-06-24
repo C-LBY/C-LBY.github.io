@@ -129,9 +129,9 @@
 <p>顺带一提，我的操作环境是wsl2的Ubuntu 22.04.3 LTS，若有因环境不同而引起的操作不同，具体请查询其他资料。</p>
 <h3 id="0x01-一些前置知识or命令"><a href="#0x01-一些前置知识or命令" class="headerlink" title="0x01 一些前置知识or命令"></a>0x01 一些前置知识or命令</h3><p>一般来说，docker的命令之前要加一个sudo来提升权限，不然有些命令可能执行不了。</p>
 <p><code>sudo docker images</code>：查看系统中存有的所有镜像及相关信息。</p>
-<p><img src="/c-lby.top/images/first_docker/docker_images.png" alt="docker_images"></p>
+<p><img src="https://c-lby.top/images/first_docker/docker_images.png" alt="docker_images"></p>
 <p><code>sudo docker ps -a</code>：查看系统中所有容器的状态。</p>
-<p><img src="/c-lby.top/images/first_docker/docker_ps.png" alt="docker_ps"></p>
+<p><img src="https://c-lby.top/images/first_docker/docker_ps.png" alt="docker_ps"></p>
 <p><code>sudo docker ps</code>：查看当前运行中的容器。</p>
 <p>镜像和容器的关系就好比C++中的类和其实例对象的关系，一个镜像可以同时有多个容器运行。</p>
 <p><code>sudo docker run -d -p &quot;0.0.0.0:10001:9999&quot; -h &quot;pwn_h&quot; --name=&quot;pwn1&quot; pwn</code>：从名为pwn的镜像中运行一个名为pwn1的容器，并将这个容器映射到10001端口运行。那么我们就可以通过0.0.0.0:10001访问到这个容器里的服务或者运行的程序。9999是docker的内部端口，-h后面接着的是hostname。</p>
@@ -153,9 +153,9 @@
 </li>
 <li><p>根据本地环境中的libc版本，还有linux发行版本，可以上网搜到这个版本的发行，然后我们来到docker网站找到与这个日期相近的tag来作为映像。</p>
 <p>举个栗子。现在我的本地环境是ubuntu22.04.3LTS。</p>
-<p>如果我在dockerfile中写<code>FROM ubuntu:22.04</code>，那么他会默认拉取ubuntu22.04的latest版本。我们打开<a target="_blank" rel="noopener" href="https://hub.docker.com/_/ubuntu/tags?page=1&page_size=&name=jammy&ordering=">dockerhub</a>看一眼（需要科学上网）。<img src="/c-lby.top/images/first_docker/dockerhub%E6%9C%80%E6%96%B0.png" alt="dockerhub最新"></p>
+<p>如果我在dockerfile中写<code>FROM ubuntu:22.04</code>，那么他会默认拉取ubuntu22.04的latest版本。我们打开<a target="_blank" rel="noopener" href="https://hub.docker.com/_/ubuntu/tags?page=1&page_size=&name=jammy&ordering=">dockerhub</a>看一眼（需要科学上网）。<img src="https://c-lby.top/images/first_docker/dockerhub%E6%9C%80%E6%96%B0.png" alt="dockerhub最新"></p>
 <p>换句话说，这个时候<code>FROM ubuntu:22.04</code>和<code>FROM ubuntu:jammy-20240530</code>是一样的。但是最新的是ubuntu22.04.4，显然不符合本地环境。</p>
-<p>可以查到ubuntu22.04.3LTS的发行日期是2023.8.10，那我们就去找tag接近这个日期的映像。<img src="/c-lby.top/images/first_docker/dockerhub2023tag.png" alt="dockerhub2023tag"></p>
+<p>可以查到ubuntu22.04.3LTS的发行日期是2023.8.10，那我们就去找tag接近这个日期的映像。<img src="https://c-lby.top/images/first_docker/dockerhub2023tag.png" alt="dockerhub2023tag"></p>
 <p>可以逐个去试一试看符不符合运行期望。也可以在dockerfile中，往镜像假如ldd的指令，这样就可以进入到容器中查看libc版本。</p>
 <p>这里还会出现一个问题，那就是本地的ubuntu是会不断更新的。比如22.04.3一开始的libc版本是2.35_3.1，但是随着安全升级，会变成2.35_3.8，那就可能不能根据日期来选择tag了，因为旧日期的tag版本，libc版本也是旧的。还有一个问题比较恶心的就是，wsl因为魔改的原因，就算linux版本和libc版本一致了，也会因为内核的原因导致奇奇怪怪的问题。所以尽量避免用wsl出题（避坑）。</p>
 <p>出好了题目保存docker之后，最好放到其他机器再测试一下，有时候很鬼畜的不同机器会有不同运行结果的（虽然几率比较小）。</p>
