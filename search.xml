@@ -4,7 +4,7 @@
   
     
     <entry>
-      <title>『ret2dl_resolve』hijack l_addr(GeekCTF2024 Memo2)</title>
+      <title>『ret2dlresolve』hijack l_addr(GeekCTF2024 Memo2)</title>
       <link href="/2024/06/25/ret2dl-hijack-l-addr/"/>
       <url>/2024/06/25/ret2dl-hijack-l-addr/</url>
       
@@ -13,7 +13,7 @@
       
       <categories>
           
-          <category> ret2dl_resolve </category>
+          <category> ret2dlresolve </category>
           
       </categories>
       
@@ -26,7 +26,7 @@
             
             <tag> WP </tag>
             
-            <tag> ret2dl_resolve </tag>
+            <tag> ret2dlresolve </tag>
             
         </tags>
       
