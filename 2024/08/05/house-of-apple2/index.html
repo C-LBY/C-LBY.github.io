@@ -127,7 +127,7 @@
 
 										<h3 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h3><p>之前傻乎乎的在网上找资料学习的时候学得一头雾水，最近才忽然想到为什么不去<a target="_blank" rel="noopener" href="https://www.roderickchan.cn/zh-cn/house-of-apple-%E4%B8%80%E7%A7%8D%E6%96%B0%E7%9A%84glibc%E4%B8%ADio%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95-2">roderick师傅的博客</a>直接看本人的分析呢。然后发现roderick师傅写的是最详细最易懂的，推荐正在学习apple2的师傅直接去看。</p>
 <p>我这里据两道题来分析，记录一下学习的过程。</p>
-<h3 id="0x01-『DeadSec-CTF-2024』shadow"><a href="#0x01-『DeadSec-CTF-2024』shadow" class="headerlink" title="0x01 『DeadSec CTF 2024』shadow"></a>0x01 『DeadSec CTF 2024』shadow</h3><p>略过泄露堆地址和libc地址的过程，详情看<a href="https://c-lby.top/">这篇文章</a>。这里直接关注利用house of apple2来getshell的部分。</p>
+<h3 id="0x01-『DeadSec-CTF-2024』shadow"><a href="#0x01-『DeadSec-CTF-2024』shadow" class="headerlink" title="0x01 『DeadSec CTF 2024』shadow"></a>0x01 『DeadSec CTF 2024』shadow</h3><p>略过泄露堆地址和libc地址的过程，详情看<a href="https://c-lby.top/2024/07/30/2024-deadsec-wp/">这篇文章</a>。这里直接关注利用house of apple2来getshell的部分。</p>
 <h4 id="基础知识回顾"><a href="#基础知识回顾" class="headerlink" title="基础知识回顾"></a>基础知识回顾</h4><p>apple系列手法主要是劫持FILE结构中的<code>_wide_data</code>成员中的<code>_wide_vtable</code>中的某个函数指针为ogg或者system。要劫持哪个函数取决于选择的调用链。如果忘记或者不清楚的，建议先看原博客文章，再来看这里的具体分析。</p>
 <h4 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h4><p>menu显示用的是puts函数（也可能是printf打印了出字符串加换行结尾，这种情况编译器也会将printf优化成puts函数），我们考虑劫持puts函数的输出流来打apple2。</p>
 <h5 id="puts函数正常执行流程"><a href="#puts函数正常执行流程" class="headerlink" title="puts函数正常执行流程"></a>puts函数正常执行流程</h5><p>我们先关注一下puts函数正常执行流程是怎么样的。</p>
