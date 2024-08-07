@@ -185,7 +185,7 @@
 
 <h4 id="关于-lock的一些思考"><a href="#关于-lock的一些思考" class="headerlink" title="关于_lock的一些思考"></a>关于_lock的一些思考</h4><p>每个师傅自己调的板子都会有些不太一样，有些师傅的wp里会给file中的<code>_lock</code>也写上一个值，有些没有，甚至每个板子写的lock地址还不一样。这个应该和题目或者是调用链有关。我想尝试从源码或者汇编中找出一些关于覆写_lock的必要性，奈何水平不够，没能分析出来个所以然，但是网上也没有多少师傅提到过这个成员，唯一能找到的说法是要给lock覆写一个可写地址。我尝试在这道题里随便写上一个堆地址，但是没能打通。下面大概讲讲我挣扎的过程，但是结论有待验证。</p>
 <p>我们先来看看不给lock覆写值会发生什么。从脚本进行调试并且链接了源码调试。<img src="https://c-lby.top/images/2024deadsec_wp/apple2_lock%E6%97%A0%E8%A6%86%E5%86%99%E6%8A%A5%E9%94%99.png" alt="apple2_lock无覆写报错"></p>
-<p>程序卡在一个<code>cmpxchg</code>的指令，对应的源码是和lock相关的。那个语句可以通过宏定义展开，但是我看的一头雾水，所以我选择去看看其对应的汇编语句。<img src="https://c-lby.top/images/2024deadsec_wp/_IO_file_underflow.png" alt="_IO_file_underflow"></p>
+<p>程序卡在一个<code>cmpxchg</code>的指令，对应的源码是和lock相关的。那个语句可以通过宏定义展开，但是我看的一头雾水，所以我选择去看看其对应的汇编语句。<img src="https://c-lby.top/images/2024deadsec_wp/IO_file_underflow.png" alt="_IO_file_underflow"></p>
 <p>从0x8CAFB开始往下分析，首先将<code>_IO_2_1_stdout_</code>的地址赋给了r12，将flags与0x8000做与运算并根据结果选择分支；如果不满足跳转条件，则取出stdout+0x88也就是_lock处的内容赋给rdi，将fs+0x10（是一个指向tls结构体的指针）赋给了rbp，然后将<code>_lock</code>处内容+8后取出里面的内容和rbp做比较，然后分支可能就会进入到cmpxchg指令中。关于这个指令的解释网上<a target="_blank" rel="noopener" href="https://coderatwork.cn/posts/linux-cmpxchg/">资料</a>有很多，简单来讲就是个比较交换的操作。</p>
 <p>在上述这些步骤中，我们可以关注到关于这个lock至少需要满足这些要求：</p>
 <ul>
