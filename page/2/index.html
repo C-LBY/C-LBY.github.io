@@ -127,6 +127,34 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2024/05/15/glibc-exit-hook/" title="glibc2.31，但是适用于glibc2.34及以前的版本">『glibc源码补完计划』exit_hook</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2024-05-15  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>线程退出的时候，需要释放掉这个线程所占有的资源，并且停止内核和CPU对其的调度，才算是结束了这个线程。换句话说，线程退出需要用户层面和内核层面的共同工作。内核层面，glibc通过_exit()系统调用来终止线程，用户层面则通过exit()函数。在pwn中，系统调用很难被利用，我们通常重点关注exit函数。</p>
+<h3 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h3>
+	
+	</div>
+  <a type="button" href="/2024/05/15/glibc-exit-hook/#more" class="btn btn-default more">阅读此文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2024/05/12/exit-hook-first-try/" title="从这道题学习exit hook的一种打法和查找偏移的方法">『2024sdpctf(山警校赛)』magic_write</a>
 		</h3>
 		</div>
@@ -432,6 +460,8 @@
 		
 			<li><a href="/categories/ret2dlresolve/">ret2dlresolve<span>1</span></a></li>
 		
+			<li><a href="/categories/测试/">测试<span>1</span></a></li>
+		
 		</ul>
 	</div>
 
@@ -441,27 +471,29 @@
 		<h4>标签云</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/BUU/">BUU<span>1</span></a></li>
-		
-			<li><a href="/tags/IO-FILE/">IO_FILE<span>2</span></a></li>
-		
-			<li><a href="/tags/libc-got/">libc_got<span>1</span></a></li>
-		
-			<li><a href="/tags/WP/">WP<span>10</span></a></li>
-		
-			<li><a href="/tags/heap/">heap<span>6</span></a></li>
-		
-			<li><a href="/tags/PWN/">PWN<span>18</span></a></li>
-		
-			<li><a href="/tags/exit-hook/">exit_hook<span>2</span></a></li>
-		
 			<li><a href="/tags/docker/">docker<span>1</span></a></li>
-		
-			<li><a href="/tags/CTF/">CTF<span>16</span></a></li>
 		
 			<li><a href="/tags/ret2dlresolve/">ret2dlresolve<span>1</span></a></li>
 		
+			<li><a href="/tags/WP/">WP<span>10</span></a></li>
+		
 			<li><a href="/tags/ROP/">ROP<span>1</span></a></li>
+		
+			<li><a href="/tags/exit-hook/">exit_hook<span>2</span></a></li>
+		
+			<li><a href="/tags/PWN/">PWN<span>18</span></a></li>
+		
+			<li><a href="/tags/heap/">heap<span>6</span></a></li>
+		
+			<li><a href="/tags/加密/">加密<span>1</span></a></li>
+		
+			<li><a href="/tags/CTF/">CTF<span>16</span></a></li>
+		
+			<li><a href="/tags/BUU/">BUU<span>1</span></a></li>
+		
+			<li><a href="/tags/libc-got/">libc_got<span>1</span></a></li>
+		
+			<li><a href="/tags/IO-FILE/">IO_FILE<span>2</span></a></li>
 		
 		 
 		</ul>
@@ -473,6 +505,10 @@
 <div class="widget">
   <h4>最新文章</h4>
   <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2024/08/10/encrypt-test/"  title="test" ><i class="fa fa-file-o"></i>encrypt-test</a>
+      </li>
     
       <li>
         <a href="/2024/08/05/house-of-apple2/"  title="学习和使用house of apple2的一些自己的理解。" ><i class="fa fa-file-o"></i>『Heap Exploitation』对house o...</a>
@@ -488,10 +524,6 @@
     
       <li>
         <a href="/2024/06/25/ret2dl-hijack-l-addr/"  title="ret2dlresolve之劫持l_addr" ><i class="fa fa-file-o"></i>『ret2dlresolve』hijack l_add...</a>
-      </li>
-    
-      <li>
-        <a href="/2024/06/25/hijack-libc-got/"  title="一种劫持libc的got表getshell的方法" ><i class="fa fa-file-o"></i>『hijack_libc_got』劫持libc的got...</a>
       </li>
     
   </ul>

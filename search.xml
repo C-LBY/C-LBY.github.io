@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>encrypt-test</title>
+      <link href="/2024/08/10/encrypt-test/"/>
+      <url>/2024/08/10/encrypt-test/</url>
+      
+        <content type="html"><![CDATA[<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="Oh, this is an invalid password. Check and try again, please." data-whm="OOPS, these decrypted content may changed, but you can still have a look.">  <script id="hbeData" type="hbeData" data-hmacdigest="07c0b6904358a52629f38d87ddc3a022605d8389f7ff618539a468ac3b1539fc">8c83c1fd70b2001f095a68c8e758fb297378b7d9927ec59ea88b32676231e82dcca330dff9bbdfbc8c630f289d517191</script>  <div class="hbe hbe-content">    <div class="hbe hbe-input hbe-input-default">      <input class="hbe hbe-input-field hbe-input-field-default" type="password" id="hbePass">      <label class="hbe hbe-input-label hbe-input-label-default" for="hbePass">        <span class="hbe hbe-input-label-content hbe-input-label-content-default">Hey, password is required here.</span>      </label>    </div>  </div></div><script data-pjax src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">]]></content>
+      
+      
+      <categories>
+          
+          <category> 测试 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 加密 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>『Heap Exploitation』对house of apple2的理解与分析</title>
       <link href="/2024/08/05/house-of-apple2/"/>
       <url>/2024/08/05/house-of-apple2/</url>
@@ -20,11 +45,11 @@
       
         <tags>
             
+            <tag> heap </tag>
+            
             <tag> CTF </tag>
             
             <tag> PWN </tag>
-            
-            <tag> heap </tag>
             
             <tag> IO_FILE </tag>
             
@@ -198,11 +223,11 @@
       
         <tags>
             
+            <tag> heap </tag>
+            
             <tag> CTF </tag>
             
             <tag> PWN </tag>
-            
-            <tag> heap </tag>
             
         </tags>
       
@@ -227,13 +252,13 @@
       
         <tags>
             
+            <tag> heap </tag>
+            
             <tag> CTF </tag>
             
             <tag> PWN </tag>
             
             <tag> WP </tag>
-            
-            <tag> heap </tag>
             
         </tags>
       
@@ -459,11 +484,11 @@
       
         <tags>
             
+            <tag> heap </tag>
+            
             <tag> CTF </tag>
             
             <tag> PWN </tag>
-            
-            <tag> heap </tag>
             
         </tags>
       
@@ -517,11 +542,11 @@
       
         <tags>
             
+            <tag> heap </tag>
+            
             <tag> CTF </tag>
             
             <tag> PWN </tag>
-            
-            <tag> heap </tag>
             
         </tags>
       
@@ -546,11 +571,11 @@
       
         <tags>
             
+            <tag> heap </tag>
+            
             <tag> CTF </tag>
             
             <tag> PWN </tag>
-            
-            <tag> heap </tag>
             
         </tags>
       
