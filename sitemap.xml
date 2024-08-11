@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://c-lby.top/diary/index.html</loc>
+    <loc>https://c-lby.top/2024/08/12/diary-test/</loc>
     
     <lastmod>2024-08-11</lastmod>
     
@@ -303,6 +303,13 @@
     <priority>0.2</priority>
   </url>
   
+  <url>
+    <loc>https://c-lby.top/tags/diary/</loc>
+    <lastmod>2024-08-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
 
   
   <url>
@@ -342,6 +349,13 @@
   
   <url>
     <loc>https://c-lby.top/categories/ret2dlresolve/</loc>
+    <lastmod>2024-08-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://c-lby.top/categories/diary/</loc>
     <lastmod>2024-08-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
