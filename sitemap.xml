@@ -2,7 +2,25 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://c-lby.top/diary/index.html</loc>
+    
+    <lastmod>2024-08-12</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://c-lby.top/2024/08/12/diary-test/</loc>
+    
+    <lastmod>2024-08-11</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://c-lby.top/diary/glibc-malloc.html</loc>
     
     <lastmod>2024-08-11</lastmod>
     
@@ -182,6 +200,15 @@
   </url>
   
   <url>
+    <loc>https://c-lby.top/diary/seccomp.html</loc>
+    
+    <lastmod>2024-02-21</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://c-lby.top/images/index.html</loc>
     
     <lastmod>2024-02-18</lastmod>
@@ -192,6 +219,15 @@
   
   <url>
     <loc>https://c-lby.top/about/index.html</loc>
+    
+    <lastmod>2024-02-16</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://c-lby.top/diary/overflow.html</loc>
     
     <lastmod>2024-02-16</lastmod>
     
@@ -255,6 +291,20 @@
   </url>
   
   <url>
+    <loc>https://c-lby.top/tags/BUU/</loc>
+    <lastmod>2024-08-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://c-lby.top/tags/diary/</loc>
+    <lastmod>2024-08-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://c-lby.top/tags/exit-hook/</loc>
     <lastmod>2024-08-12</lastmod>
     <changefreq>weekly</changefreq>
@@ -263,13 +313,6 @@
   
   <url>
     <loc>https://c-lby.top/tags/docker/</loc>
-    <lastmod>2024-08-12</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://c-lby.top/tags/BUU/</loc>
     <lastmod>2024-08-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -303,14 +346,14 @@
     <priority>0.2</priority>
   </url>
   
+
+  
   <url>
-    <loc>https://c-lby.top/tags/diary/</loc>
+    <loc>https://c-lby.top/categories/WP/</loc>
     <lastmod>2024-08-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
-  
-
   
   <url>
     <loc>https://c-lby.top/categories/glibc%E6%BA%90%E7%A0%81%E8%A1%A5%E5%AE%8C%E8%AE%A1%E5%88%92/</loc>
@@ -320,7 +363,7 @@
   </url>
   
   <url>
-    <loc>https://c-lby.top/categories/WP/</loc>
+    <loc>https://c-lby.top/categories/diary/</loc>
     <lastmod>2024-08-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -334,13 +377,6 @@
   </url>
   
   <url>
-    <loc>https://c-lby.top/categories/Heap-Exploitation/</loc>
-    <lastmod>2024-08-12</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://c-lby.top/categories/hijack-libc-got/</loc>
     <lastmod>2024-08-12</lastmod>
     <changefreq>weekly</changefreq>
@@ -348,14 +384,14 @@
   </url>
   
   <url>
-    <loc>https://c-lby.top/categories/ret2dlresolve/</loc>
+    <loc>https://c-lby.top/categories/Heap-Exploitation/</loc>
     <lastmod>2024-08-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://c-lby.top/categories/diary/</loc>
+    <loc>https://c-lby.top/categories/ret2dlresolve/</loc>
     <lastmod>2024-08-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
