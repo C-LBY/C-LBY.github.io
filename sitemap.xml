@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://c-lby.top/2024/08/12/diary-test/</loc>
+    
+    <lastmod>2024-08-12</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://c-lby.top/diary/index.html</loc>
     
     <lastmod>2024-08-12</lastmod>
@@ -262,6 +271,13 @@
   </url>
   
   <url>
+    <loc>https://c-lby.top/tags/diary/</loc>
+    <lastmod>2024-08-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://c-lby.top/tags/exit-hook/</loc>
     <lastmod>2024-08-12</lastmod>
     <changefreq>weekly</changefreq>
@@ -314,6 +330,13 @@
   
   <url>
     <loc>https://c-lby.top/categories/glibc%E6%BA%90%E7%A0%81%E8%A1%A5%E5%AE%8C%E8%AE%A1%E5%88%92/</loc>
+    <lastmod>2024-08-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://c-lby.top/categories/diary/</loc>
     <lastmod>2024-08-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>

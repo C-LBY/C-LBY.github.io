@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>diary_test</title>
+      <link href="/2024/08/12/diary-test/"/>
+      <url>/2024/08/12/diary-test/</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
+      <categories>
+          
+          <category> diary </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> diary </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>『Heap Exploitation』对house of apple2的理解与分析</title>
       <link href="/2024/08/05/house-of-apple2/"/>
       <url>/2024/08/05/house-of-apple2/</url>
