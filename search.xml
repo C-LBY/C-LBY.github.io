@@ -4,6 +4,56 @@
   
     
     <entry>
+      <title>日志 24-8-12</title>
+      <link href="/2024/08/12/diary/24-8-12/"/>
+      <url>/2024/08/12/diary/24-8-12/</url>
+      
+        <content type="html"><![CDATA[<p>可算是把页面处理好了，但是页面读取文章只能从全部文章列表里筛选符合diary分类的文章出来显示。换句话来说，他会作为一篇post出现在其他页面，虽然可以用隐藏，但是写frontmatter比较麻烦，得想个办法才行。</p><p>换了个生成器，可以限定某个页面只显示特定tag的文章，完美解决。还有一点麻烦的是每次新建文章，都要手动整理文章到路径。如果用-p参数，则没法自动抓取front-matter模板，今日乏了，不改源码了。我记得好像有现成的插件可以自动分类文件夹的，明天在找找。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> diary </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> diary </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>日志 24-8-11</title>
+      <link href="/2024/08/12/diary/24-8-11/"/>
+      <url>/2024/08/12/diary/24-8-11/</url>
+      
+        <content type="html"><![CDATA[<p>把moe的密码和misc也做了，ak了第一周密码。misc依然是脑洞不是很够。</p><p>开始捣鼓diary页面了。在写时尚小垃圾的时候发现，归档页面的title是中文，而其他页面title是英文，强迫症受不了，于是翻了一下几个ejs，改了改其他页面引用title的方式是从语言yml文件里来的就行了。</p><p>好像归档的界面就是最理想的对于日记排版的界面，有年月日和标题，打算就用这个了，改改里面储存文档的路径就好了，希望今晚能搞定。（21:31）</p><p>看来是搞不定，官方文档已经是新版本的变量了，旧版本只能靠自己摸索摸索了。现在要想办法在diary界面过滤tag，使得显示出来的文章只有diary的。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> diary </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> diary </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>日志 24-8-10</title>
       <link href="/2024/08/12/diary/24-8-10/"/>
       <url>/2024/08/12/diary/24-8-10/</url>

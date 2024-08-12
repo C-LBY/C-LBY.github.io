@@ -7,17 +7,17 @@
   <meta http-equiv="expires" content="0">
   <meta name="baidu-site-verification" content="codeva-0Qx7wvY9gP" />
   
-  <title>日志 24-8-10 | C_LBY&#39;s BLOG</title>
+  <title>日志 24-8-11 | C_LBY&#39;s BLOG</title>
   <meta name="author" content="鎏柏鱼">
   
-  <meta name="description" content="前几天受到某个大佬的启发，想要在博客里加个日记的页面，每天记录一点当日搞的小玩意或者学到的东西，这样无论是记录当天学习内容还是为了第二天衔接没做完当天没做完的工作，都很方便。
-事不宜迟，那么今天就开始升级博客了。首先是加装了页面加密和隐藏的插件，资料https://blog.yxyang.top/posts/24498.html。想在menu上加一个diary的页面，但是还没想好该怎么呈现内容，估计还得手搓一下ejs，所以页面这一块暂且搁置了。
-把2024moectf的pwn第一周的题目做完了，题目依然是很有moe的味道，但是没有那么传统了，不如说新颖得有点不适应，虽然很简单，但是最后一题的引导性没那么好。misc的引导性就比较强。当然也有可能是我比较菜。"> 
+  <meta name="description" content="把moe的密码和misc也做了，ak了第一周密码。misc依然是脑洞不是很够。
+开始捣鼓diary页面了。在写时尚小垃圾的时候发现，归档页面的title是中文，而其他页面title是英文，强迫症受不了，于是翻了一下几个ejs，改了改其他页面引用title的方式是从语言yml文件里来的就行了。
+好像归档的界面就是最理想的对于日记排版的界面，有年月日和标题，打算就用这个了，改改里面储存文档的路径就好了，希望今晚能搞定。（21:31）"> 
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="日志 24-8-10"/>
+  <meta property="og:title" content="日志 24-8-11"/>
   <meta property="og:site_name" content="C_LBY&#39;s BLOG"/>
 
   
@@ -112,7 +112,7 @@
 
 	
 		<div class="page-header">
-			<h1> 日志 24-8-10</h1>
+			<h1> 日志 24-8-11</h1>
 		</div>
 	
 
@@ -129,10 +129,10 @@
 							<div class="mypage">
 								
 
-										<p>前几天受到某个大佬的启发，想要在博客里加个日记的页面，每天记录一点当日搞的小玩意或者学到的东西，这样无论是记录当天学习内容还是为了第二天衔接没做完当天没做完的工作，都很方便。</p>
-<p>事不宜迟，那么今天就开始升级博客了。首先是加装了页面加密和隐藏的插件，资料<a target="_blank" rel="noopener" href="https://blog.yxyang.top/posts/24498.html%E3%80%82%E6%83%B3%E5%9C%A8menu%E4%B8%8A%E5%8A%A0%E4%B8%80%E4%B8%AAdiary%E7%9A%84%E9%A1%B5%E9%9D%A2%EF%BC%8C%E4%BD%86%E6%98%AF%E8%BF%98%E6%B2%A1%E6%83%B3%E5%A5%BD%E8%AF%A5%E6%80%8E%E4%B9%88%E5%91%88%E7%8E%B0%E5%86%85%E5%AE%B9%EF%BC%8C%E4%BC%B0%E8%AE%A1%E8%BF%98%E5%BE%97%E6%89%8B%E6%90%93%E4%B8%80%E4%B8%8Bejs%EF%BC%8C%E6%89%80%E4%BB%A5%E9%A1%B5%E9%9D%A2%E8%BF%99%E4%B8%80%E5%9D%97%E6%9A%82%E4%B8%94%E6%90%81%E7%BD%AE%E4%BA%86%E3%80%82">https://blog.yxyang.top/posts/24498.html。想在menu上加一个diary的页面，但是还没想好该怎么呈现内容，估计还得手搓一下ejs，所以页面这一块暂且搁置了。</a></p>
-<p>把2024moectf的pwn第一周的题目做完了，题目依然是很有moe的味道，但是没有那么传统了，不如说新颖得有点不适应，虽然很简单，但是最后一题的引导性没那么好。misc的引导性就比较强。当然也有可能是我比较菜。</p>
-<p>wsrx桌面版太麻烦，用习惯了linux，所以直接装了命令行的版本。这玩意是用rust写的，要求版本在1.77以上，所以还得rustup升级，结果下载安装好几遍都更换版本不成功，索性删掉重新安装。资料<a target="_blank" rel="noopener" href="https://www.sysgeek.cn/ubuntu-install-rust/#google_vignette%E3%80%82%E5%88%B0%E6%9C%80%E5%90%8E%E5%8F%91%E7%8E%B0%E6%9C%80%E9%87%8D%E8%A6%81%E7%9A%84%E6%98%AF%E8%A6%81%E6%BF%80%E6%B4%BB%E7%8E%AF%E5%A2%83%E8%BF%99%E4%B8%80%E6%AD%A5source">https://www.sysgeek.cn/ubuntu-install-rust/#google_vignette。到最后发现最重要的是要激活环境这一步source</a> $HOME&#x2F;.cargo&#x2F;env，然而其他资料都没有写到。顺带一提，旧版本的rustup没有自删除的功能……用上命令行版本的wsrx就顺手多了，虽然还是很想吐槽，这四个字母在键盘上真的不好打……</p>
+										<p>把moe的密码和misc也做了，ak了第一周密码。misc依然是脑洞不是很够。</p>
+<p>开始捣鼓diary页面了。在写时尚小垃圾的时候发现，归档页面的title是中文，而其他页面title是英文，强迫症受不了，于是翻了一下几个ejs，改了改其他页面引用title的方式是从语言yml文件里来的就行了。</p>
+<p>好像归档的界面就是最理想的对于日记排版的界面，有年月日和标题，打算就用这个了，改改里面储存文档的路径就好了，希望今晚能搞定。（21:31）</p>
+<p>看来是搞不定，官方文档已经是新版本的变量了，旧版本只能靠自己摸索摸索了。现在要想办法在diary界面过滤tag，使得显示出来的文章只有diary的。</p>
 
 											<div class="article-footer-copyright">
 
@@ -144,7 +144,7 @@
 
 							
 									
-										<span data-path="/2024/08/12/diary/24-8-10/">
+										<span data-path="/2024/08/12/diary/24-8-11/">
 											<em class="post-meta-item-text"> Page View <i
 													class="waline-pageview-count"></i></em>
 										</span>
@@ -157,13 +157,13 @@
 
     
     
-    <a href="/2024/08/12/diary/24-8-11/" type="button" class="btn btn-default"><i
+    <a href="/2024/08/12/diary/24-8-12/" type="button" class="btn btn-default"><i
                 class="fa fa-arrow-circle-o-left"></i> 上一页</a>
     
 
     <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
     
-    <a href="/2024/08/05/house-of-apple2/" type="button" class="btn btn-default ">下一页<i
+    <a href="/2024/08/12/diary/24-8-10/" type="button" class="btn btn-default ">下一页<i
                 class="fa fa-arrow-circle-o-right"></i></a>
     
 
