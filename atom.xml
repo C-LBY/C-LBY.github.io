@@ -6,7 +6,7 @@
   <link href="https://c-lby.top/atom.xml" rel="self"/>
   
   <link href="https://c-lby.top/"/>
-  <updated>2024-08-11T16:48:39.998Z</updated>
+  <updated>2024-08-09T16:10:35.818Z</updated>
   <id>https://c-lby.top/</id>
   
   <author>
@@ -15,25 +15,6 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title>diary_test</title>
-    <link href="https://c-lby.top/2024/08/12/diary-test/"/>
-    <id>https://c-lby.top/2024/08/12/diary-test/</id>
-    <published>2024-08-11T16:48:12.000Z</published>
-    <updated>2024-08-11T16:48:39.998Z</updated>
-    
-    
-    <summary type="html">test</summary>
-    
-    
-    
-    <category term="diary" scheme="https://c-lby.top/categories/diary/"/>
-    
-    
-    <category term="diary" scheme="https://c-lby.top/tags/diary/"/>
-    
-  </entry>
   
   <entry>
     <title>『Heap Exploitation』对house of apple2的理解与分析</title>

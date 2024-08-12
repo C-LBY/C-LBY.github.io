@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://c-lby.top/2024/08/12/diary-test/</loc>
-    <lastmod>2024-08-11</lastmod>
-  </url>
-  <url>
-    <loc>https://c-lby.top/diary/glibc-malloc.html</loc>
-    <lastmod>2024-08-11</lastmod>
-  </url>
-  <url>
     <loc>https://c-lby.top/2024/08/05/house-of-apple2/</loc>
     <lastmod>2024-08-09</lastmod>
   </url>
@@ -83,13 +75,5 @@
   <url>
     <loc>https://c-lby.top/2024/02/17/tcache-attack/</loc>
     <lastmod>2024-03-04</lastmod>
-  </url>
-  <url>
-    <loc>https://c-lby.top/diary/seccomp.html</loc>
-    <lastmod>2024-02-21</lastmod>
-  </url>
-  <url>
-    <loc>https://c-lby.top/diary/overflow.html</loc>
-    <lastmod>2024-02-16</lastmod>
   </url>
 </urlset> 

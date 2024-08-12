@@ -1,6 +1,4 @@
 https://c-lby.top/diary/index.html
-https://c-lby.top/2024/08/12/diary-test/
-https://c-lby.top/diary/glibc-malloc.html
 https://c-lby.top/2024/08/05/house-of-apple2/
 https://c-lby.top/2024/07/30/2024-deadsec-wp/
 https://c-lby.top/2024/07/30/glibc-IO/
@@ -20,10 +18,8 @@ https://c-lby.top/2024/03/05/pwnable-WP/
 https://c-lby.top/2024/03/28/2016HCTF-fheap/
 https://c-lby.top/2024/03/02/glibc-unsortedbin/
 https://c-lby.top/2024/02/17/tcache-attack/
-https://c-lby.top/diary/seccomp.html
 https://c-lby.top/images/index.html
 https://c-lby.top/about/index.html
-https://c-lby.top/diary/overflow.html
 https://c-lby.top/tags/index.html
 https://c-lby.top/categories/index.html
 https://c-lby.top/
@@ -32,7 +28,6 @@ https://c-lby.top/tags/CTF/
 https://c-lby.top/tags/PWN/
 https://c-lby.top/tags/WP/
 https://c-lby.top/tags/BUU/
-https://c-lby.top/tags/diary/
 https://c-lby.top/tags/exit-hook/
 https://c-lby.top/tags/docker/
 https://c-lby.top/tags/IO-FILE/
@@ -41,7 +36,6 @@ https://c-lby.top/tags/ret2dlresolve/
 https://c-lby.top/tags/ROP/
 https://c-lby.top/categories/WP/
 https://c-lby.top/categories/glibc%E6%BA%90%E7%A0%81%E8%A1%A5%E5%AE%8C%E8%AE%A1%E5%88%92/
-https://c-lby.top/categories/diary/
 https://c-lby.top/categories/docker/
 https://c-lby.top/categories/hijack-libc-got/
 https://c-lby.top/categories/Heap-Exploitation/
