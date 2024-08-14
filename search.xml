@@ -5,10 +5,10 @@
     
     <entry>
       <title>日志 24-8-14</title>
-      <link href="/2024/08/14/24-8-14/"/>
-      <url>/2024/08/14/24-8-14/</url>
+      <link href="/2024/08/14/diary/24-8-14/"/>
+      <url>/2024/08/14/diary/24-8-14/</url>
       
-        <content type="html"><![CDATA[]]></content>
+        <content type="html"><![CDATA[<p>今天似乎什么也没学，来青马红客训练营这边报了个道，也是来到锦行科技的公司了。</p><p>VN的成员页做好了，因为头像托管在github上加载有点慢，所以汪队帮我传到oss上了<a href="https://vnteam.cn/members/%E3%80%82oss%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F%E9%98%BF%E9%87%8C%E4%BA%91%E7%9A%84%E5%AF%B9%E8%B1%A1%E5%82%A8%E5%AD%98%E6%9C%8D%E5%8A%A1%E3%80%82%E6%9C%89%E6%97%B6%E9%97%B4%E4%BA%86%E8%A7%A3%E4%B8%80%E4%B8%8B%E3%80%82">https://vnteam.cn/members/。oss是什么？阿里云的对象储存服务。有时间了解一下。</a></p>]]></content>
       
       
       <categories>
@@ -30,10 +30,10 @@
     
     <entry>
       <title>日志 24-8-13</title>
-      <link href="/2024/08/13/24-8-13/"/>
-      <url>/2024/08/13/24-8-13/</url>
+      <link href="/2024/08/13/diary/24-8-13/"/>
+      <url>/2024/08/13/diary/24-8-13/</url>
       
-        <content type="html"><![CDATA[<p>ak了moe的web，太久没做ctf的web题，有点手生了。很艰难地学习并大概理解了pop链要怎么做，感谢jjg的帮助。资料<a href="https://blog.csdn.net/qq_45927266/article/details/120380343%E3%80%82%E4%B9%8B%E5%89%8D%E6%98%AF%E4%B8%80%E7%82%B9%E9%83%BD%E7%9C%8B%E4%B8%8D%E6%87%82%EF%BC%8C%E7%8E%B0%E5%9C%A8%E6%84%9F%E8%A7%89%E8%83%BD%E7%90%86%E8%A7%A3%E4%BB%80%E4%B9%88%E6%84%8F%E6%80%9D%E4%BA%86%EF%BC%8C%E4%B9%9F%E7%9F%A5%E9%81%93%E8%A6%81%E6%80%8E%E4%B9%88%E7%94%9F%E6%88%90payload%E4%BA%86%E3%80%82%E6%9C%80%E5%A5%BD%E8%BF%98%E6%98%AF%E5%85%A8%E9%9D%A2%E5%AD%A6%E4%B9%A0%E4%B8%80%E4%B8%8Bphp%E6%AF%94%E8%BE%83%E5%A5%BD%EF%BC%8Cpwn%E9%A2%98%E4%B9%9F%E4%BC%9A%E7%94%A8%E5%BE%97%E5%88%B0%E3%80%82">https://blog.csdn.net/qq_45927266/article/details/120380343。之前是一点都看不懂，现在感觉能理解什么意思了，也知道要怎么生成payload了。最好还是全面学习一下php比较好，pwn题也会用得到。</a></p><p>晚上忽然上新一道运维题，抢救一个误删了glibc的linux系统，每次环境只有一次机会，因为仅存一个shell，如果断连了就没有了。也是第一次知道ls、cp这些命令是依赖于glibc的。找到了资料<a href="https://tech.soraharu.com/archives/96/%EF%BC%8C%E4%B9%8B%E5%89%8D%E4%B8%80%E7%9B%B4%E7%9C%8B%E5%88%B0busybox%EF%BC%8C%E4%BD%86%E6%B2%A1%E6%9C%89%E7%9C%9F%E6%AD%A3%E5%8E%BB%E4%BA%86%E8%A7%A3%E4%BB%96%EF%BC%8C%E7%8E%B0%E5%9C%A8%E5%A4%A7%E6%A6%82%E7%9F%A5%E9%81%93%E6%98%AF%E4%B8%AA%E4%BB%80%E4%B9%88%E4%B8%9C%E8%A5%BF%E4%BA%86%E3%80%82%E5%9C%A8%E6%88%91%E7%9C%8B%E6%9D%A5%E5%B0%B1%E6%98%AF%E9%80%82%E5%90%88%E5%A1%9E%E8%BF%9B%E5%B5%8C%E5%85%A5%E5%BC%8F%E7%9A%84%E5%B0%8F%E4%BD%93%E7%A7%AF%E9%9D%99%E6%80%81%E7%BC%96%E8%AF%91%E4%BA%8C%E8%BF%9B%E5%88%B6%E7%A8%8B%E5%BA%8F%E5%8C%85%EF%BC%8C%E5%8F%AF%E4%BB%A5%E5%AE%9E%E7%8E%B0linux%E7%9A%84%E5%91%BD%E4%BB%A4%E4%B9%8B%E7%B1%BB%E7%9A%84%E5%8A%9F%E8%83%BD%EF%BC%8C%E5%BE%88%E6%96%B9%E4%BE%BF%E3%80%82">https://tech.soraharu.com/archives/96/，之前一直看到busybox，但没有真正去了解他，现在大概知道是个什么东西了。在我看来就是适合塞进嵌入式的小体积静态编译二进制程序包，可以实现linux的命令之类的功能，很方便。</a></p><p>感觉自己linux学得也是半斤八两，还是系统学习一下运维知识比较好。</p>]]></content>
+        <content type="html"><![CDATA[<p>ak了moe的web，太久没做ctf的web题，有点手生了。很艰难地学习并大概理解了pop链要怎么做，感谢jjg的帮助。资料<a href="https://blog.csdn.net/qq_45927266/article/details/120380343%E3%80%82%E4%B9%8B%E5%89%8D%E6%98%AF%E4%B8%80%E7%82%B9%E9%83%BD%E7%9C%8B%E4%B8%8D%E6%87%82%EF%BC%8C%E7%8E%B0%E5%9C%A8%E6%84%9F%E8%A7%89%E8%83%BD%E7%90%86%E8%A7%A3%E4%BB%80%E4%B9%88%E6%84%8F%E6%80%9D%E4%BA%86%EF%BC%8C%E4%B9%9F%E7%9F%A5%E9%81%93%E8%A6%81%E6%80%8E%E4%B9%88%E7%94%9F%E6%88%90payload%E4%BA%86%E3%80%82%E6%9C%80%E5%A5%BD%E8%BF%98%E6%98%AF%E5%85%A8%E9%9D%A2%E5%AD%A6%E4%B9%A0%E4%B8%80%E4%B8%8Bphp%E6%AF%94%E8%BE%83%E5%A5%BD%EF%BC%8Cpwn%E9%A2%98%E4%B9%9F%E4%BC%9A%E7%94%A8%E5%BE%97%E5%88%B0%E3%80%82">https://blog.csdn.net/qq_45927266/article/details/120380343。之前是一点都看不懂，现在感觉能理解什么意思了，也知道要怎么生成payload了。最好还是全面学习一下php比较好，pwn题也会用得到。</a></p><p>晚上忽然上新一道运维题，抢救一个误删了glibc的linux系统，每次环境只有一次机会，因为仅存一个shell，如果断连了就没有了。也是第一次知道ls、cp这些命令是依赖于glibc的。找到了资料<a href="https://tech.soraharu.com/archives/96/%EF%BC%8C%E4%B9%8B%E5%89%8D%E4%B8%80%E7%9B%B4%E7%9C%8B%E5%88%B0busybox%EF%BC%8C%E4%BD%86%E6%B2%A1%E6%9C%89%E7%9C%9F%E6%AD%A3%E5%8E%BB%E4%BA%86%E8%A7%A3%E4%BB%96%EF%BC%8C%E7%8E%B0%E5%9C%A8%E5%A4%A7%E6%A6%82%E7%9F%A5%E9%81%93%E6%98%AF%E4%B8%AA%E4%BB%80%E4%B9%88%E4%B8%9C%E8%A5%BF%E4%BA%86%E3%80%82%E5%9C%A8%E6%88%91%E7%9C%8B%E6%9D%A5%E5%B0%B1%E6%98%AF%E9%80%82%E5%90%88%E5%A1%9E%E8%BF%9B%E5%B5%8C%E5%85%A5%E5%BC%8F%E7%9A%84%E5%B0%8F%E4%BD%93%E7%A7%AF%E9%9D%99%E6%80%81%E7%BC%96%E8%AF%91%E4%BA%8C%E8%BF%9B%E5%88%B6%E7%A8%8B%E5%BA%8F%E5%8C%85%EF%BC%8C%E5%8F%AF%E4%BB%A5%E5%AE%9E%E7%8E%B0linux%E7%9A%84%E5%91%BD%E4%BB%A4%E4%B9%8B%E7%B1%BB%E7%9A%84%E5%8A%9F%E8%83%BD%EF%BC%8C%E5%BE%88%E6%96%B9%E4%BE%BF%E3%80%82%E4%B9%8B%E5%90%8E%E6%9C%89%E6%97%B6%E9%97%B4%E4%B9%9F%E8%A6%81%E6%B7%B1%E5%85%A5%E4%BA%86%E8%A7%A3%E4%B8%80%E4%B8%8B%E3%80%82">https://tech.soraharu.com/archives/96/，之前一直看到busybox，但没有真正去了解他，现在大概知道是个什么东西了。在我看来就是适合塞进嵌入式的小体积静态编译二进制程序包，可以实现linux的命令之类的功能，很方便。之后有时间也要深入了解一下。</a></p><p>感觉自己linux学得也是半斤八两，还是系统学习一下运维知识比较好。</p>]]></content>
       
       
       <categories>
