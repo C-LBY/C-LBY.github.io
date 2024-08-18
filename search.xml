@@ -4,6 +4,81 @@
   
     
     <entry>
+      <title>日志 24-8-18</title>
+      <link href="/2024/08/19/24-8-18/"/>
+      <url>/2024/08/19/24-8-18/</url>
+      
+        <content type="html"><![CDATA[<p>今天学的内容，是路由器固件漏洞挖掘和杀软漏洞挖掘。没有讲到环境模拟和固件提取，专注于讲漏洞挖掘。学到很多东西。捋一下</p><ul><li>实战中，IDA逆向分析的入手点一般是字符串。像路由器和杀软这样的二进制程序，会产生大量的日志，写这些日志就会有很多字符串留存在程序当中，而且其实一般不会像CTF一样各种隐藏。所以可以把具体位置的日志信息当做注释来看，辅助分析。</li><li>有些攻击面，有些漏洞，其实要结合web的知识，尤其是逻辑漏洞。比如没有过滤字符导致的目录穿越、sql注入等等。不要只带着二进制漏洞的思想去看iot中的漏挖</li><li>一般路由器（包括其他IOT设备）最好是挖未授权，授权后的漏洞一般利用条件比较难。</li><li>不要和别人挤破头都去找大热门被挖烂了的攻击面，找些冷门的。</li><li>不要放过任何一个小洞，可能可以和其他洞组合成一个大洞。</li><li>有些路由器是可以ssh上去的（比如华硕）</li></ul><p>初次体验了一下fuzz，用winafl，虽然最后因为环境配置问题（主要还是那个RIO），没跑成功。RIO如果要在本地编译需要安装perl，现在安装这玩意真是鬼死麻烦，已下载安装包，<strong>未配置，有时间再跑一下</strong>。讲讲收获：</p><ul><li>如何在cpp中静、动态调用dll，封装想要调试的函数（或流程）。</li><li>fuzz一个封装了想要测试的接口的程序，比测试原本的程序更快更方便。</li><li>winafl的参数设置，<strong>后面专门写一篇博客分析一下</strong>，还有写多开主次线程的批处理文件方法。</li><li>对于二进制插桩有了更深一层的理解，但是感觉还远远不够。</li><li><a href="https://libuv-docs-chinese.readthedocs.io/zh/latest/api.html">libuv库</a></li></ul><p>同学来问关于wsl代理的问题，我也是该<strong>找时间研究一下</strong>了，自己使用起来也是有点麻烦的，包括git终端也是不走代理，很难受。关于<a href="https://blog.dejavu.moe/posts/cfw-tun/">tun</a>和<a href="https://clashforwindows.cc/tun-%E6%A8%A1%E5%BC%8F/">tun</a>。</p><p>VM的vmdk磁盘文件可以通过ovf加载整台虚拟机，如果遇到hash对不上的情况，删掉打包的时候带有的mf文件即可。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> diary </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> diary </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>日志 24-8-17</title>
+      <link href="/2024/08/17/diary/24-8-17/"/>
+      <url>/2024/08/17/diary/24-8-17/</url>
+      
+        <content type="html"><![CDATA[<p><a href="https://www.yuque.com/hxfqg9">yichen师傅的知识库</a>，有IoT，硬件安全，智能合约，web等.</p><p>劳累的一天。今天学内网渗透，虽然因为不怎么感兴趣而听得很潦草（？），但是依然学到了很多东西。不得不承认，这个地方真的能学到东西，老师真的会告诉你要怎么实操，要找什么东西要怎么找。这两三天来大量高深知识涌入脑子，能不能吸收另当别论，至少确确实实是有用且能用的知识与技能。</p><p>大部分知识也都记在笔记里了，重要的是晚上的靶场模拟演练切切实实感受了一遍内网渗透，或者说后渗透的大致流程和一些操作技巧等等。但是因为没什么经验，所以打得很菜，实际能找到的flag只有两个……虽然跟着思路现学新工具和知识复现打出了4个flag，依然有一个没能找到。</p><p>学到的新知识或资源有</p><ul><li><a href="https://www.anquanke.com/post/id/225870">内存马</a></li><li>冰蝎的使用（很强大，可以扫描网络资产存活的主机和运行的服务，搭建隧道实现内网穿透等等）</li><li>cve-2021-26084（<a href="https://www.cnblogs.com/NoId/p/16573825.html">confluence</a>的一个rce）</li><li>PostgreSQL数据库（可以用navicat连接，也可以用linux下的psql工具）</li><li>开源工具ConfluenceMemshell，可以一键给confluence注入内存马（有漏洞的情况下）</li><li><a href="https://blog.csdn.net/qq_39583774/article/details/130947754">双重内网横穿</a>，其实今天的靶场中最后一步也有这个场景，但是没做出来，有待复现</li><li><a href="https://tq.jxsec.cn/cas/index">天穹靶场</a></li><li><a href="https://www.somd5.com/">somd5</a></li></ul><p>哦对，顺便把kernel basic和ret2usr学了，虽然还没自己复现，有时间再说吧。大概思路是明白了，果然，之前没看懂的的知识，过一段时间再看就能看懂了，虽然最本初的原理还没去研究，但是流程和做法大致理解了。</p><p>顺带一提，还要找时间看看IDA9的破解原理，看能不能把名字改一下。其实研究那个py脚本文件就好了吧我想。看了一眼，果不其然，试试能不能改生效。大功告成！</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> diary </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> diary </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>日志 24-8-16</title>
+      <link href="/2024/08/16/diary/24-8-16/"/>
+      <url>/2024/08/16/diary/24-8-16/</url>
+      
+        <content type="html"><![CDATA[<p>其实现在是17号凌晨，不过有接触到新的东西所以还是记录一下。首先是今天培训讲的内容有关Windows免杀，还算是比较感兴趣。但是苦于基础知识不多，开发能力欠缺，学起来和实践起来还是有点痛苦的。如果以后要走免杀研究或者杀软对抗这条路的话，至少要学好cpp、go、rust之类的语言，同时还要学Windows api相关的东西。</p><p>第二是做了一道背包加密的题目，用LLL算法在sage进行解密，这部分知识有待进一步深入学习。<a href="https://blog.csdn.net/XiongSiqi_blog/article/details/132109655">资料</a></p><p>第三是，很久没用过web伪协议的知识了，应该要回顾一下了。</p><p>第四是，我觉得可能当下比较重要的一点，应该要开始接触一点点linux kernel的内容了。<a href="https://arttnba3.cn/2021/03/03/PWN-0X00-LINUX-KERNEL-PWN-PART-I/#0x00-%E7%BB%AA%E8%AE%BA">资料是a3师傅的博客</a></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> diary </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> diary </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>日志 24-8-14</title>
       <link href="/2024/08/14/diary/24-8-14/"/>
       <url>/2024/08/14/diary/24-8-14/</url>
@@ -33,7 +108,7 @@
       <link href="/2024/08/13/diary/24-8-13/"/>
       <url>/2024/08/13/diary/24-8-13/</url>
       
-        <content type="html"><![CDATA[<p>ak了moe的web，太久没做ctf的web题，有点手生了。很艰难地学习并大概理解了pop链要怎么做，感谢jjg的帮助。资料<a href="https://blog.csdn.net/qq_45927266/article/details/120380343%E3%80%82%E4%B9%8B%E5%89%8D%E6%98%AF%E4%B8%80%E7%82%B9%E9%83%BD%E7%9C%8B%E4%B8%8D%E6%87%82%EF%BC%8C%E7%8E%B0%E5%9C%A8%E6%84%9F%E8%A7%89%E8%83%BD%E7%90%86%E8%A7%A3%E4%BB%80%E4%B9%88%E6%84%8F%E6%80%9D%E4%BA%86%EF%BC%8C%E4%B9%9F%E7%9F%A5%E9%81%93%E8%A6%81%E6%80%8E%E4%B9%88%E7%94%9F%E6%88%90payload%E4%BA%86%E3%80%82%E6%9C%80%E5%A5%BD%E8%BF%98%E6%98%AF%E5%85%A8%E9%9D%A2%E5%AD%A6%E4%B9%A0%E4%B8%80%E4%B8%8Bphp%E6%AF%94%E8%BE%83%E5%A5%BD%EF%BC%8Cpwn%E9%A2%98%E4%B9%9F%E4%BC%9A%E7%94%A8%E5%BE%97%E5%88%B0%E3%80%82">https://blog.csdn.net/qq_45927266/article/details/120380343。之前是一点都看不懂，现在感觉能理解什么意思了，也知道要怎么生成payload了。最好还是全面学习一下php比较好，pwn题也会用得到。</a></p><p>晚上忽然上新一道运维题，抢救一个误删了glibc的linux系统，每次环境只有一次机会，因为仅存一个shell，如果断连了就没有了。也是第一次知道ls、cp这些命令是依赖于glibc的。找到了资料<a href="https://tech.soraharu.com/archives/96/%EF%BC%8C%E4%B9%8B%E5%89%8D%E4%B8%80%E7%9B%B4%E7%9C%8B%E5%88%B0busybox%EF%BC%8C%E4%BD%86%E6%B2%A1%E6%9C%89%E7%9C%9F%E6%AD%A3%E5%8E%BB%E4%BA%86%E8%A7%A3%E4%BB%96%EF%BC%8C%E7%8E%B0%E5%9C%A8%E5%A4%A7%E6%A6%82%E7%9F%A5%E9%81%93%E6%98%AF%E4%B8%AA%E4%BB%80%E4%B9%88%E4%B8%9C%E8%A5%BF%E4%BA%86%E3%80%82%E5%9C%A8%E6%88%91%E7%9C%8B%E6%9D%A5%E5%B0%B1%E6%98%AF%E9%80%82%E5%90%88%E5%A1%9E%E8%BF%9B%E5%B5%8C%E5%85%A5%E5%BC%8F%E7%9A%84%E5%B0%8F%E4%BD%93%E7%A7%AF%E9%9D%99%E6%80%81%E7%BC%96%E8%AF%91%E4%BA%8C%E8%BF%9B%E5%88%B6%E7%A8%8B%E5%BA%8F%E5%8C%85%EF%BC%8C%E5%8F%AF%E4%BB%A5%E5%AE%9E%E7%8E%B0linux%E7%9A%84%E5%91%BD%E4%BB%A4%E4%B9%8B%E7%B1%BB%E7%9A%84%E5%8A%9F%E8%83%BD%EF%BC%8C%E5%BE%88%E6%96%B9%E4%BE%BF%E3%80%82%E4%B9%8B%E5%90%8E%E6%9C%89%E6%97%B6%E9%97%B4%E4%B9%9F%E8%A6%81%E6%B7%B1%E5%85%A5%E4%BA%86%E8%A7%A3%E4%B8%80%E4%B8%8B%E3%80%82">https://tech.soraharu.com/archives/96/，之前一直看到busybox，但没有真正去了解他，现在大概知道是个什么东西了。在我看来就是适合塞进嵌入式的小体积静态编译二进制程序包，可以实现linux的命令之类的功能，很方便。之后有时间也要深入了解一下。</a></p><p>感觉自己linux学得也是半斤八两，还是系统学习一下运维知识比较好。</p>]]></content>
+        <content type="html"><![CDATA[<p>ak了moe的web，太久没做ctf的web题，有点手生了。很艰难地学习并大概理解了pop链要怎么做，感谢jjg的帮助。<a href="https://blog.csdn.net/qq_45927266/article/details/120380343">资料</a>。之前是一点都看不懂，现在感觉能理解什么意思了，也知道要怎么生成payload了。最好还是全面学习一下php比较好，pwn题也会用得到。</p><p>晚上忽然上新一道运维题，抢救一个误删了glibc的linux系统，每次环境只有一次机会，因为仅存一个shell，如果断连了就没有了。也是第一次知道ls、cp这些命令是依赖于glibc的。找到了<a href="https://tech.soraharu.com/archives/96/">资料</a>，之前一直看到busybox，但没有真正去了解他，现在大概知道是个什么东西了。在我看来就是适合塞进嵌入式的小体积静态编译二进制程序包，可以实现linux的命令之类的功能，很方便。之后有时间也要深入了解一下。</p><p>感觉自己linux学得也是半斤八两，还是系统学习一下运维知识比较好。</p>]]></content>
       
       
       <categories>
@@ -108,7 +183,7 @@
       <link href="/2024/08/10/diary/24-8-10/"/>
       <url>/2024/08/10/diary/24-8-10/</url>
       
-        <content type="html"><![CDATA[<p>前几天受到某个大佬的启发，想要在博客里加个日记的页面，每天记录一点当日搞的小玩意或者学到的东西，这样无论是记录当天学习内容还是为了第二天衔接没做完当天没做完的工作，都很方便。</p><p>事不宜迟，那么今天就开始升级博客了。首先是加装了页面加密和隐藏的插件，资料<a href="https://blog.yxyang.top/posts/24498.html%E3%80%82%E6%83%B3%E5%9C%A8menu%E4%B8%8A%E5%8A%A0%E4%B8%80%E4%B8%AAdiary%E7%9A%84%E9%A1%B5%E9%9D%A2%EF%BC%8C%E4%BD%86%E6%98%AF%E8%BF%98%E6%B2%A1%E6%83%B3%E5%A5%BD%E8%AF%A5%E6%80%8E%E4%B9%88%E5%91%88%E7%8E%B0%E5%86%85%E5%AE%B9%EF%BC%8C%E4%BC%B0%E8%AE%A1%E8%BF%98%E5%BE%97%E6%89%8B%E6%90%93%E4%B8%80%E4%B8%8Bejs%EF%BC%8C%E6%89%80%E4%BB%A5%E9%A1%B5%E9%9D%A2%E8%BF%99%E4%B8%80%E5%9D%97%E6%9A%82%E4%B8%94%E6%90%81%E7%BD%AE%E4%BA%86%E3%80%82">https://blog.yxyang.top/posts/24498.html。想在menu上加一个diary的页面，但是还没想好该怎么呈现内容，估计还得手搓一下ejs，所以页面这一块暂且搁置了。</a></p><p>把2024moectf的pwn第一周的题目做完了，题目依然是很有moe的味道，但是没有那么传统了，不如说新颖得有点不适应，虽然很简单，但是最后一题的引导性没那么好。misc的引导性就比较强。当然也有可能是我比较菜。</p><p>wsrx桌面版太麻烦，用习惯了linux，所以直接装了命令行的版本。这玩意是用rust写的，要求版本在1.77以上，所以还得rustup升级，结果下载安装好几遍都更换版本不成功，索性删掉重新安装。资料<a href="https://www.sysgeek.cn/ubuntu-install-rust/#google_vignette%E3%80%82%E5%88%B0%E6%9C%80%E5%90%8E%E5%8F%91%E7%8E%B0%E6%9C%80%E9%87%8D%E8%A6%81%E7%9A%84%E6%98%AF%E8%A6%81%E6%BF%80%E6%B4%BB%E7%8E%AF%E5%A2%83%E8%BF%99%E4%B8%80%E6%AD%A5source">https://www.sysgeek.cn/ubuntu-install-rust/#google_vignette。到最后发现最重要的是要激活环境这一步source</a> $HOME&#x2F;.cargo&#x2F;env，然而其他资料都没有写到。顺带一提，旧版本的rustup没有自删除的功能……用上命令行版本的wsrx就顺手多了，虽然还是很想吐槽，这四个字母在键盘上真的不好打……</p>]]></content>
+        <content type="html"><![CDATA[<p>前几天受到某个大佬的启发，想要在博客里加个日记的页面，每天记录一点当日搞的小玩意或者学到的东西，这样无论是记录当天学习内容还是为了第二天衔接没做完当天没做完的工作，都很方便。</p><p>事不宜迟，那么今天就开始升级博客了。首先是加装了页面加密和隐藏的插件，<a href="https://blog.yxyang.top/posts/24498.html">资料</a>。想在menu上加一个diary的页面，但是还没想好该怎么呈现内容，估计还得手搓一下ejs，所以页面这一块暂且搁置了。</p><p>把2024moectf的pwn第一周的题目做完了，题目依然是很有moe的味道，但是没有那么传统了，不如说新颖得有点不适应，虽然很简单，但是最后一题的引导性没那么好。misc的引导性就比较强。当然也有可能是我比较菜。</p><p>wsrx桌面版太麻烦，用习惯了linux，所以直接装了命令行的版本。这玩意是用rust写的，要求版本在1.77以上，所以还得rustup升级，结果下载安装好几遍都更换版本不成功，索性删掉重新安装。<a href="https://www.sysgeek.cn/ubuntu-install-rust/#google_vignette">资料</a>。到最后发现最重要的是要激活环境这一步source $HOME&#x2F;.cargo&#x2F;env，然而其他资料都没有写到。顺带一提，旧版本的rustup没有自删除的功能……用上命令行版本的wsrx就顺手多了，虽然还是很想吐槽，这四个字母在键盘上真的不好打……</p>]]></content>
       
       
       <categories>
