@@ -6,7 +6,7 @@
   <link href="https://c-lby.top/atom.xml" rel="self"/>
   
   <link href="https://c-lby.top/"/>
-  <updated>2024-08-18T17:46:57.586Z</updated>
+  <updated>2024-08-18T17:48:46.105Z</updated>
   <id>https://c-lby.top/</id>
   
   <author>
@@ -18,10 +18,10 @@
   
   <entry>
     <title>日志 24-8-18</title>
-    <link href="https://c-lby.top/2024/08/19/24-8-18/"/>
-    <id>https://c-lby.top/2024/08/19/24-8-18/</id>
-    <published>2024-08-18T16:29:16.000Z</published>
-    <updated>2024-08-18T17:46:57.586Z</updated>
+    <link href="https://c-lby.top/2024/08/18/24-8-18/"/>
+    <id>https://c-lby.top/2024/08/18/24-8-18/</id>
+    <published>2024-08-17T16:29:16.000Z</published>
+    <updated>2024-08-18T17:48:46.105Z</updated>
     
     <content type="html"><![CDATA[<p>今天学的内容，是路由器固件漏洞挖掘和杀软漏洞挖掘。没有讲到环境模拟和固件提取，专注于讲漏洞挖掘。学到很多东西。捋一下</p><ul><li>实战中，IDA逆向分析的入手点一般是字符串。像路由器和杀软这样的二进制程序，会产生大量的日志，写这些日志就会有很多字符串留存在程序当中，而且其实一般不会像CTF一样各种隐藏。所以可以把具体位置的日志信息当做注释来看，辅助分析。</li><li>有些攻击面，有些漏洞，其实要结合web的知识，尤其是逻辑漏洞。比如没有过滤字符导致的目录穿越、sql注入等等。不要只带着二进制漏洞的思想去看iot中的漏挖</li><li>一般路由器（包括其他IOT设备）最好是挖未授权，授权后的漏洞一般利用条件比较难。</li><li>不要和别人挤破头都去找大热门被挖烂了的攻击面，找些冷门的。</li><li>不要放过任何一个小洞，可能可以和其他洞组合成一个大洞。</li><li>有些路由器是可以ssh上去的（比如华硕）</li></ul><p>初次体验了一下fuzz，用winafl，虽然最后因为环境配置问题（主要还是那个RIO），没跑成功。RIO如果要在本地编译需要安装perl，现在安装这玩意真是鬼死麻烦，已下载安装包，<strong>未配置，有时间再跑一下</strong>。讲讲收获：</p><ul><li>如何在cpp中静、动态调用dll，封装想要调试的函数（或流程）。</li><li>fuzz一个封装了想要测试的接口的程序，比测试原本的程序更快更方便。</li><li>winafl的参数设置，<strong>后面专门写一篇博客分析一下</strong>，还有写多开主次线程的批处理文件方法。</li><li>对于二进制插桩有了更深一层的理解，但是感觉还远远不够。</li><li><a href="https://libuv-docs-chinese.readthedocs.io/zh/latest/api.html">libuv库</a></li></ul><p>同学来问关于wsl代理的问题，我也是该<strong>找时间研究一下</strong>了，自己使用起来也是有点麻烦的，包括git终端也是不走代理，很难受。关于<a href="https://blog.dejavu.moe/posts/cfw-tun/">tun</a>和<a href="https://clashforwindows.cc/tun-%E6%A8%A1%E5%BC%8F/">tun</a>。</p><p>VM的vmdk磁盘文件可以通过ovf加载整台虚拟机，如果遇到hash对不上的情况，删掉打包的时候带有的mf文件即可。</p>]]></content>
     
