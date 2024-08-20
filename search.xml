@@ -4,9 +4,59 @@
   
     
     <entry>
+      <title>日志 24-8-20</title>
+      <link href="/2024/08/20/24-8-20/"/>
+      <url>/2024/08/20/24-8-20/</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
+      <categories>
+          
+          <category> diary </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> diary </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>日志 24-8-19</title>
+      <link href="/2024/08/19/diary/24-8-19/"/>
+      <url>/2024/08/19/diary/24-8-19/</url>
+      
+        <content type="html"><![CDATA[<p>Windows内核漏洞挖掘，这下就是真正意义上的还没学会走就要学跑了。不过也学了个大概的思路。如果未来考虑走挖洞这条路，最好是平时多调试多复现一些老的漏洞，积累经验和手感。但是其实国内大多数二进制岗位都是应急响应比较多，像赛博昆仑这样的注重挖洞的公司是很少见的。</p><p><a href="https://xz.aliyun.com/t/6008?time__1311=n4+xnD0DgDc7mqCqGNnmexRm7balgbD#toc-1">cve的解析</a></p><p><a href="https://whereisk0shl.top/post/a-trick-the-story-of-cve-2024-26230">k0shl师傅的博客</a></p><p><a href="https://xiaodaozhi.com/exploit/122.html">https://xiaodaozhi.com/exploit/122.html</a></p><p><a href="https://github.com/leeqwind/HolicPOC/blob/master/windows/win32k/CVE-2015-2546/README.md">https://github.com/leeqwind/HolicPOC/blob/master/windows/win32k/CVE-2015-2546/README.md</a></p><p><a href="https://blog.csdn.net/pangshaohua/article/details/6592390#:~:text=%E8%AE%BE%E7%BD%AE%E6%96%B9%E6%B3%95%EF%BC%9A%20%E2%80%9C%E6%88%91%E7%9A%84%E7%94%B5%E8%84%91%E2%80%9D%E5%B1%9E%E6%80%A7%E4%B8%AD%EF%BC%8C%E9%AB%98%E7%BA%A7%E8%AE%BE%E7%BD%AE%E9%87%8C%EF%BC%8C%20%E6%9C%89%E4%B8%AA%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%EF%BC%8C%20%E5%8F%98%E9%87%8F%E5%90%8D%EF%BC%9A_NT_SYMBOL_PATH,%E5%8F%98%E9%87%8F%E5%80%BC%EF%BC%9ASRV%2A%20%7B%24Path%7D%2Ahttp%3A%2F%2Fmsdl.microsoft.com%2Fdownload%2Fsymbols%2F%20%E5%B0%86%E2%80%9C%20%7B%24Path%7D%E2%80%9D%E6%9B%BF%E6%8D%A2%E4%B8%BA%E8%A6%81%E5%AD%98%E5%82%A8pdb%E7%AC%A6%E5%8F%B7%E8%A1%A8%E6%96%87%E4%BB%B6%E7%9A%84%E8%B7%AF%E5%BE%84%EF%BC%8C%E6%AF%94%E5%A6%82%EF%BC%9AC%3APDB">windbg&#x2F;ida自动下载符号表的设置方法</a></p><p><a href="https://www.anquanke.com/post/id/84911">cve复现</a></p><p><a href="https://github.com/AabyssZG/Docker-TCP-Scan">曾哥的新工具</a></p><p><a href="https://www.4hou.com/posts/n7V5">驱动漏洞挖掘入门</a></p><p>可以说是第一次接触到域渗透，一点经验也没有。菜就多练。</p><p>永恒之蓝的使用是基于139和445端口的开放，且特定漏洞版本下才能使用。使用msf框架可以比较方便地对此进行检测盒利用。kali中使用msfconsole。</p><p>445端口是可以直接在cmd中用<code>net use \\ip\ipc$ password /user:username</code>连接的</p><p>如果有完整权限，可以用psexec工具并接管其cmd。这个工具是微软官方的，也可以用\impacket-examples-windows的。</p><p>linux用多了，Windows的命令不会用一点，平时都是用的gui界面，要多学习Windows命令才行</p><p>要开始学习Windows开发等知识了，不然到时候练PoC都看不懂。</p><p>顺便记录一下今天想到的新生赛出题思路。之前忘记是做什么题了，一道简单的ret2text，然而传参却是往后推了一个的，也就是从rdx开始传。所以可以给一个这样的思路：给一个pop rdx，给一个mov rdi,rdx的gadget，然后组合传参。或者能不能自己写一个简单的so库，so中实现一个自定义的system函数，传两个参数，用其他东西占用一个参数位置，让其他参数顺延（也可以用execve）。</p><p>另一个出题想法是给<code>pop r8``call r8</code>这样的gadget，配合固定地址的mmap写shellcode，但是要自己利用栈溢出来执行shellcode。诶等等但是这样岂不是可以把地址写到ret位置上？可以给传入的参数加上字符过滤就好了。比如0x114514这样的地址，一般来说是不合法的，那么就可以在检查字符串的时候提示，地址非法。检查的话，为了防止加偏移绕过，可以用白名单的方式，比如检查是否来自程序基址段或者libc地址段上。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> diary </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> diary </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>日志 24-8-18</title>
-      <link href="/2024/08/18/24-8-18/"/>
-      <url>/2024/08/18/24-8-18/</url>
+      <link href="/2024/08/18/diary/24-8-18/"/>
+      <url>/2024/08/18/diary/24-8-18/</url>
       
         <content type="html"><![CDATA[<p>今天学的内容，是路由器固件漏洞挖掘和杀软漏洞挖掘。没有讲到环境模拟和固件提取，专注于讲漏洞挖掘。学到很多东西。捋一下</p><ul><li>实战中，IDA逆向分析的入手点一般是字符串。像路由器和杀软这样的二进制程序，会产生大量的日志，写这些日志就会有很多字符串留存在程序当中，而且其实一般不会像CTF一样各种隐藏。所以可以把具体位置的日志信息当做注释来看，辅助分析。</li><li>有些攻击面，有些漏洞，其实要结合web的知识，尤其是逻辑漏洞。比如没有过滤字符导致的目录穿越、sql注入等等。不要只带着二进制漏洞的思想去看iot中的漏挖</li><li>一般路由器（包括其他IOT设备）最好是挖未授权，授权后的漏洞一般利用条件比较难。</li><li>不要和别人挤破头都去找大热门被挖烂了的攻击面，找些冷门的。</li><li>不要放过任何一个小洞，可能可以和其他洞组合成一个大洞。</li><li>有些路由器是可以ssh上去的（比如华硕）</li></ul><p>初次体验了一下fuzz，用winafl，虽然最后因为环境配置问题（主要还是那个RIO），没跑成功。RIO如果要在本地编译需要安装perl，现在安装这玩意真是鬼死麻烦，已下载安装包，<strong>未配置，有时间再跑一下</strong>。讲讲收获：</p><ul><li>如何在cpp中静、动态调用dll，封装想要调试的函数（或流程）。</li><li>fuzz一个封装了想要测试的接口的程序，比测试原本的程序更快更方便。</li><li>winafl的参数设置，<strong>后面专门写一篇博客分析一下</strong>，还有写多开主次线程的批处理文件方法。</li><li>对于二进制插桩有了更深一层的理解，但是感觉还远远不够。</li><li><a href="https://libuv-docs-chinese.readthedocs.io/zh/latest/api.html">libuv库</a></li></ul><p>同学来问关于wsl代理的问题，我也是该<strong>找时间研究一下</strong>了，自己使用起来也是有点麻烦的，包括git终端也是不走代理，很难受。关于<a href="https://blog.dejavu.moe/posts/cfw-tun/">tun</a>和<a href="https://clashforwindows.cc/tun-%E6%A8%A1%E5%BC%8F/">tun</a>。</p><p>VM的vmdk磁盘文件可以通过ovf加载整台虚拟机，如果遇到hash对不上的情况，删掉打包的时候带有的mf文件即可。</p>]]></content>
       
