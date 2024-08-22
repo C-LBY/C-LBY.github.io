@@ -4,9 +4,34 @@
   
     
     <entry>
+      <title>日志 24-8-22</title>
+      <link href="/2024/08/22/diary/24-8-22/"/>
+      <url>/2024/08/22/diary/24-8-22/</url>
+      
+        <content type="html"><![CDATA[<p>今天感觉老师并没有怎么讲课，一直在打靶场……不过倒是第一次getshell，通关靶场了，接触了crm这种应用，之前没碰过。</p><p>今天把昨天遗留的时钟插件装好了，但是shell还没时间搞，再推一推。时钟插件是靠conky进行管理的，conky-manager2可以直接在shell输入然后就会有UI界面了。如果出现方框，那是因为设置那里时间设置成了中文格式，换成英文就好了。</p><p>关于conky下载安装相关的<a href="https://blog.csdn.net/2301_76911706/article/details/133000145">教程</a></p><p>下载还是在gnome那些官网找，然后下载解压之后塞到<code>~/.conky</code>里就行了。一般.conf文件里装着<a href="https://forum.ubuntu.com.cn/viewtopic.php?t=372261">配置</a>，可以自己调，不要的部分也可以通过删掉下面代码的部分删掉。</p><p>关于ubuntu中字体的安装<a href="https://blog.csdn.net/qq_37955704/article/details/117901454">https://blog.csdn.net/qq_37955704/article/details/117901454</a></p><p>今天VN里面试一个大三的师傅，出的题目很多不会要学习的地方，总之先记录下来一篇到时候学习，后面也可以翻一翻22号的聊天记录，多学。</p><p><a href="https://chovid99.github.io/posts/gcc-ctf-2024/#social-media">GCC CTF 2024</a></p><p>今天光速秒了base第二周pwn题，虽然我觉得对于新生不算很友好，尤其是syscall shellcode题，有点模仿xyctf的感觉，一眼就能看出来了，但是新生一没汇编基础二没动调经验，虽然不排除有人天赋很好，但是这样为了出题而出题总感觉怪怪的。发过来看，想要不成为这样的出题人，还需要继续加强自己的功底才行。</p><p>也是见到知道创宇的老总“黑哥”（周景平）了，中国十大黑客之一，这么近距离接触大牛的机会还是很少的，虽然其实没怎么听讲座……不过里面提到的几个点确实值得我们思考：</p><ul><li>gpt要成为我们的工具而不是玩具</li><li>老板向员工交代任务是一种艺术，我们使用gpt的时候也应该是才行</li></ul><p>被推去粤盾做蓝方，还是第一次做蓝方。大二就能进护网项目，知足吧，虽然价格是低了点，但是经验就摆在那也没办法，还是多学习学习积累经验吧。虚心一点，你不是万能的。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> diary </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> diary </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>日志 24-8-21</title>
-      <link href="/2024/08/21/24-8-21/"/>
-      <url>/2024/08/21/24-8-21/</url>
+      <link href="/2024/08/21/diary/24-8-21/"/>
+      <url>/2024/08/21/diary/24-8-21/</url>
       
         <content type="html"><![CDATA[<p><a href="https://blog.csdn.net/ghostyusheng/article/details/80321483">docker-ce解决官网无法连接的问题</a></p><p>docker换源之后记得要<code>systemctl daemon-reload</code> <code>systemctl restart docker.service</code>重启一下docker相关的服务。</p><p>关于ubuntu22美化的资料：</p><p><a href="https://blog.csdn.net/weixin_44348719/article/details/132521680">https://blog.csdn.net/weixin_44348719/article/details/132521680</a></p><p><a href="https://blog.csdn.net/2301_76911706/article/details/133000145">https://blog.csdn.net/2301_76911706/article/details/133000145</a></p><p><a href="https://blog.csdn.net/qq_44928822/article/details/129358224">https://blog.csdn.net/qq_44928822/article/details/129358224</a></p><p><a href="https://blog.51cto.com/zhangxueliang/5376229">https://blog.51cto.com/zhangxueliang/5376229</a></p><p><a href="https://www.gnome-look.org/browse/">https://www.gnome-look.org/browse/</a></p><p><a href="https://www.cnblogs.com/WHU-TD/p/14010786.html">https://www.cnblogs.com/WHU-TD/p/14010786.html</a></p><p>主界面配置得差不多了，很满意。接下来就是自定义terminal了，交给明天的我来处理吧！</p><p>大概给终端加个背景图片就差不多了，还有就是修改一下pwndbg的显示，依然用wsl里用的模板就行，和tmux一起真的是天作之合，可惜还不熟悉tmux的操作，还得多练。</p><p>gnome-tweaks是可以直接在终端输入后打开UI界面的。gnome的那些插件在安装之前一定要在火狐或者chrome上安装拓展。打开这个网站<code>https://extensions.gnome.org</code>之后就会提示你安装插件了。在火狐上安装插件之后，要手动在插件界面允许与本地gnome交互，不然插件是无效的。然后就可以开始安装拓展了。想要调拓展的设置，要在<code>installed extends</code>界面，就有设置可以调了。</p><p>哦对，本地还要安装<code>gnome-chrome-connector</code>这个软件包。22以前的的软件包名字和23开始名字不一样，但是官网有提示。</p><p>全场最佳，那个跟随鼠标的眼睛（</p><p>有时间还是详细写一篇博文记录一下吧。</p><p>shit忽然想起来时钟插件忘了装，一样明天再装好了。<a href="https://blog.csdn.net/2301_76911706/article/details/133000145">教程</a></p><p>如果可以，真的像买台笔记本专门装一个ubuntu来使用。一定很舒服</p>]]></content>
       
@@ -33,7 +58,7 @@
       <link href="/2024/08/20/diary/24-8-20/"/>
       <url>/2024/08/20/diary/24-8-20/</url>
       
-        <content type="html"><![CDATA[<p><a href="https://www.cnblogs.com/zhuminghui/p/16396100.html">bat命令的安装与使用（batcat）</a>支持语法高亮，相当于升级版的cat命令，可以自定义高亮主题。</p><p>linux kernel题目中的cpio文件是一种备份文件，解压流程如下：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">c_lby@laptop:/core$ ls</span><br><span class="line">core.cpio</span><br><span class="line">c_lby@laptop:/core$ mv core.cpio core.cpio.gz</span><br><span class="line">c_lby@laptop:/core$ gunzip core.cpio.gz</span><br><span class="line">c_lby@laptop:/core$ cpio -idm &lt; core.cpio</span><br><span class="line">104379 blocks</span><br></pre></td></tr></table></figure>]]></content>
+        <content type="html"><![CDATA[<p><a href="https://www.cnblogs.com/zhuminghui/p/16396100.html">bat命令的安装与使用（batcat）</a>支持语法高亮，相当于升级版的cat命令，可以自定义高亮主题。</p><p>linux kernel题目中的cpio文件是一种备份文件，解压流程如下：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">c_lby@laptop:/core$ ls</span><br><span class="line">core.cpio</span><br><span class="line">c_lby@laptop:/core$ mv core.cpio core.cpio.gz</span><br><span class="line">c_lby@laptop:/core$ gunzip core.cpio.gz</span><br><span class="line">c_lby@laptop:/core$ cpio -idm &lt; core.cpio</span><br><span class="line">104379 blocks</span><br></pre></td></tr></table></figure><p>感觉今天唯一学会的就是如何使用宝塔搭建站点，虚拟机里搭建环境的话，一般域名就设置成虚拟机的内网IP就行。记得要设置默认页面。如果是MVC模式的框架，一般就一个像index.php这样的入口文件，就设置一个就行。然后数据库的设置，一定要设置好密码用户名和数据库名，一定要和站点配置对得上，不然会报错。</p>]]></content>
       
       
       <categories>
