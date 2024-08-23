@@ -7,17 +7,17 @@
   <meta http-equiv="expires" content="0">
   <meta name="baidu-site-verification" content="codeva-0Qx7wvY9gP" />
   
-  <title>日志 24-8-19 | C_LBY&#39;s BLOG</title>
+  <title>日志 24-8-23 | C_LBY&#39;s BLOG</title>
   <meta name="author" content="鎏柏鱼">
   
-  <meta name="description" content="Windows内核漏洞挖掘，这下就是真正意义上的还没学会走就要学跑了。不过也学了个大概的思路。如果未来考虑走挖洞这条路，最好是平时多调试多复现一些老的漏洞，积累经验和手感。但是其实国内大多数二进制岗位都是应急响应比较多，像赛博昆仑这样的注重挖洞的公司是很少见的。
-cve的解析
-k0shl师傅的博客"> 
+  <meta name="description" content="今天把终端搞了一下，忽然发现其实自己不是很喜欢zsh那种花里胡哨的风格，也许会在wsl上装（短时间内其实也不是很想），但是虚拟机或者未来装纯净ubuntu的时候不是很想装zsh这种，如果只是光改颜色的话其实也还行，但是并没有目色到合适的，还是用回原生吧，只是把终端背景的透明度改了一改能看到背景了而已，这样子就已经和舒服了。
+可能老了，不喜欢太花里胡哨的东西了（
+今天学了钓鱼的技术，其实总结一下就是gophish的使用，不过这个东西能部署在服务器上，集成一个总的邮件服务器，比settools方便，不过目前可能还是社工钓鱼用得比较多，很少邮件钓鱼了，除非需要大规模测试的，所以也就是学个过程体验个流程，不过确实学到了和学校课程不一样的地方，更多的实际案例和实操其实更能加深我对某个概念事务的印象。"> 
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="日志 24-8-19"/>
+  <meta property="og:title" content="日志 24-8-23"/>
   <meta property="og:site_name" content="C_LBY&#39;s BLOG"/>
 
   
@@ -112,7 +112,7 @@ k0shl师傅的博客">
 
 	
 		<div class="page-header">
-			<h1> 日志 24-8-19</h1>
+			<h1> 日志 24-8-23</h1>
 		</div>
 	
 
@@ -129,23 +129,10 @@ k0shl师傅的博客">
 							<div class="mypage">
 								
 
-										<p>Windows内核漏洞挖掘，这下就是真正意义上的还没学会走就要学跑了。不过也学了个大概的思路。如果未来考虑走挖洞这条路，最好是平时多调试多复现一些老的漏洞，积累经验和手感。但是其实国内大多数二进制岗位都是应急响应比较多，像赛博昆仑这样的注重挖洞的公司是很少见的。</p>
-<p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/6008?time__1311=n4+xnD0DgDc7mqCqGNnmexRm7balgbD#toc-1">cve的解析</a></p>
-<p><a target="_blank" rel="noopener" href="https://whereisk0shl.top/post/a-trick-the-story-of-cve-2024-26230">k0shl师傅的博客</a></p>
-<p><a target="_blank" rel="noopener" href="https://xiaodaozhi.com/exploit/122.html">https://xiaodaozhi.com/exploit/122.html</a></p>
-<p><a target="_blank" rel="noopener" href="https://github.com/leeqwind/HolicPOC/blob/master/windows/win32k/CVE-2015-2546/README.md">https://github.com/leeqwind/HolicPOC/blob/master/windows/win32k/CVE-2015-2546/README.md</a></p>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/pangshaohua/article/details/6592390#:~:text=%E8%AE%BE%E7%BD%AE%E6%96%B9%E6%B3%95%EF%BC%9A%20%E2%80%9C%E6%88%91%E7%9A%84%E7%94%B5%E8%84%91%E2%80%9D%E5%B1%9E%E6%80%A7%E4%B8%AD%EF%BC%8C%E9%AB%98%E7%BA%A7%E8%AE%BE%E7%BD%AE%E9%87%8C%EF%BC%8C%20%E6%9C%89%E4%B8%AA%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%EF%BC%8C%20%E5%8F%98%E9%87%8F%E5%90%8D%EF%BC%9A_NT_SYMBOL_PATH,%E5%8F%98%E9%87%8F%E5%80%BC%EF%BC%9ASRV%2A%20%7B%24Path%7D%2Ahttp%3A%2F%2Fmsdl.microsoft.com%2Fdownload%2Fsymbols%2F%20%E5%B0%86%E2%80%9C%20%7B%24Path%7D%E2%80%9D%E6%9B%BF%E6%8D%A2%E4%B8%BA%E8%A6%81%E5%AD%98%E5%82%A8pdb%E7%AC%A6%E5%8F%B7%E8%A1%A8%E6%96%87%E4%BB%B6%E7%9A%84%E8%B7%AF%E5%BE%84%EF%BC%8C%E6%AF%94%E5%A6%82%EF%BC%9AC%3APDB">windbg&#x2F;ida自动下载符号表的设置方法</a></p>
-<p><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/84911">cve复现</a></p>
-<p><a target="_blank" rel="noopener" href="https://github.com/AabyssZG/Docker-TCP-Scan">曾哥的新工具</a></p>
-<p><a target="_blank" rel="noopener" href="https://www.4hou.com/posts/n7V5">驱动漏洞挖掘入门</a></p>
-<p>可以说是第一次接触到域渗透，一点经验也没有。菜就多练。</p>
-<p>永恒之蓝的使用是基于139和445端口的开放，且特定漏洞版本下才能使用。使用msf框架可以比较方便地对此进行检测盒利用。kali中使用msfconsole。</p>
-<p>445端口是可以直接在cmd中用<code>net use \\ip\ipc$ password /user:username</code>连接的</p>
-<p>如果有完整权限，可以用psexec工具并接管其cmd。这个工具是微软官方的，也可以用\impacket-examples-windows的。</p>
-<p>linux用多了，Windows的命令不会用一点，平时都是用的gui界面，要多学习Windows命令才行</p>
-<p>要开始学习Windows开发等知识了，不然到时候练PoC都看不懂。</p>
-<p>顺便记录一下今天想到的新生赛出题思路。之前忘记是做什么题了，一道简单的ret2text，然而传参却是往后推了一个的，也就是从rdx开始传。所以可以给一个这样的思路：给一个pop rdx，给一个mov rdi,rdx的gadget，然后组合传参。或者能不能自己写一个简单的so库，so中实现一个自定义的system函数，传两个参数，用其他东西占用一个参数位置，让其他参数顺延（也可以用execve）。</p>
-<p>另一个出题想法是给<code>pop r8``call r8</code>这样的gadget，配合固定地址的mmap写shellcode，但是要自己利用栈溢出来执行shellcode。诶等等但是这样岂不是可以把地址写到ret位置上？可以给传入的参数加上字符过滤就好了。比如0x114514这样的地址，一般来说是不合法的，那么就可以在检查字符串的时候提示，地址非法。检查的话，为了防止加偏移绕过，可以用白名单的方式，比如检查是否来自程序基址段或者libc地址段上。</p>
+										<p>今天把终端搞了一下，忽然发现其实自己不是很喜欢zsh那种花里胡哨的风格，也许会在wsl上装（短时间内其实也不是很想），但是虚拟机或者未来装纯净ubuntu的时候不是很想装zsh这种，如果只是光改颜色的话其实也还行，但是并没有目色到合适的，还是用回原生吧，只是把终端背景的透明度改了一改能看到背景了而已，这样子就已经和舒服了。</p>
+<p>可能老了，不喜欢太花里胡哨的东西了（</p>
+<p>今天学了钓鱼的技术，其实总结一下就是gophish的使用，不过这个东西能部署在服务器上，集成一个总的邮件服务器，比settools方便，不过目前可能还是社工钓鱼用得比较多，很少邮件钓鱼了，除非需要大规模测试的，所以也就是学个过程体验个流程，不过确实学到了和学校课程不一样的地方，更多的实际案例和实操其实更能加深我对某个概念事务的印象。</p>
+<p>今天似乎过得异常地轻松，比起前几天高强度的学习和考核。总算可以休息一会了。</p>
 
 											<div class="article-footer-copyright">
 
@@ -157,7 +144,7 @@ k0shl师傅的博客">
 
 							
 									
-										<span data-path="/2024/08/19/diary/24-8-19/">
+										<span data-path="/2024/08/23/24-8-23/">
 											<em class="post-meta-item-text"> Page View <i
 													class="waline-pageview-count"></i></em>
 										</span>
@@ -170,13 +157,12 @@ k0shl师傅的博客">
 
     
     
-    <a href="/2024/08/20/diary/24-8-20/" type="button" class="btn btn-default"><i
-                class="fa fa-arrow-circle-o-left"></i> 上一页</a>
+    <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>上一页</a>
     
 
     <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
     
-    <a href="/2024/08/18/diary/24-8-18/" type="button" class="btn btn-default ">下一页<i
+    <a href="/2024/08/22/diary/24-8-22/" type="button" class="btn btn-default ">下一页<i
                 class="fa fa-arrow-circle-o-right"></i></a>
     
 
@@ -248,7 +234,7 @@ k0shl师傅的博客">
 	
 	<div class="meta-widget">
 	<i class="fa fa-clock-o"></i>
-	2024-08-19 
+	2024-08-23 
 	</div>
 	
 
