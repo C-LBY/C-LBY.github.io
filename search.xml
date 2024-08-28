@@ -32,8 +32,8 @@
     
     <entry>
       <title>日志 24-8-25</title>
-      <link href="/2024/08/25/24-8-25/"/>
-      <url>/2024/08/25/24-8-25/</url>
+      <link href="/2024/08/25/diary/24-8-25/"/>
+      <url>/2024/08/25/diary/24-8-25/</url>
       
         <content type="html"><![CDATA[<p>结营，证书+2，知识+n</p><p>准备一下蓝队的知识吧</p><p>算了学<a href="https://mp.weixin.qq.com/s/lipd1tc9RGW3VW_WEpjQxA">protobuf</a></p>]]></content>
       
@@ -57,8 +57,8 @@
     
     <entry>
       <title>日志 24-8-24</title>
-      <link href="/2024/08/24/24-8-24/"/>
-      <url>/2024/08/24/24-8-24/</url>
+      <link href="/2024/08/24/diary/24-8-24/"/>
+      <url>/2024/08/24/diary/24-8-24/</url>
       
         <content type="html"><![CDATA[<p><a href="https://mlm.lingyiwanwu.com/">机器语言大模型MLM</a></p><p>来自高傲的清华</p>]]></content>
       
@@ -82,35 +82,10 @@
     
     <entry>
       <title>日志 24-8-23</title>
-      <link href="/2024/08/23/24-8-23/"/>
-      <url>/2024/08/23/24-8-23/</url>
+      <link href="/2024/08/23/diary/24-8-23/"/>
+      <url>/2024/08/23/diary/24-8-23/</url>
       
         <content type="html"><![CDATA[<p>今天把终端搞了一下，忽然发现其实自己不是很喜欢zsh那种花里胡哨的风格，也许会在wsl上装（短时间内其实也不是很想），但是虚拟机或者未来装纯净ubuntu的时候不是很想装zsh这种，如果只是光改颜色的话其实也还行，但是并没有目色到合适的，还是用回原生吧，只是把终端背景的透明度改了一改能看到背景了而已，这样子就已经和舒服了。</p><p>可能老了，不喜欢太花里胡哨的东西了（</p><p>今天学了钓鱼的技术，其实总结一下就是gophish的使用，不过这个东西能部署在服务器上，集成一个总的邮件服务器，比settools方便，不过目前可能还是社工钓鱼用得比较多，很少邮件钓鱼了，除非需要大规模测试的，所以也就是学个过程体验个流程，不过确实学到了和学校课程不一样的地方，更多的实际案例和实操其实更能加深我对某个概念事务的印象。</p><p>今天似乎过得异常地轻松，比起前几天高强度的学习和考核。总算可以休息一会了。</p>]]></content>
-      
-      
-      <categories>
-          
-          <category> diary </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> diary </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>日志 24-8-22</title>
-      <link href="/2024/08/22/diary/24-8-22/"/>
-      <url>/2024/08/22/diary/24-8-22/</url>
-      
-        <content type="html"><![CDATA[<p>今天感觉老师并没有怎么讲课，一直在打靶场……不过倒是第一次getshell，通关靶场了，接触了crm这种应用，之前没碰过。</p><p>今天把昨天遗留的时钟插件装好了，但是shell还没时间搞，再推一推。时钟插件是靠conky进行管理的，conky-manager2可以直接在shell输入然后就会有UI界面了。如果出现方框，那是因为设置那里时间设置成了中文格式，换成英文就好了。</p><p>关于conky下载安装相关的<a href="https://blog.csdn.net/2301_76911706/article/details/133000145">教程</a></p><p>下载还是在gnome那些官网找，然后下载解压之后塞到<code>~/.conky</code>里就行了。一般.conf文件里装着<a href="https://forum.ubuntu.com.cn/viewtopic.php?t=372261">配置</a>，可以自己调，不要的部分也可以通过删掉下面代码的部分删掉。</p><p>关于ubuntu中字体的安装<a href="https://blog.csdn.net/qq_37955704/article/details/117901454">https://blog.csdn.net/qq_37955704/article/details/117901454</a></p><p>今天VN里面试一个大三的师傅，出的题目很多不会要学习的地方，总之先记录下来一篇到时候学习，后面也可以翻一翻22号的聊天记录，多学。</p><p><a href="https://chovid99.github.io/posts/gcc-ctf-2024/#social-media">GCC CTF 2024</a></p><p>今天光速秒了base第二周pwn题，虽然我觉得对于新生不算很友好，尤其是syscall shellcode题，有点模仿xyctf的感觉，一眼就能看出来了，但是新生一没汇编基础二没动调经验，虽然不排除有人天赋很好，但是这样为了出题而出题总感觉怪怪的。发过来看，想要不成为这样的出题人，还需要继续加强自己的功底才行。</p><p>也是见到知道创宇的老总“黑哥”（周景平）了，中国十大黑客之一，这么近距离接触大牛的机会还是很少的，虽然其实没怎么听讲座……不过里面提到的几个点确实值得我们思考：</p><ul><li>gpt要成为我们的工具而不是玩具</li><li>老板向员工交代任务是一种艺术，我们使用gpt的时候也应该是才行</li></ul><p>被推去粤盾做蓝方，还是第一次做蓝方。大二就能进护网项目，知足吧，虽然价格是低了点，但是经验就摆在那也没办法，还是多学习学习积累经验吧。虚心一点，你不是万能的。</p>]]></content>
       
       
       <categories>

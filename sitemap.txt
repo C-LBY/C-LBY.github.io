@@ -1,8 +1,7 @@
 https://c-lby.top/2024/08/28/cpp-exception/
-https://c-lby.top/2024/08/25/24-8-25/
-https://c-lby.top/2024/08/24/24-8-24/
-https://c-lby.top/2024/08/23/24-8-23/
-https://c-lby.top/2024/08/22/diary/24-8-22/
+https://c-lby.top/2024/08/25/diary/24-8-25/
+https://c-lby.top/2024/08/24/diary/24-8-24/
+https://c-lby.top/2024/08/23/diary/24-8-23/
 https://c-lby.top/2024/08/20/diary/24-8-20/
 https://c-lby.top/2024/08/21/diary/24-8-21/
 https://c-lby.top/2024/06/11/first-docker/
