@@ -4,7 +4,25 @@
   <url>
     <loc>https://c-lby.top/2024/09/01/ret2libc-start-main/</loc>
     
-    <lastmod>2024-09-01</lastmod>
+    <lastmod>2024-09-05</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://c-lby.top/2024/08/05/house-of-apple2/</loc>
+    
+    <lastmod>2024-09-04</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://c-lby.top/2024/09/02/2024ycb-wp/</loc>
+    
+    <lastmod>2024-09-04</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -158,15 +176,6 @@
     <loc>https://c-lby.top/diary/index.html</loc>
     
     <lastmod>2024-08-12</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://c-lby.top/2024/08/05/house-of-apple2/</loc>
-    
-    <lastmod>2024-08-09</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -364,7 +373,7 @@
 
   <url>
     <loc>https://c-lby.top/</loc>
-    <lastmod>2024-09-01</lastmod>
+    <lastmod>2024-09-20</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -372,91 +381,91 @@
   
   <url>
     <loc>https://c-lby.top/tags/heap/</loc>
-    <lastmod>2024-09-01</lastmod>
+    <lastmod>2024-09-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/tags/CTF/</loc>
-    <lastmod>2024-09-01</lastmod>
+    <lastmod>2024-09-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/tags/PWN/</loc>
-    <lastmod>2024-09-01</lastmod>
+    <lastmod>2024-09-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/tags/WP/</loc>
-    <lastmod>2024-09-01</lastmod>
+    <lastmod>2024-09-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/tags/BUU/</loc>
-    <lastmod>2024-09-01</lastmod>
+    <lastmod>2024-09-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/tags/diary/</loc>
-    <lastmod>2024-09-01</lastmod>
+    <lastmod>2024-09-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/tags/exit-hook/</loc>
-    <lastmod>2024-09-01</lastmod>
+    <lastmod>2024-09-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/tags/docker/</loc>
-    <lastmod>2024-09-01</lastmod>
+    <lastmod>2024-09-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/tags/IO-FILE/</loc>
-    <lastmod>2024-09-01</lastmod>
+    <lastmod>2024-09-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/tags/libc-got/</loc>
-    <lastmod>2024-09-01</lastmod>
+    <lastmod>2024-09-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/tags/ret2dlresolve/</loc>
-    <lastmod>2024-09-01</lastmod>
+    <lastmod>2024-09-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/tags/ROP/</loc>
-    <lastmod>2024-09-01</lastmod>
+    <lastmod>2024-09-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/tags/cpp%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E6%9C%BA%E5%88%B6/</loc>
-    <lastmod>2024-09-01</lastmod>
+    <lastmod>2024-09-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
@@ -465,63 +474,63 @@
   
   <url>
     <loc>https://c-lby.top/categories/WP/</loc>
-    <lastmod>2024-09-01</lastmod>
+    <lastmod>2024-09-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/categories/glibc%E6%BA%90%E7%A0%81%E8%A1%A5%E5%AE%8C%E8%AE%A1%E5%88%92/</loc>
-    <lastmod>2024-09-01</lastmod>
+    <lastmod>2024-09-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/categories/diary/</loc>
-    <lastmod>2024-09-01</lastmod>
+    <lastmod>2024-09-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/categories/docker/</loc>
-    <lastmod>2024-09-01</lastmod>
+    <lastmod>2024-09-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/categories/hijack-libc-got/</loc>
-    <lastmod>2024-09-01</lastmod>
+    <lastmod>2024-09-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/categories/Heap-Exploitation/</loc>
-    <lastmod>2024-09-01</lastmod>
+    <lastmod>2024-09-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/categories/ret2dlresolve/</loc>
-    <lastmod>2024-09-01</lastmod>
+    <lastmod>2024-09-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/categories/cpp%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E6%9C%BA%E5%88%B6/</loc>
-    <lastmod>2024-09-01</lastmod>
+    <lastmod>2024-09-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/categories/ret2-libc-start-main/</loc>
-    <lastmod>2024-09-01</lastmod>
+    <lastmod>2024-09-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>

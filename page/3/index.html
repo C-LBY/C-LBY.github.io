@@ -133,6 +133,34 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2024/02/17/tcache-attack/" title="除非特别说明，默认为glibc_2.35">『Heap Exploitation』tcache_attack</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2024-02-17  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h2 id="TcacheBin-Attack"><a href="#TcacheBin-Attack" class="headerlink" title="TcacheBin Attack"></a>TcacheBin Attack</h2><p>根据源代码我们可以得知，高版本的glibc给tcachebin引入了检查机制，使得攻击没那么方便了，但正所谓道高一尺魔高一丈，没有攻不破的系统，只有不努力的黑客。tcache的检查机制主要有两个：对double free的检查和对chunk对齐的检查。前者的分析见<a target="_blank" rel="noopener" href="https://c-lby.github.io/2024/02/14/glibc_tcachebin/#TcacheBin%E5%AD%98%E5%8F%96chunk">TcacheBin存取chunk</a>。这里对chunk对齐的机制进行溯源。</p>
+<h3 id="chunk对齐检查机制"><a href="#chunk对齐检查机制" class="headerlink" title="chunk对齐检查机制"></a>chunk对齐检查机制</h3>
+	
+	</div>
+  <a type="button" href="/2024/02/17/tcache-attack/#more" class="btn btn-default more">阅读此文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2024/02/14/glibc_tcachebin/" title="glibc_2.35（版本较高，注意版本区别）">『glibc源码补完计划』TcacheBin</a>
 		</h3>
 		</div>
@@ -204,7 +232,7 @@
 		
 			<li><a href="/categories/Heap-Exploitation/">Heap Exploitation<span>3</span></a></li>
 		
-			<li><a href="/categories/WP/">WP<span>9</span></a></li>
+			<li><a href="/categories/WP/">WP<span>10</span></a></li>
 		
 			<li><a href="/categories/cpp异常处理机制/">cpp异常处理机制<span>1</span></a></li>
 		
@@ -229,31 +257,31 @@
 		<h4>标签云</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/ret2dlresolve/">ret2dlresolve<span>1</span></a></li>
-		
-			<li><a href="/tags/diary/">diary<span>14</span></a></li>
-		
-			<li><a href="/tags/IO-FILE/">IO_FILE<span>2</span></a></li>
-		
-			<li><a href="/tags/PWN/">PWN<span>20</span></a></li>
-		
-			<li><a href="/tags/CTF/">CTF<span>17</span></a></li>
-		
-			<li><a href="/tags/WP/">WP<span>10</span></a></li>
-		
-			<li><a href="/tags/BUU/">BUU<span>1</span></a></li>
-		
-			<li><a href="/tags/ROP/">ROP<span>2</span></a></li>
-		
-			<li><a href="/tags/cpp异常处理机制/">cpp异常处理机制<span>1</span></a></li>
+			<li><a href="/tags/CTF/">CTF<span>18</span></a></li>
 		
 			<li><a href="/tags/heap/">heap<span>6</span></a></li>
 		
+			<li><a href="/tags/PWN/">PWN<span>21</span></a></li>
+		
+			<li><a href="/tags/ROP/">ROP<span>2</span></a></li>
+		
+			<li><a href="/tags/BUU/">BUU<span>1</span></a></li>
+		
+			<li><a href="/tags/IO-FILE/">IO_FILE<span>2</span></a></li>
+		
+			<li><a href="/tags/diary/">diary<span>14</span></a></li>
+		
 			<li><a href="/tags/docker/">docker<span>1</span></a></li>
+		
+			<li><a href="/tags/ret2dlresolve/">ret2dlresolve<span>1</span></a></li>
 		
 			<li><a href="/tags/libc-got/">libc_got<span>1</span></a></li>
 		
 			<li><a href="/tags/exit-hook/">exit_hook<span>2</span></a></li>
+		
+			<li><a href="/tags/WP/">WP<span>11</span></a></li>
+		
+			<li><a href="/tags/cpp异常处理机制/">cpp异常处理机制<span>1</span></a></li>
 		
 		 
 		</ul>
@@ -265,6 +293,10 @@
 <div class="widget">
   <h4>最新文章</h4>
   <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2024/09/02/2024ycb-wp/"  title="卷" ><i class="fa fa-file-o"></i>『2024羊城杯初赛』 PWN WP</a>
+      </li>
     
       <li>
         <a href="/2024/09/01/ret2libc-start-main/"  title="BaseCTF week3 PWN PIE" ><i class="fa fa-file-o"></i>记一次简单的ret2libc_start_main分析...</a>
@@ -280,10 +312,6 @@
     
       <li>
         <a href="/2024/08/24/diary/24-8-24/" ><i class="fa fa-file-o"></i>日志 24-8-24</a>
-      </li>
-    
-      <li>
-        <a href="/2024/08/23/diary/24-8-23/" ><i class="fa fa-file-o"></i>日志 24-8-23</a>
       </li>
     
   </ul>
