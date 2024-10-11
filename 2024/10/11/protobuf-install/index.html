@@ -1,0 +1,382 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  <meta name="baidu-site-verification" content="codeva-0Qx7wvY9gP" />
+  
+  <title>protobuf pwn题环境配置及基础操作 | C_LBY&#39;s BLOG</title>
+  <meta name="author" content="鎏柏鱼">
+  
+  <meta name="description" content="自从国赛遇到protobuf题目之后就一直想好好研究一下，最近才学习其用法。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="protobuf pwn题环境配置及基础操作"/>
+  <meta property="og:site_name" content="C_LBY&#39;s BLOG"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+    <link rel="alternative" href="/atom.xml" title="C_LBY&#39;s BLOG" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">C_LBY&#39;s BLOG</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/diary" title="fashion little junk">
+			  <i class="fa fa-tasks"></i>Diary
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class="fa fa-rss"></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> protobuf pwn题环境配置及基础操作</h1>
+		</div>
+	
+
+
+
+	<div class="row post">
+		<!-- cols -->
+		
+			<div id="top_meta"></div>
+			<div class="col-md-9">
+				
+
+							<!-- content -->
+							<div class="mypage">
+								
+									<div class="alert alert-success description">
+										<i class="fa fa-info-circle"></i> 自从国赛遇到protobuf题目之后就一直想好好研究一下，最近才学习其用法。
+									</div> <!-- alert -->
+									
+
+										<h2 id="0x00-配置环境"><a href="#0x00-配置环境" class="headerlink" title="0x00 配置环境"></a>0x00 配置环境</h2><p>VMware Ubuntu22.04<br>VMware Ubuntu20.04<br>WSL2 Ubuntu22.04均按照步骤配置环境没有问题</p>
+<p>windows环境没有测试</p>
+<p>关于protobuf，网上有很多介绍，不多赘述。</p>
+<h2 id="0x01-安装"><a href="#0x01-安装" class="headerlink" title="0x01 安装"></a>0x01 安装</h2><h3 id="一些注意事项"><a href="#一些注意事项" class="headerlink" title="一些注意事项"></a>一些注意事项</h3><p>请确保环境安装了make并且能正常使用，因为项目需要自己编译。</p>
+<p>Ubuntu22是默认自带较高版本的protobuf的，如果你不打算两个版本同时存在在电脑上的话，可以选择卸载。（两个版本一起也能用，但比较麻烦，我没研究）</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">which</span> protoc</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">protoc: /usr/bin/protoc（虽然不知道为什么我的实在anaconda下）</span></span><br><span class="line">rm -rf /usr/bin/protoc #这里的路径是上面显示的路径</span><br><span class="line"></span><br><span class="line">sudo rm -rf /usr/include/google/protobuf #头文件</span><br><span class="line">sudo rm -rf /usr/local/include/google/protobuf #头文件</span><br><span class="line">sudo rm -rf /usr/lib/libproto* #库文件</span><br><span class="line">sudo rm -rf /usr/local/lib/libproto* # 库文件</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/h799710/article/details/126762153">来源</a></p>
+<h3 id="编译安装protoc库"><a href="#编译安装protoc库" class="headerlink" title="编译安装protoc库"></a>编译安装protoc库</h3><p>（protoc是protobuf的库，不是protobuf-c的，请注意区分）</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">wget https://github.com/protocolbuffers/protobuf/releases/download/v3.6.1/protobuf-all-3.6.1.tar.gz</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">tar -xvzf protobuf-all-3.6.1.tar.gz</span></span><br></pre></td></tr></table></figure>
+
+<p>也可以在浏览器中下载后手动解压。这里下载的版本比较旧了，是为了适配后面要安装的protobuf-c，如果不需要，也可以下载最新版（但是一般做pwn题目前大多都还是C语言写的）。如果只需要C不需要其他语言的，也可以下载只有<a target="_blank" rel="noopener" href="https://github.com/protocolbuffers/protobuf/releases/download/v3.6.1/protobuf-cpp-3.6.1.tar.gz">cpp版本</a>的，可以减小体积和加快编译（但不多）。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">cd</span> protobuf-all-3.6.1</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">./configure &amp;&amp; make &amp;&amp; sudo make install</span></span><br></pre></td></tr></table></figure>
+
+<p>其实上面三步建议分开，要是哪一步出问题了还可以去查一查。在install之前可以运行<code>make check</code>检查一下。make需要花点时间，取决于你的电脑性能。编译完之后运行</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">ln</span> -s /usr/local/lib/libprotobuf.so.17 /usr/lib/libprotobuf.so.17</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">ln</span> -s /usr/local/lib/libprotoc.so.17 /usr/lib/libprotoc.so.17</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo ldconfig</span></span><br></pre></td></tr></table></figure>
+
+<p>这时候输入<code>protoc --version</code>应该就会回显<code>libprotoc 3.6.1</code>，如果回显3.20.x，说明是Ubuntu22原本自带的版本没删干净。</p>
+<h3 id="编译安装protobuf-c"><a href="#编译安装protobuf-c" class="headerlink" title="编译安装protobuf-c"></a>编译安装protobuf-c</h3><p>protobuf原生并不支持C，这里用一个第三方库来兼容C语言。编译步骤和上面一样。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">wget https://github.com/protobuf-c/protobuf-c/releases/download/v1.5.0/protobuf-c-1.5.0.tar.gz</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">tar -xvzf protobuf-c-1.5.0.tar.gz</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">cd</span> protobuf-c-1.5.0</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">./configure &amp;&amp; make &amp;&amp; sudo make install</span></span><br></pre></td></tr></table></figure>
+
+<p>顺带一提，如果上面protobuf安装的版本过高，那么在configure的时候会提示没找到protobuf。</p>
+<h3 id="安装python第三方库"><a href="#安装python第三方库" class="headerlink" title="安装python第三方库"></a>安装python第三方库</h3><p>写脚本要用到google对protobuf支持的第三方库。如果没安装，运行脚本时候会显示没有google库。不用像网上把整个google库都下下来。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">pip3 install protobuf==3.20.3</span></span><br></pre></td></tr></table></figure>
+
+<p>这里protobuf的版本要用到3.20.x（只有1 2 3），如果没指定版本直接安装了最新版，运行脚本的时候python会提示版本不兼容，protobuf版本过低，要更新protobuf，否则使用3.20.x版本的python库。安装完这个之后，环境就算是配置好了。</p>
+<h2 id="基础使用方法"><a href="#基础使用方法" class="headerlink" title="基础使用方法"></a>基础使用方法</h2><p>-I参数指定proto源码目录，–c_out参数指定生成的类声明与实现文件的输出目录。如果proto文件就在当前目录，直接运行：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">protoc --c_out=. filename.proto</span></span><br></pre></td></tr></table></figure>
+
+<p>那么文件就会生成在当前目录。如果你想出题和对照着函数实现来逆向，那么这一步是必要的。如果你要用python写脚本，那么你需要生成python的实现代码：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">protoc --python_out=. filename.proto</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="运行须知"><a href="#运行须知" class="headerlink" title="运行须知"></a>运行须知</h2><p>如果程序使用了protobuf，那必定需要libprotobuf动态库的。上述安装的版本下，运行库的名字叫<code>libprotobuf-c.so.1</code>。假如protobuf_demo是一个使用了protobuf的程序</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">ldd protobuf_demo</span></span><br><span class="line">        linux-vdso.so.1 (0x00007ffcc5597000)</span><br><span class="line">        libprotobuf-c.so.1 =&gt; /usr/local/lib/libprotobuf-c.so.1 (0x00007f2a99c64000)</span><br><span class="line">        libc.so.6 =&gt; /lib/x86_64-linux-gnu/libc.so.6 (0x00007f2a99a3b000)</span><br><span class="line">        /lib64/ld-linux-x86-64.so.2 (0x00007f2a99c81000)</span><br></pre></td></tr></table></figure>
+
+<p>光有<code>libprotobuf-c.so.1</code>也不够，还需要<code>libprotobuf-c.so.1.0.0</code>。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">ldconfig -v</span></span><br><span class="line">...</span><br><span class="line">/usr/local/lib: (from /etc/ld.so.conf.d/libc.conf:2)</span><br><span class="line">        libprotobuf-c.so.1 -&gt; libprotobuf-c.so.1.0.0</span><br><span class="line">        libprotobuf.so.17 -&gt; libprotobuf.so.17.0.0</span><br><span class="line">        libprotobuf-lite.so.17 -&gt; libprotobuf-lite.so.17.0.0</span><br><span class="line">        libprotoc.so.17 -&gt; libprotoc.so.17.0.0</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>如果在一个纯净的环境（容器）或者版本不适配（高版本的protobuf动态库名字不一样）的情况下，不想安装完整的protobuf又想要运行程序的，可以把这两个文件放到<code>/usr/local/lib</code>下，并运行</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">ln</span> -sf /usr/local/lib/libprotobuf-c.so.1.0.0 /usr/local/lib/libprotobuf-c.so.1</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo ldconfig</span></span><br></pre></td></tr></table></figure>
+
+<p>如果不想破坏原本高版本的protobuf，可以就放在程序目录下，运行上面的命令先链接，然后利用patchelf来修改动态链接库路径。有时候也可能是不知道为什么程序就运行不了的，也可以用这种方式试试。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">patchelf --print-needed protobuf_demo <span class="comment">#打印程序需要的动态库</span></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">patchelf --replace-needed libprotobuf-c.so.1 ./libcprotobuf-c.so.1 protobuf <span class="comment">#第二个libcproto*是附件给你的或者你下载的动态库的路径</span></span></span><br></pre></td></tr></table></figure>
+
+<p>配置容器时同理。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/lipd1tc9RGW3VW_WEpjQxA">Real返璞归真师傅的全面解析</a></p>
+
+											<div class="article-footer-copyright">
+
+    本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0
+        国际许可协议(CC BY-NC-SA 4.0) 发布.</a></br>
+    因本人技术水平和知识面有限, 内容如有纰漏或者需要修正的地方, 欢迎大家指正。转载请注明来自<a href="https://c-lby.github.io" target="_blank">C_LBY's blog</a>！
+</div>
+							</div>
+
+							
+									
+										<span data-path="/2024/10/11/protobuf-install/">
+											<em class="post-meta-item-text"> Page View <i
+													class="waline-pageview-count"></i></em>
+										</span>
+
+										
+											<div>
+												<center>
+
+													<div class="pagination">
+
+    
+    
+    <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>上一页</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2024/09/25/Turing-Complete-1/" type="button" class="btn btn-default ">下一页<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+
+												</center>
+											</div>
+
+											<!-- comment -->
+											<!--
+<section id="comment">
+    <h2 class="title">留言</h2>
+
+    
+</section>
+
+-->
+											
+													
+														<section id="comments" class="comments">
+															<!-- <link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css" />
+<div id="waline"></div>
+<script type="module">
+  import { init } from 'https://unpkg.com/@waline/client@v2/dist/waline.mjs';
+  var walineConfig = 
+    walineConfig.el='#waline';
+  Waline.init(walineConfig);
+</script> -->
+
+<link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css" />
+<div id="waline"></div>
+<script type="module">
+  import { init } from 'https://unpkg.com/@waline/client@v2/dist/waline.mjs';
+
+  init({
+    enable: true,
+    el: '#waline',
+    serverURL: 'https://blog-s-comment-three.vercel.app',
+    dark: true,
+    pageview: true,
+    lang: 'zh-CN',
+    requiredMeta: ['nick', 'mail'],
+    locale:
+      { placeholder: 'Say something……' },
+    highlighter: true,
+    search: false,
+    emoji: [
+      '//unpkg.com/@waline/emojis@1.2.0/weibo',
+      '//unpkg.com/@waline/emojis@1.2.0/bmoji',
+      '//unpkg.com/@waline/emojis@1.2.0/bilibili',
+      'https://unpkg.com/@waline/emojis@1.2.0/qq',
+    ],
+    imageUploader: false,
+  });
+</script>
+														</section>
+														
+															
+					</div> <!-- col-md-9/col-md-12 -->
+
+
+					
+						<div id="side_meta">
+							<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2024-10-11 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/protobuf/">protobuf<span>1</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/CTF/">CTF<span>19</span></a></li> <li><a href="/tags/PWN，protobuf/">PWN，protobuf<span>1</span></a></li>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+		   <span class="toc-title">Contents</span>
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x00-%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83"><span class="toc-article-text">0x00 配置环境</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x01-%E5%AE%89%E8%A3%85"><span class="toc-article-text">0x01 安装</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E4%B8%80%E4%BA%9B%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-article-text">一些注意事项</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85protoc%E5%BA%93"><span class="toc-article-text">编译安装protoc库</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85protobuf-c"><span class="toc-article-text">编译安装protobuf-c</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%AE%89%E8%A3%85python%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93"><span class="toc-article-text">安装python第三方库</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%9F%BA%E7%A1%80%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95"><span class="toc-article-text">基础使用方法</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E8%BF%90%E8%A1%8C%E9%A1%BB%E7%9F%A5"><span class="toc-article-text">运行须知</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%8F%82%E8%80%83"><span class="toc-article-text">参考</span></a></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+
+
+						</div>
+
+						
+
+			</div><!-- row -->
+
+			<!--
+ -->
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+    &copy; 2024
+      鎏柏鱼's Blog
+        
+                powered by <a href="http://hexo.io/" target="_blank">Hexo</a> | Theme by <a
+                  href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>

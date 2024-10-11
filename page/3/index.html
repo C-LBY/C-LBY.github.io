@@ -133,6 +133,62 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2024/03/02/glibc-unsortedbin/" title="glibc_2.23，除非特别说明，否则下文默认为此版本下的分析。">『glibc源码补完计划』UnsortedBin</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2024-03-02  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h2 id="UnsortedBin"><a href="#UnsortedBin" class="headerlink" title="UnsortedBin"></a>UnsortedBin</h2><p>最近学习堆题的时候接触到了unsortedbin的利用，感觉还挺有意思的，所以先把它的源码读了，方便以后构建利用思路。之所以这里分析glibc2.23的代码而非2.35的代码，是因为从2.29开始，unsortedbin加入了一坨检查机制以至于它在高版本下难以被攻击，所以索性读低版本的了。</p>
+<p>glibc2.23在unsortedbin中取chunk的时候的检查：</p>
+	
+	</div>
+  <a type="button" href="/2024/03/02/glibc-unsortedbin/#more" class="btn btn-default more">阅读此文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2024/03/01/2023newstar-week4-wp/" title="新生赛复现，主要是为了复现堆题。">『NewStarCTF2023』_week4 PWN WP</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2024-03-01  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h3 id="0x00-前言（patchelf的正确打开方式）"><a href="#0x00-前言（patchelf的正确打开方式）" class="headerlink" title="0x00 前言（patchelf的正确打开方式）"></a>0x00 前言（patchelf的正确打开方式）</h3><p>正好最近在学习堆入门，想起来去年还有newstar的题没复现完，所以干脆拿来当堆入门的练手了。但是在做完准备写wp用动调分析的时候遇到了一个问题。我的主力Linux是Ubuntu22，glibc版本是2.35，我学习堆也是从2.35开始往低版本对比学习，如果题目环境glibc不一样（一般都不一样，2.35版本太高了），则需要用patchelf来修改动态链接库以便gdb分析，但是按照网上的流程来patch怎么都不能成功。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">patchelf --set-interpreter ~/glibc-all-in-one/libs/2.23-0ubuntu3_amd64/libc.so.6 --set-rpath ~/glibc-all-in-one/libs/2.23-0ubuntu3_amd64/ Double</span></span><br></pre></td></tr></table></figure>
+	
+	</div>
+  <a type="button" href="/2024/03/01/2023newstar-week4-wp/#more" class="btn btn-default more">阅读此文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2024/02/17/tcache-attack/" title="除非特别说明，默认为glibc_2.35">『Heap Exploitation』tcache_attack</a>
 		</h3>
 		</div>
@@ -244,9 +300,13 @@
 		
 			<li><a href="/categories/hijack-libc-got/">hijack_libc_got<span>1</span></a></li>
 		
+			<li><a href="/categories/protobuf/">protobuf<span>1</span></a></li>
+		
 			<li><a href="/categories/ret2-libc-start-main/">ret2__libc_start_main<span>1</span></a></li>
 		
 			<li><a href="/categories/ret2dlresolve/">ret2dlresolve<span>1</span></a></li>
+		
+			<li><a href="/categories/图灵完备/">图灵完备<span>1</span></a></li>
 		
 		</ul>
 	</div>
@@ -257,31 +317,35 @@
 		<h4>标签云</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
+			<li><a href="/tags/ROP/">ROP<span>2</span></a></li>
+		
 			<li><a href="/tags/docker/">docker<span>1</span></a></li>
 		
-			<li><a href="/tags/PWN/">PWN<span>21</span></a></li>
+			<li><a href="/tags/PWN，protobuf/">PWN，protobuf<span>1</span></a></li>
+		
+			<li><a href="/tags/图灵完备，计组/">图灵完备，计组<span>1</span></a></li>
 		
 			<li><a href="/tags/ret2dlresolve/">ret2dlresolve<span>1</span></a></li>
 		
-			<li><a href="/tags/exit-hook/">exit_hook<span>2</span></a></li>
-		
-			<li><a href="/tags/IO-FILE/">IO_FILE<span>2</span></a></li>
-		
-			<li><a href="/tags/BUU/">BUU<span>1</span></a></li>
-		
-			<li><a href="/tags/heap/">heap<span>6</span></a></li>
-		
-			<li><a href="/tags/CTF/">CTF<span>18</span></a></li>
-		
-			<li><a href="/tags/diary/">diary<span>14</span></a></li>
-		
-			<li><a href="/tags/cpp异常处理机制/">cpp异常处理机制<span>1</span></a></li>
+			<li><a href="/tags/PWN/">PWN<span>21</span></a></li>
 		
 			<li><a href="/tags/WP/">WP<span>11</span></a></li>
 		
-			<li><a href="/tags/ROP/">ROP<span>2</span></a></li>
+			<li><a href="/tags/CTF/">CTF<span>19</span></a></li>
 		
 			<li><a href="/tags/libc-got/">libc_got<span>1</span></a></li>
+		
+			<li><a href="/tags/BUU/">BUU<span>1</span></a></li>
+		
+			<li><a href="/tags/IO-FILE/">IO_FILE<span>2</span></a></li>
+		
+			<li><a href="/tags/diary/">diary<span>14</span></a></li>
+		
+			<li><a href="/tags/exit-hook/">exit_hook<span>2</span></a></li>
+		
+			<li><a href="/tags/heap/">heap<span>6</span></a></li>
+		
+			<li><a href="/tags/cpp异常处理机制/">cpp异常处理机制<span>1</span></a></li>
 		
 		 
 		</ul>
@@ -295,6 +359,14 @@
   <ul class="entry list-unstyled">
     
       <li>
+        <a href="/2024/10/11/protobuf-install/"  title="自从国赛遇到protobuf题目之后就一直想好好研究一下，最近才学习其用法。" ><i class="fa fa-file-o"></i>protobuf pwn题环境配置及基础操作</a>
+      </li>
+    
+      <li>
+        <a href="/2024/09/25/Turing-Complete-1/"  title="开启计组学习的新大门" ><i class="fa fa-file-o"></i>『图灵完备』完全攻略之基础逻辑电路（一）</a>
+      </li>
+    
+      <li>
         <a href="/2024/09/02/2024ycb-wp/"  title="卷" ><i class="fa fa-file-o"></i>『2024羊城杯初赛』 PWN WP</a>
       </li>
     
@@ -304,14 +376,6 @@
     
       <li>
         <a href="/2024/08/28/cpp-exception/"  title="从2024羊城杯logger题目引起的cpp异常处理机制学习" ><i class="fa fa-file-o"></i>C++异常处理机制及其利用研究</a>
-      </li>
-    
-      <li>
-        <a href="/2024/08/25/diary/24-8-25/" ><i class="fa fa-file-o"></i>日志 24-8-25</a>
-      </li>
-    
-      <li>
-        <a href="/2024/08/24/diary/24-8-24/" ><i class="fa fa-file-o"></i>日志 24-8-24</a>
       </li>
     
   </ul>
