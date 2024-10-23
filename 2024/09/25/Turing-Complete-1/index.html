@@ -153,6 +153,20 @@
 <p><img src="https://c-lby.top/images/Turing-Complete/1/%E6%88%96%E9%97%A8.png" alt="或门"></p>
 <h2 id="或非门"><a href="#或非门" class="headerlink" title="或非门"></a>或非门</h2><p>NOR，类比一下与非门的命名逻辑，显然或非门就是或后非。所以只要在或门后面的输出加上非门即可。这也是为什么前面先讲了或门，才来讲或非门。</p>
 <p><img src="https://c-lby.top/images/Turing-Complete/1/%E6%88%96%E9%9D%9E%E9%97%A8.png" alt="或非门"></p>
+<h2 id="高电平"><a href="#高电平" class="headerlink" title="高电平"></a>高电平</h2><p>题目要求无论是输入是什么，输出时钟需要保持高电平（即为1）。很显然在只有一个输入的情况下，我们需要将其分为两条路子来给到元件，但是尽管是两条路也肯定没法保证全部都是高电平，但是可以轻松做到一个高电平一个低电平。我们利用或门（或者与非门）的性质就能永远输出高电平了。（解法不止一种）</p>
+<p><img src="https://c-lby.top/images/Turing-Complete/1/%E9%AB%98%E7%94%B5%E5%B9%B3.png" alt="高电平"></p>
+<h2 id="第二刻"><a href="#第二刻" class="headerlink" title="第二刻"></a>第二刻</h2><p>这道题其实有一种对着答案出题的感觉，其实完全不用管第几刻的问题，直接对着给出的真值表造就行。</p>
+<p><img src="https://c-lby.top/images/Turing-Complete/1/%E7%AC%AC%E4%BA%8C%E5%88%BB.png" alt="第二刻"></p>
+<p>也不难发现，试想如果将真值表中输入2的值全部倒转会发生什么，那就变成与门的真值表了！所以我们只需要在输入2处加个非门即可。举一反三，如果下次要第三刻怎么办？诶！想想摩根定律。</p>
+<h2 id="异或门"><a href="#异或门" class="headerlink" title="异或门"></a>异或门</h2><p>XOR，但是只能用前面见到过的元件。有一说一，有点难想。我的视角是这样的：观察真值表会发现，除了真真得假之外，其他三项和或门的性质很像，于是想到最后可能要用到或门在输出的位置，那么现在问题就转变成了如何在两个都为真的时候，让进入或门的两个输入都变成低电平。</p>
+<p>我们现在抛弃其他的不想，我们就抓着或门的其中给一个输入来考虑。如果两个输入中一个接一个非门，然后接入与门，是不是就能实现两个输入为真的时候输出低电平？巧妙的是，当没接非门的那一个输入为真的时候，与门也能输出真，这不就符合了我们满足真真得假的设想。</p>
+<p><img src="https://c-lby.top/images/Turing-Complete/1/%E5%BC%82%E6%88%96%E9%97%A8.png" alt="异或门"></p>
+<h2 id="三路或门"><a href="#三路或门" class="headerlink" title="三路或门"></a>三路或门</h2><p>有一个真即为真，叠或门即可。</p>
+<p><img src="https://c-lby.top/images/Turing-Complete/1/%E4%B8%89%E8%B7%AF%E6%88%96%E9%97%A8.png" alt="三路或门"></p>
+<h2 id="三路与门"><a href="#三路与门" class="headerlink" title="三路与门"></a>三路与门</h2><p>全为真才为真，叠与门即可。</p>
+<p><img src="https://c-lby.top/images/Turing-Complete/1/%E4%B8%89%E8%B7%AF%E4%B8%8E%E9%97%A8.png" alt="三路与门"></p>
+<h2 id="同或门"><a href="#同或门" class="headerlink" title="同或门"></a>同或门</h2><p>XNOR，真值表和异或门刚好反过来，根据摩根定律，在输出处加上非门即可。</p>
+<p><img src="https://c-lby.top/images/Turing-Complete/1/%E5%90%8C%E6%88%96%E9%97%A8.png" alt="同或门"></p>
 
 											<div class="article-footer-copyright">
 
@@ -290,7 +304,7 @@
 	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
 	   <div id="toc" class="toc collapse in">
 		   <span class="toc-title">Contents</span>
-			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%8E%9F%E5%8A%9B%E8%A7%89%E9%86%92"><span class="toc-article-text">原力觉醒</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%B8%8E%E9%9D%9E%E9%97%A8"><span class="toc-article-text">与非门</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E9%9D%9E%E9%97%A8"><span class="toc-article-text">非门</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%B8%8E%E9%97%A8"><span class="toc-article-text">与门</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%88%96%E9%97%A8"><span class="toc-article-text">或门</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%88%96%E9%9D%9E%E9%97%A8"><span class="toc-article-text">或非门</span></a></li></ol>
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%8E%9F%E5%8A%9B%E8%A7%89%E9%86%92"><span class="toc-article-text">原力觉醒</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%B8%8E%E9%9D%9E%E9%97%A8"><span class="toc-article-text">与非门</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E9%9D%9E%E9%97%A8"><span class="toc-article-text">非门</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%B8%8E%E9%97%A8"><span class="toc-article-text">与门</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%88%96%E9%97%A8"><span class="toc-article-text">或门</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%88%96%E9%9D%9E%E9%97%A8"><span class="toc-article-text">或非门</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E9%AB%98%E7%94%B5%E5%B9%B3"><span class="toc-article-text">高电平</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E7%AC%AC%E4%BA%8C%E5%88%BB"><span class="toc-article-text">第二刻</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%BC%82%E6%88%96%E9%97%A8"><span class="toc-article-text">异或门</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%B8%89%E8%B7%AF%E6%88%96%E9%97%A8"><span class="toc-article-text">三路或门</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%B8%89%E8%B7%AF%E4%B8%8E%E9%97%A8"><span class="toc-article-text">三路与门</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%90%8C%E6%88%96%E9%97%A8"><span class="toc-article-text">同或门</span></a></li></ol>
 		</div>
 	
 	</div>
