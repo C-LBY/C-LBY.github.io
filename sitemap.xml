@@ -539,14 +539,21 @@
   </url>
   
   <url>
-    <loc>https://c-lby.top/tags/%E5%9B%BE%E7%81%B5%E5%AE%8C%E5%A4%87%EF%BC%8C%E8%AE%A1%E7%BB%84/</loc>
+    <loc>https://c-lby.top/tags/protobuf/</loc>
     <lastmod>2024-10-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://c-lby.top/tags/protobuf/</loc>
+    <loc>https://c-lby.top/tags/%E5%9B%BE%E7%81%B5%E5%AE%8C%E5%A4%87/</loc>
+    <lastmod>2024-10-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://c-lby.top/tags/%E8%AE%A1%E7%BB%84/</loc>
     <lastmod>2024-10-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
