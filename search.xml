@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>『图灵完备』完全攻略之算数运算（二）</title>
+      <link href="/2024/10/24/Turing-Complete-2/"/>
+      <url>/2024/10/24/Turing-Complete-2/</url>
+      
+        <content type="html"><![CDATA[<h2 id="二进制速算"><a href="#二进制速算" class="headerlink" title="二进制速算"></a>二进制速算</h2><p>口算题，不涉及电路，好好熟悉一下2的次方数再去做会比较快。</p><h2 id="成对的麻烦"><a href="#成对的麻烦" class="headerlink" title="成对的麻烦"></a>成对的麻烦</h2><p>有两个及以上数量的真才为真，一共有四个输入。思路很简单，我只要保证每两个输入至少会接在同一个与门上即可，四个输入组合起来一共有六个可能，也就是会有六个与门，这些与门再由或门连接即可。</p><p><img src="https://c-lby.top/images/Turing-Complete/2/%E6%88%90%E5%AF%B9%E7%9A%84%E9%BA%BB%E7%83%A6.png" alt="成对的麻烦"></p><h2 id="奇数个信号"><a href="#奇数个信号" class="headerlink" title="奇数个信号"></a>奇数个信号</h2><p>奇数个真才为真，并且限制只能用三个元件。我在上高中的时候从数学老师那里学到印象最深的一个道理是，<strong>正难则反</strong>。这道题换个视角来看就是，偶数个真就是假。诶！异或门不就刚好是这个性质吗？所以这道题只需要两两输入接入一个异或门，再由一个异或门连接即可。</p><p><img src="https://c-lby.top/images/Turing-Complete/2/%E5%A5%87%E6%95%B0%E4%B8%AA%E4%BF%A1%E5%8F%B7.png" alt="奇数个信号"></p><h2 id="信号计数"><a href="#信号计数" class="headerlink" title="信号计数"></a>信号计数</h2><p>根据输入为真的数量输出二进制（3bits）。</p><p>关于1的思路很简单，因为只有当数字是奇数的时候才会为真。观察真值表可以发现，当奇数个真的时候，输出一定是奇数，所以接入输出一的电路和“奇数个信号”电路是一样的。</p><p>关于2我们也能找到一些规律，当至多只有一个真的时候，数字不会大于1，所以2肯定不会启用，也就是说当输入为真数量大于等于2的时候输出真，那么电路就和“成对的麻烦”一样了。但是问题是当输入全部为真的时候，2并不会启用，只有4启用。这个问题很好解决，给输出二接一个异或门就行，用与门判断如果全部都为真，将这个结果与上述电路接入异或门给到输出二即可。</p><p>其实这道题没有这么难，主要看你能不能关联到前面做的电路。</p><p><img src="https://c-lby.top/images/Turing-Complete/2/%E4%BF%A1%E5%8F%B7%E8%AE%A1%E6%95%B0.png" alt="信号计数"></p><h2 id="加倍"><a href="#加倍" class="headerlink" title="加倍"></a>加倍</h2><p>新的元件。非常简单，每一个都乘二后输出，其实也就是左移了一位。</p><p><img src="https://c-lby.top/images/Turing-Complete/2/%E5%8A%A0%E5%80%8D.png" alt="加倍"></p><h2 id="8位非"><a href="#8位非" class="headerlink" title="8位非"></a>8位非</h2><p>8位数分别取反即可</p><p><img src="https://c-lby.top/images/Turing-Complete/2/8%E4%BD%8D%E9%9D%9E.png" alt="8位非"></p><h2 id="8位或"><a href="#8位或" class="headerlink" title="8位或"></a>8位或</h2><p>8位数分别取或即可</p><p><img src="https://c-lby.top/images/Turing-Complete/2/8%E4%BD%8D%E6%88%96.png" alt="8位或"></p><h2 id="半加器"><a href="#半加器" class="headerlink" title="半加器"></a>半加器</h2><p>加法，但是两个单字节相加，输出也只有一个字节，没法完全储存所有可能的结果（因为可能进位溢出），但是也预留了进位寄存器一个字节。这道题可以根据真值表来做，sum位其实就是异或门的真值表，car位就是与门的真值表。</p><h2 id="全加器"><a href="#全加器" class="headerlink" title="全加器"></a>全加器</h2><p>思路和半加器稍微有点不同，没法直接通过真值表来做，可以从算术的角度去考虑。只有三个输入的情况下，输出只有0,1,2,3。只有2和3的时候才会产生进位，所以利用“成对的麻烦”相同的思路去判断输入为真的数量有没有超过2个即可。而sum位则可以使用“奇数个信号”电路的思路来编写。</p><p><img src="https://c-lby.top/images/Turing-Complete/2/%E5%85%A8%E5%8A%A0%E5%99%A8.png" alt="全加器"></p><h2 id="8位加法器"><a href="#8位加法器" class="headerlink" title="8位加法器"></a>8位加法器</h2><p>这时候已经有add元件可以用了，那就很简单了，对应位分别相加即可，别忘了在计算高一位的时候要考虑上低一位的进位问题。</p><p><img src="https://c-lby.top/images/Turing-Complete/2/8%E4%BD%8D%E5%8A%A0%E6%B3%95%E5%99%A8.png" alt="8位加法器"></p><p>（彩虹！（神金））</p><h2 id="负数"><a href="#负数" class="headerlink" title="负数"></a>负数</h2><p>先学好补码的知识，再来做口算题。</p><p><img src="https://c-lby.top/images/Turing-Complete/2/%E8%A1%A5%E7%A0%81.png" alt="补码"></p><h2 id="相反数"><a href="#相反数" class="headerlink" title="相反数"></a>相反数</h2><p>前面已经学过了补码和负数的知识了，那么其实就很容易想到某个数的相反数其实就是那个数取反后+1。如果这关想不懂，说明补码没学懂。</p><p><img src="https://c-lby.top/images/Turing-Complete/2/%E7%9B%B8%E5%8F%8D%E6%95%B0.png" alt="相反数"></p><h2 id="1位解码器"><a href="#1位解码器" class="headerlink" title="1位解码器"></a>1位解码器</h2><p>一个神奇的元件，由一个元件控制到不同输出。因为有了开关元件，所以这题不是很难，当一路控制为开路的时候另一路控制为闭路即可，一个输入分为两条路，其中一条路要加上非门，这样来保证一条开路一条闭路。</p><p><img src="https://c-lby.top/images/Turing-Complete/2/1%E4%BD%8D%E8%A7%A3%E7%A0%81%E5%99%A8.png" alt="1位解码器"></p><h2 id="3位解码器"><a href="#3位解码器" class="headerlink" title="3位解码器"></a>3位解码器</h2><p>3位输入排列后可以得到8种可能，这时候用开关就不好用了。我选择用排列组合的方式，用与门，将八种情况全部列出来。对于一位输入，分两条路之后，无非就是1和0的区别。根据真值表来选择节点。</p><p><img src="https://c-lby.top/images/Turing-Complete/2/3%E4%BD%8D%E8%A7%A3%E7%A0%81%E5%99%A8.png" alt="3位解码器"></p><h2 id="逻辑引擎"><a href="#逻辑引擎" class="headerlink" title="逻辑引擎"></a>逻辑引擎</h2><p>这个好像没什么好讲的。指令操作码解码的时候，因为只有4个指令，所以只用到四路输出，剩下的不管。另外要注意的是，要用开关控制住其他的运算结果不要和要输出的冲突输出了。</p><p><img src="https://c-lby.top/images/Turing-Complete/2/%E9%80%BB%E8%BE%91%E5%BC%95%E6%93%8E.png" alt="逻辑引擎"></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 图灵完备 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 图灵完备，计组 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>『YLCTF 源鲁杯 2024』 msg_bot</title>
       <link href="/2024/10/12/YLCTF-msgbot-protobuf/"/>
       <url>/2024/10/12/YLCTF-msgbot-protobuf/</url>
