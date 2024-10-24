@@ -133,6 +133,34 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2024/08/05/house-of-apple2/" title="学习和使用house of apple2的一些自己的理解。">『Heap Exploitation』对house of apple2的理解与分析</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2024-08-05  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h3 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h3><p>之前傻乎乎的在网上找资料学习的时候学得一头雾水，最近才忽然想到为什么不去<a target="_blank" rel="noopener" href="https://www.roderickchan.cn/zh-cn/house-of-apple-%E4%B8%80%E7%A7%8D%E6%96%B0%E7%9A%84glibc%E4%B8%ADio%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95-2">roderick师傅的博客</a>直接看本人的分析呢。然后发现roderick师傅写的是最详细最易懂的，推荐正在学习apple2的师傅直接去看。</p>
+<p>我这里据两道题来分析，记录一下学习的过程。</p>
+	
+	</div>
+  <a type="button" href="/2024/08/05/house-of-apple2/#more" class="btn btn-default more">阅读此文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2024/07/30/glibc-IO/" title="glibc2.35，有特殊情况会说明。">『glibc源码补完计划』IO_FILE</a>
 		</h3>
 		</div>
@@ -378,35 +406,6 @@
 </div>
 
 		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2024/05/12/exit-hook-first-try/" title="从这道题学习exit hook的一种打法和查找偏移的方法">『2024sdpctf(山警校赛)』magic_write</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2024-05-12  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<h3 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> __fastcall <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">const</span> <span class="type">char</span> **argv, <span class="type">const</span> <span class="type">char</span> **envp)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">int</span> v4; <span class="comment">// [rsp+1Ch] [rbp-24h] BYREF</span></span><br><span class="line">  <span class="type">char</span> buf[<span class="number">20</span>]; <span class="comment">// [rsp+20h] [rbp-20h] BYREF</span></span><br><span class="line">  <span class="type">unsigned</span> <span class="type">int</span> v6; <span class="comment">// [rsp+34h] [rbp-Ch]</span></span><br><span class="line">  <span class="type">unsigned</span> <span class="type">int</span> v7; <span class="comment">// [rsp+38h] [rbp-8h]</span></span><br><span class="line">  <span class="type">unsigned</span> <span class="type">int</span> seed; <span class="comment">// [rsp+3Ch] [rbp-4h]</span></span><br><span class="line"></span><br><span class="line">  myinit(argc, argv, envp);</span><br><span class="line">  <span class="built_in">puts</span>(<span class="string">&quot;please enter this challenge&quot;</span>);</span><br><span class="line">  __isoc99_scanf(<span class="string">&quot;%d&quot;</span>, &amp;v4);</span><br><span class="line">  seed = time(<span class="number">0LL</span>);</span><br><span class="line">  srand(seed);</span><br><span class="line">  v7 = rand();</span><br><span class="line">  v6 = v7 % <span class="number">0x6E</span>;</span><br><span class="line">  <span class="keyword">if</span> ( v7 % <span class="number">0x6E</span> == v4 )</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">&quot;Give you a gift&quot;</span>);</span><br><span class="line">    gift();</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">&quot;Do you know any address to write&quot;</span>);</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">&quot;Come and try it out&quot;</span>);</span><br><span class="line">    read(<span class="number">0</span>, buf, <span class="number">0x2E</span>uLL);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>main函数开头要我们绕过一个随机数检查才有输入点。gift函数会打印puts函数的libc地址，libc地址不请自来。接着read函数溢出14个字节，只能覆盖六个字节到ret地址，所以想要在这里写one gadget是不可能的了，因为libc地址占七个字节。</p>
-	
-	</div>
-  <a type="button" href="/2024/05/12/exit-hook-first-try/#more" class="btn btn-default more">阅读此文</a>
-</div>
-
-		
 
 		</div>
 
@@ -476,7 +475,7 @@
 		
 			<li><a href="/categories/ret2dlresolve/">ret2dlresolve<span>1</span></a></li>
 		
-			<li><a href="/categories/图灵完备/">图灵完备<span>2</span></a></li>
+			<li><a href="/categories/图灵完备/">图灵完备<span>3</span></a></li>
 		
 		</ul>
 	</div>
@@ -487,41 +486,41 @@
 		<h4>标签云</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
+			<li><a href="/tags/IO-FILE/">IO_FILE<span>2</span></a></li>
+		
 			<li><a href="/tags/WP/">WP<span>14</span></a></li>
 		
-			<li><a href="/tags/PWN/">PWN<span>24</span></a></li>
+			<li><a href="/tags/protobuf/">protobuf<span>1</span></a></li>
 		
-			<li><a href="/tags/PWN，protobuf/">PWN，protobuf<span>1</span></a></li>
-		
-			<li><a href="/tags/ROP/">ROP<span>2</span></a></li>
-		
-			<li><a href="/tags/exit-hook/">exit_hook<span>2</span></a></li>
-		
-			<li><a href="/tags/libc-got/">libc_got<span>1</span></a></li>
-		
-			<li><a href="/tags/magic-gadget/">magic_gadget<span>1</span></a></li>
-		
-			<li><a href="/tags/cpp异常处理机制/">cpp异常处理机制<span>1</span></a></li>
+			<li><a href="/tags/图灵完备/">图灵完备<span>3</span></a></li>
 		
 			<li><a href="/tags/docker/">docker<span>1</span></a></li>
 		
-			<li><a href="/tags/heap/">heap<span>6</span></a></li>
+			<li><a href="/tags/计组/">计组<span>3</span></a></li>
 		
-			<li><a href="/tags/diary/">diary<span>14</span></a></li>
+			<li><a href="/tags/PWN/">PWN<span>24</span></a></li>
 		
 			<li><a href="/tags/BUU/">BUU<span>1</span></a></li>
 		
-			<li><a href="/tags/ret2dlresolve/">ret2dlresolve<span>1</span></a></li>
-		
-			<li><a href="/tags/计组/">计组<span>2</span></a></li>
-		
-			<li><a href="/tags/IO-FILE/">IO_FILE<span>2</span></a></li>
-		
-			<li><a href="/tags/图灵完备/">图灵完备<span>2</span></a></li>
-		
 			<li><a href="/tags/CTF/">CTF<span>21</span></a></li>
 		
-			<li><a href="/tags/protobuf/">protobuf<span>1</span></a></li>
+			<li><a href="/tags/ret2dlresolve/">ret2dlresolve<span>1</span></a></li>
+		
+			<li><a href="/tags/libc-got/">libc_got<span>1</span></a></li>
+		
+			<li><a href="/tags/diary/">diary<span>14</span></a></li>
+		
+			<li><a href="/tags/PWN，protobuf/">PWN，protobuf<span>1</span></a></li>
+		
+			<li><a href="/tags/cpp异常处理机制/">cpp异常处理机制<span>1</span></a></li>
+		
+			<li><a href="/tags/ROP/">ROP<span>2</span></a></li>
+		
+			<li><a href="/tags/heap/">heap<span>6</span></a></li>
+		
+			<li><a href="/tags/exit-hook/">exit_hook<span>2</span></a></li>
+		
+			<li><a href="/tags/magic-gadget/">magic_gadget<span>1</span></a></li>
 		
 		 
 		</ul>
@@ -533,6 +532,10 @@
 <div class="widget">
   <h4>最新文章</h4>
   <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2024/10/25/Turing-Complete-3/"  title="本攻略没有那么追求极致的效率和布局，大佬轻喷。" ><i class="fa fa-file-o"></i>『图灵完备』完全攻略之存储器（三）</a>
+      </li>
     
       <li>
         <a href="/2024/10/24/Turing-Complete-2/"  title="第一章写文字讲述理解写得我好累，这一章开始，想到什么讲什么，想不到就只有图了。顺带一提，本攻略没有那么追求极致的效率和布局，大佬轻喷。" ><i class="fa fa-file-o"></i>『图灵完备』完全攻略之算数运算（二）</a>
@@ -548,10 +551,6 @@
     
       <li>
         <a href="/2024/10/11/protobuf-install/"  title="自从国赛遇到protobuf题目之后就一直想好好研究一下，最近才学习其用法。" ><i class="fa fa-file-o"></i>protobuf pwn题环境配置及基础操作</a>
-      </li>
-    
-      <li>
-        <a href="/2024/09/25/Turing-Complete-1/"  title="开启计组学习的新大门" ><i class="fa fa-file-o"></i>『图灵完备』完全攻略之基础逻辑电路（一）</a>
       </li>
     
   </ul>
