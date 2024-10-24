@@ -133,6 +133,34 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2024/06/11/first-docker/" title="记录第一次出PWN题可能会遇到的docker相关问题及其解决办法，还有其他可能用得上的一些命令">出PWN题可能会遇到的docker相关问题及其解决办法</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2024-06-11  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h3 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h3><p>最近给战队出了一道pwn题，第一次体验完整的出题流程，涉及到docker的使用。因为是第一次使用docker来封装题目环境，所以遇到了很多问题。网上有一些关于出pwn题的使用方法，但是有些问题没有提到，所以这里记录一下我遇到的问题，还有解决方法。docker的安装网上教程很多这里不多赘述。</p>
+<p>顺带一提，我的操作环境是wsl2的Ubuntu 22.04.3 LTS，若有因环境不同而引起的操作不同，具体请查询其他资料。</p>
+	
+	</div>
+  <a type="button" href="/2024/06/11/first-docker/#more" class="btn btn-default more">阅读此文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2024/06/04/largebin-attack/" title="largebin attack分为2.30前和2.30后两种情况。这里记录2.30后的攻击方法，2.30前的可以看[hollk师傅](https://blog.csdn.net/qq_41202237/article/details/112825556)的讲解。">『Heap Exploitation』largebin_attack</a>
 		</h3>
 		</div>
@@ -380,34 +408,6 @@
 </div>
 
 		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2024/03/02/glibc-unsortedbin/" title="glibc_2.23，除非特别说明，否则下文默认为此版本下的分析。">『glibc源码补完计划』UnsortedBin</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2024-03-02  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<h2 id="UnsortedBin"><a href="#UnsortedBin" class="headerlink" title="UnsortedBin"></a>UnsortedBin</h2><p>最近学习堆题的时候接触到了unsortedbin的利用，感觉还挺有意思的，所以先把它的源码读了，方便以后构建利用思路。之所以这里分析glibc2.23的代码而非2.35的代码，是因为从2.29开始，unsortedbin加入了一坨检查机制以至于它在高版本下难以被攻击，所以索性读低版本的了。</p>
-<p>glibc2.23在unsortedbin中取chunk的时候的检查：</p>
-	
-	</div>
-  <a type="button" href="/2024/03/02/glibc-unsortedbin/#more" class="btn btn-default more">阅读此文</a>
-</div>
-
-		
 
 		</div>
 
@@ -477,7 +477,7 @@
 		
 			<li><a href="/categories/ret2dlresolve/">ret2dlresolve<span>1</span></a></li>
 		
-			<li><a href="/categories/图灵完备/">图灵完备<span>3</span></a></li>
+			<li><a href="/categories/图灵完备/">图灵完备<span>4</span></a></li>
 		
 		</ul>
 	</div>
@@ -488,41 +488,41 @@
 		<h4>标签云</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/PWN，protobuf/">PWN，protobuf<span>1</span></a></li>
+			<li><a href="/tags/protobuf/">protobuf<span>1</span></a></li>
 		
 			<li><a href="/tags/libc-got/">libc_got<span>1</span></a></li>
 		
-			<li><a href="/tags/BUU/">BUU<span>1</span></a></li>
-		
-			<li><a href="/tags/docker/">docker<span>1</span></a></li>
-		
-			<li><a href="/tags/protobuf/">protobuf<span>1</span></a></li>
-		
-			<li><a href="/tags/图灵完备/">图灵完备<span>3</span></a></li>
-		
-			<li><a href="/tags/ROP/">ROP<span>2</span></a></li>
-		
-			<li><a href="/tags/heap/">heap<span>6</span></a></li>
-		
 			<li><a href="/tags/PWN/">PWN<span>24</span></a></li>
 		
-			<li><a href="/tags/计组/">计组<span>3</span></a></li>
+			<li><a href="/tags/PWN，protobuf/">PWN，protobuf<span>1</span></a></li>
 		
 			<li><a href="/tags/magic-gadget/">magic_gadget<span>1</span></a></li>
 		
 			<li><a href="/tags/cpp异常处理机制/">cpp异常处理机制<span>1</span></a></li>
 		
-			<li><a href="/tags/CTF/">CTF<span>21</span></a></li>
-		
-			<li><a href="/tags/exit-hook/">exit_hook<span>2</span></a></li>
-		
 			<li><a href="/tags/diary/">diary<span>14</span></a></li>
 		
 			<li><a href="/tags/WP/">WP<span>14</span></a></li>
 		
+			<li><a href="/tags/IO-FILE/">IO_FILE<span>2</span></a></li>
+		
 			<li><a href="/tags/ret2dlresolve/">ret2dlresolve<span>1</span></a></li>
 		
-			<li><a href="/tags/IO-FILE/">IO_FILE<span>2</span></a></li>
+			<li><a href="/tags/ROP/">ROP<span>2</span></a></li>
+		
+			<li><a href="/tags/exit-hook/">exit_hook<span>2</span></a></li>
+		
+			<li><a href="/tags/heap/">heap<span>6</span></a></li>
+		
+			<li><a href="/tags/BUU/">BUU<span>1</span></a></li>
+		
+			<li><a href="/tags/图灵完备/">图灵完备<span>4</span></a></li>
+		
+			<li><a href="/tags/CTF/">CTF<span>21</span></a></li>
+		
+			<li><a href="/tags/计组/">计组<span>4</span></a></li>
+		
+			<li><a href="/tags/docker/">docker<span>1</span></a></li>
 		
 		 
 		</ul>
@@ -540,6 +540,10 @@
       </li>
     
       <li>
+        <a href="/2024/10/25/Turing-Complete-4/"  title="我发现上面的关卡写完之后，前面的也会同步，所以直接展示图灵完备那一关，并且展示各个元件好了。至此，你完成了一台可运行的计算机。" ><i class="fa fa-file-o"></i>『图灵完备』完全攻略之处理器架构（四）</a>
+      </li>
+    
+      <li>
         <a href="/2024/10/24/Turing-Complete-2/"  title="第一章写文字讲述理解写得我好累，这一章开始，想到什么讲什么，想不到就只有图了。顺带一提，本攻略没有那么追求极致的效率和布局，大佬轻喷。" ><i class="fa fa-file-o"></i>『图灵完备』完全攻略之算数运算（二）</a>
       </li>
     
@@ -549,10 +553,6 @@
     
       <li>
         <a href="/2024/10/12/2024YLCTF-1/"  title="ROUND1" ><i class="fa fa-file-o"></i>『YLCTF 源鲁杯 2024』 PWN-1 WP</a>
-      </li>
-    
-      <li>
-        <a href="/2024/10/11/protobuf-install/"  title="自从国赛遇到protobuf题目之后就一直想好好研究一下，最近才学习其用法。" ><i class="fa fa-file-o"></i>protobuf pwn题环境配置及基础操作</a>
       </li>
     
   </ul>

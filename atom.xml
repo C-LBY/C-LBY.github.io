@@ -40,6 +40,29 @@
   </entry>
   
   <entry>
+    <title>『图灵完备』完全攻略之处理器架构（四）</title>
+    <link href="https://c-lby.top/2024/10/25/Turing-Complete-4/"/>
+    <id>https://c-lby.top/2024/10/25/Turing-Complete-4/</id>
+    <published>2024-10-25T07:40:24.000Z</published>
+    <updated>2024-10-24T08:26:45.882Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="OVERTURE架构"><a href="#OVERTURE架构" class="headerlink" title="OVERTURE架构"></a>OVERTURE架构</h2><p><img src="https://c-lby.top/images/Turing-Complete/4/%E5%9B%BE%E7%81%B5%E5%AE%8C%E5%A4%87.png" alt="图灵完备"></p><h3 id="指令解码器"><a href="#指令解码器" class="headerlink" title="指令解码器"></a>指令解码器</h3><p>位于架构上方</p><p><img src="https://c-lby.top/images/Turing-Complete/4/DEC.png" alt="DEC"></p><h3 id="条件跳转"><a href="#条件跳转" class="headerlink" title="条件跳转"></a>条件跳转</h3><p>架构左下角</p><p><img src="https://c-lby.top/images/Turing-Complete/4/COND.png" alt="COND"></p><h3 id="算数引擎"><a href="#算数引擎" class="headerlink" title="算数引擎"></a>算数引擎</h3><p>ALU，位于架构右上角</p><p><img src="https://c-lby.top/images/Turing-Complete/4/ALU.png" alt="ALU"></p>]]></content>
+    
+    
+    <summary type="html">我发现上面的关卡写完之后，前面的也会同步，所以直接展示图灵完备那一关，并且展示各个元件好了。至此，你完成了一台可运行的计算机。</summary>
+    
+    
+    
+    <category term="图灵完备" scheme="https://c-lby.top/categories/%E5%9B%BE%E7%81%B5%E5%AE%8C%E5%A4%87/"/>
+    
+    
+    <category term="图灵完备" scheme="https://c-lby.top/tags/%E5%9B%BE%E7%81%B5%E5%AE%8C%E5%A4%87/"/>
+    
+    <category term="计组" scheme="https://c-lby.top/tags/%E8%AE%A1%E7%BB%84/"/>
+    
+  </entry>
+  
+  <entry>
     <title>『图灵完备』完全攻略之算数运算（二）</title>
     <link href="https://c-lby.top/2024/10/24/Turing-Complete-2/"/>
     <id>https://c-lby.top/2024/10/24/Turing-Complete-2/</id>
@@ -456,31 +479,6 @@
     <summary type="html">&lt;p&gt;其实现在是17号凌晨，不过有接触到新的东西所以还是记录一下。首先是今天培训讲的内容有关Windows免杀，还算是比较感兴趣。但是苦于基础知识不多，开发能力欠缺，学起来和实践起来还是有点痛苦的。如果以后要走免杀研究或者杀软对抗这条路的话，至少要学好cpp、go、rust之类的语言，同时还要学Windows api相关的东西。&lt;/p&gt;
 &lt;p&gt;第二是做了一道背包加密的题目，用LLL算法在sage进行解密，这部分知识有待进一步深入学习。&lt;a href=&quot;https://blog.csdn.net/XiongSiqi_blog/article/details/132109655&quot;&gt;资料&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;第三是，很久没用过web伪协议的知识了，应该要回顾一下了。&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="diary" scheme="https://c-lby.top/categories/diary/"/>
-    
-    
-    <category term="diary" scheme="https://c-lby.top/tags/diary/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>日志 24-8-14</title>
-    <link href="https://c-lby.top/2024/08/14/diary/24-8-14/"/>
-    <id>https://c-lby.top/2024/08/14/diary/24-8-14/</id>
-    <published>2024-08-14T02:41:38.000Z</published>
-    <updated>2024-08-14T15:50:59.173Z</updated>
-    
-    <content type="html"><![CDATA[<p>今天似乎什么也没学，来青马红客训练营这边报了个道，也是来到锦行科技的公司了。</p><p>VN的成员页做好了，因为头像托管在github上加载有点慢，所以汪队帮我传到oss上了<a href="https://vnteam.cn/members/%E3%80%82oss%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F%E9%98%BF%E9%87%8C%E4%BA%91%E7%9A%84%E5%AF%B9%E8%B1%A1%E5%82%A8%E5%AD%98%E6%9C%8D%E5%8A%A1%E3%80%82%E6%9C%89%E6%97%B6%E9%97%B4%E4%BA%86%E8%A7%A3%E4%B8%80%E4%B8%8B%E3%80%82">https://vnteam.cn/members/。oss是什么？阿里云的对象储存服务。有时间了解一下。</a></p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;今天似乎什么也没学，来青马红客训练营这边报了个道，也是来到锦行科技的公司了。&lt;/p&gt;
-&lt;p&gt;VN的成员页做好了，因为头像托管在github上加载有点慢，所以汪队帮我传到oss上了&lt;a href=&quot;https://vnteam.cn/members/%E3%80%82oss%</summary>
-      
     
     
     

@@ -31,6 +31,33 @@
     
     
     <entry>
+      <title>『图灵完备』完全攻略之处理器架构（四）</title>
+      <link href="/2024/10/25/Turing-Complete-4/"/>
+      <url>/2024/10/25/Turing-Complete-4/</url>
+      
+        <content type="html"><![CDATA[<h2 id="OVERTURE架构"><a href="#OVERTURE架构" class="headerlink" title="OVERTURE架构"></a>OVERTURE架构</h2><p><img src="https://c-lby.top/images/Turing-Complete/4/%E5%9B%BE%E7%81%B5%E5%AE%8C%E5%A4%87.png" alt="图灵完备"></p><h3 id="指令解码器"><a href="#指令解码器" class="headerlink" title="指令解码器"></a>指令解码器</h3><p>位于架构上方</p><p><img src="https://c-lby.top/images/Turing-Complete/4/DEC.png" alt="DEC"></p><h3 id="条件跳转"><a href="#条件跳转" class="headerlink" title="条件跳转"></a>条件跳转</h3><p>架构左下角</p><p><img src="https://c-lby.top/images/Turing-Complete/4/COND.png" alt="COND"></p><h3 id="算数引擎"><a href="#算数引擎" class="headerlink" title="算数引擎"></a>算数引擎</h3><p>ALU，位于架构右上角</p><p><img src="https://c-lby.top/images/Turing-Complete/4/ALU.png" alt="ALU"></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 图灵完备 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 图灵完备 </tag>
+            
+            <tag> 计组 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>『图灵完备』完全攻略之算数运算（二）</title>
       <link href="/2024/10/24/Turing-Complete-2/"/>
       <url>/2024/10/24/Turing-Complete-2/</url>
