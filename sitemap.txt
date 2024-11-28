@@ -1,3 +1,4 @@
+https://c-lby.top/2024/11/28/first-llvm-pass-pwn/
 https://c-lby.top/2024/11/01/2024xsctf-QQbot-wp/
 https://c-lby.top/2024/10/11/protobuf-install/
 https://c-lby.top/2024/10/23/Turing-Complete-2/
@@ -66,6 +67,8 @@ https://c-lby.top/tags/magic-gadget/
 https://c-lby.top/tags/protobuf/
 https://c-lby.top/tags/%E5%9B%BE%E7%81%B5%E5%AE%8C%E5%A4%87/
 https://c-lby.top/tags/%E8%AE%A1%E7%BB%84/
+https://c-lby.top/tags/llvm/
+https://c-lby.top/tags/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/
 https://c-lby.top/categories/WP/
 https://c-lby.top/categories/glibc%E6%BA%90%E7%A0%81%E8%A1%A5%E5%AE%8C%E8%AE%A1%E5%88%92/
 https://c-lby.top/categories/diary/
@@ -78,3 +81,4 @@ https://c-lby.top/categories/ret2-libc-start-main/
 https://c-lby.top/categories/magic-gadget/
 https://c-lby.top/categories/protobuf/
 https://c-lby.top/categories/%E5%9B%BE%E7%81%B5%E5%AE%8C%E5%A4%87/
+https://c-lby.top/categories/llvm-pass/

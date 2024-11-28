@@ -133,6 +133,33 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2024/09/02/2024ycb-wp/" title="卷">『2024羊城杯初赛』 PWN WP</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2024-09-02  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h3 id="pstack"><a href="#pstack" class="headerlink" title="pstack"></a>pstack</h3><h4 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h4><p>非常经典的没有回显的0x10字节溢出，栈迁移。第一件事就要先考虑怎么泄露出libc地址。我们选择将栈劫持到bss段。从汇编代码可知vuln函数栈帧开辟了0x30大小，所以把rbp劫持为某个选定的bss段+0x30，这样rbp就会跳到bss+0x30。</p>
+	
+	</div>
+  <a type="button" href="/2024/09/02/2024ycb-wp/#more" class="btn btn-default more">阅读此文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2024/09/01/ret2libc-start-main/" title="BaseCTF week3 PWN PIE">记一次简单的ret2libc_start_main分析及利用</a>
 		</h3>
 		</div>
@@ -381,34 +408,6 @@
 </div>
 
 		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2024/06/04/2024-litctf-wp/" title="非常好堆题，使我的patchelf旋转。">『LitCTF2024』 PWN WP</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2024-06-04  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<h3 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h3><p>虽然说是新生赛，但是五道堆题估计真新生都被吓傻了。实际上题目限制非常宽松，也正好可以拿来总结各个常见版本glibc的基本特点。因为题目除了2.39之外都一样所以就先分析题目，再来看不同版本下的做法。</p>
-<h3 id="0x01-题目分析"><a href="#0x01-题目分析" class="headerlink" title="0x01 题目分析"></a>0x01 题目分析</h3>
-	
-	</div>
-  <a type="button" href="/2024/06/04/2024-litctf-wp/#more" class="btn btn-default more">阅读此文</a>
-</div>
-
-		
 
 		</div>
 
@@ -470,6 +469,8 @@
 		
 			<li><a href="/categories/hijack-libc-got/">hijack_libc_got<span>1</span></a></li>
 		
+			<li><a href="/categories/llvm-pass/">llvm pass<span>1</span></a></li>
+		
 			<li><a href="/categories/magic-gadget/">magic_gadget<span>1</span></a></li>
 		
 			<li><a href="/categories/protobuf/">protobuf<span>1</span></a></li>
@@ -489,39 +490,43 @@
 		<h4>标签云</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/magic-gadget/">magic_gadget<span>1</span></a></li>
-		
-			<li><a href="/tags/heap/">heap<span>6</span></a></li>
+			<li><a href="/tags/docker/">docker<span>1</span></a></li>
 		
 			<li><a href="/tags/ret2dlresolve/">ret2dlresolve<span>1</span></a></li>
 		
-			<li><a href="/tags/图灵完备/">图灵完备<span>4</span></a></li>
+			<li><a href="/tags/cpp异常处理机制/">cpp异常处理机制<span>1</span></a></li>
 		
-			<li><a href="/tags/WP/">WP<span>15</span></a></li>
-		
-			<li><a href="/tags/exit-hook/">exit_hook<span>2</span></a></li>
-		
-			<li><a href="/tags/BUU/">BUU<span>1</span></a></li>
-		
-			<li><a href="/tags/PWN/">PWN<span>26</span></a></li>
+			<li><a href="/tags/PWN/">PWN<span>27</span></a></li>
 		
 			<li><a href="/tags/ROP/">ROP<span>2</span></a></li>
 		
-			<li><a href="/tags/libc-got/">libc_got<span>1</span></a></li>
-		
-			<li><a href="/tags/diary/">diary<span>14</span></a></li>
-		
-			<li><a href="/tags/cpp异常处理机制/">cpp异常处理机制<span>1</span></a></li>
+			<li><a href="/tags/BUU/">BUU<span>1</span></a></li>
 		
 			<li><a href="/tags/IO-FILE/">IO_FILE<span>2</span></a></li>
 		
 			<li><a href="/tags/计组/">计组<span>4</span></a></li>
 		
-			<li><a href="/tags/CTF/">CTF<span>22</span></a></li>
+			<li><a href="/tags/llvm/">llvm<span>1</span></a></li>
+		
+			<li><a href="/tags/图灵完备/">图灵完备<span>4</span></a></li>
+		
+			<li><a href="/tags/heap/">heap<span>6</span></a></li>
 		
 			<li><a href="/tags/protobuf/">protobuf<span>2</span></a></li>
 		
-			<li><a href="/tags/docker/">docker<span>1</span></a></li>
+			<li><a href="/tags/diary/">diary<span>14</span></a></li>
+		
+			<li><a href="/tags/CTF/">CTF<span>23</span></a></li>
+		
+			<li><a href="/tags/WP/">WP<span>16</span></a></li>
+		
+			<li><a href="/tags/编译原理/">编译原理<span>1</span></a></li>
+		
+			<li><a href="/tags/magic-gadget/">magic_gadget<span>1</span></a></li>
+		
+			<li><a href="/tags/exit-hook/">exit_hook<span>2</span></a></li>
+		
+			<li><a href="/tags/libc-got/">libc_got<span>1</span></a></li>
 		
 		 
 		</ul>
@@ -533,6 +538,10 @@
 <div class="widget">
   <h4>最新文章</h4>
   <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2024/11/28/first-llvm-pass-pwn/"  title="llvm pass pwn 入门" ><i class="fa fa-file-o"></i>llvm pass pwn 入门</a>
+      </li>
     
       <li>
         <a href="/2024/11/01/2024xsctf-QQbot-wp/"  title="出题记录兼WP" ><i class="fa fa-file-o"></i>2024XSCTF初赛QQbot出题小记</a>
@@ -548,10 +557,6 @@
     
       <li>
         <a href="/2024/10/23/Turing-Complete-2/"  title="第一章写文字讲述理解写得我好累，这一章开始，想到什么讲什么，想不到就只有图了。顺带一提，本攻略没有那么追求极致的效率和布局，大佬轻喷。" ><i class="fa fa-file-o"></i>『图灵完备』完全攻略之算数运算（二）</a>
-      </li>
-    
-      <li>
-        <a href="/2024/10/12/YLCTF-msgbot-protobuf/"  title="做了一天，我太菜了" ><i class="fa fa-file-o"></i>『YLCTF 源鲁杯 2024』 msg_bot</a>
       </li>
     
   </ul>
