@@ -133,6 +133,34 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2024/09/13/magic-gadget/" title="爱来自gets师傅">没有输出函数的情况下magic_gadget的利用</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2024-09-13  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h3 id="什么是magic-gadget"><a href="#什么是magic-gadget" class="headerlink" title="什么是magic_gadget"></a>什么是magic_gadget</h3><p>magic gadget其实是一类gadget的统称，指可以巧妙地实现某些目的的gadget。这里要讲的gadget只是众多magic gadget中的其中一个，可以在没法泄露libc地址的时候达到能够使用libc地址的目的。</p>
+<p>这里要讲的gadget位于程序的<code>__do_global_dtors_aux</code>函数中，偏移是0x18。</p>
+	
+	</div>
+  <a type="button" href="/2024/09/13/magic-gadget/#more" class="btn btn-default more">阅读此文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2024/09/02/2024ycb-wp/" title="卷">『2024羊城杯初赛』 PWN WP</a>
 		</h3>
 		</div>
@@ -380,34 +408,6 @@
 </div>
 
 		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2024/06/04/largebin-attack/" title="largebin attack分为2.30前和2.30后两种情况。这里记录2.30后的攻击方法，2.30前的可以看[hollk师傅](https://blog.csdn.net/qq_41202237/article/details/112825556)的讲解。">『Heap Exploitation』largebin_attack</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2024-06-04  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<h3 id="前置知识"><a href="#前置知识" class="headerlink" title="前置知识"></a>前置知识</h3><p>首先每个Large Bin中存在63个bin链表，在binmap中的index是64-126。每个bin中存的是一定范围内大小的chunk，而不是像tcachebin那样的一个bin一个大小。举个栗子，index64的bin中存的是0x400到0x430的chunk。每个bin能存取的范围一般是0x30。</p>
-<p>Large Bin既不是FIFO也不是LIFO，它的排序是根据chunk大小来进行的，并且结构更加复杂。large chunk被释放的时候不仅会被写入fd和bk，还有fd_nextsize和bk_nextsize两个指针来维护bin的结构。fd和bk用来链接bin中相同大小的chunk，而nextsize则用来链接bin中不同大小的chunk。更具体地说，<code>fd</code>指向比自己晚释放的相同大小的chunk，<code>bk</code>则指向比自己晚释放的相同大小的chunk，<code>fd_nextsize</code>用来指向比自己大的chunk，<code>bk_nextsize</code>则指向比自己小的chunk。在相同大小的chunkbin中只有首堆块会有nextsize的指针。bin中首尾chunk的nextsize会指向另一端，首堆块的fd会指向对应index的bin头地址，尾堆块的bk会指向对应index的bin头地址。</p>
-	
-	</div>
-  <a type="button" href="/2024/06/04/largebin-attack/#more" class="btn btn-default more">阅读此文</a>
-</div>
-
-		
 
 		</div>
 
@@ -457,7 +457,7 @@
 		
 			<li><a href="/categories/Heap-Exploitation/">Heap Exploitation<span>3</span></a></li>
 		
-			<li><a href="/categories/WP/">WP<span>13</span></a></li>
+			<li><a href="/categories/WP/">WP<span>14</span></a></li>
 		
 			<li><a href="/categories/cpp异常处理机制/">cpp异常处理机制<span>1</span></a></li>
 		
@@ -490,43 +490,43 @@
 		<h4>标签云</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/图灵完备/">图灵完备<span>4</span></a></li>
-		
-			<li><a href="/tags/计组/">计组<span>4</span></a></li>
-		
-			<li><a href="/tags/WP/">WP<span>16</span></a></li>
-		
-			<li><a href="/tags/diary/">diary<span>14</span></a></li>
-		
-			<li><a href="/tags/protobuf/">protobuf<span>2</span></a></li>
-		
-			<li><a href="/tags/PWN/">PWN<span>27</span></a></li>
-		
-			<li><a href="/tags/docker/">docker<span>1</span></a></li>
+			<li><a href="/tags/exit-hook/">exit_hook<span>2</span></a></li>
 		
 			<li><a href="/tags/ret2dlresolve/">ret2dlresolve<span>1</span></a></li>
 		
-			<li><a href="/tags/exit-hook/">exit_hook<span>2</span></a></li>
-		
 			<li><a href="/tags/编译原理/">编译原理<span>1</span></a></li>
-		
-			<li><a href="/tags/heap/">heap<span>6</span></a></li>
-		
-			<li><a href="/tags/IO-FILE/">IO_FILE<span>2</span></a></li>
-		
-			<li><a href="/tags/CTF/">CTF<span>23</span></a></li>
 		
 			<li><a href="/tags/cpp异常处理机制/">cpp异常处理机制<span>1</span></a></li>
 		
-			<li><a href="/tags/BUU/">BUU<span>1</span></a></li>
+			<li><a href="/tags/CTF/">CTF<span>24</span></a></li>
 		
-			<li><a href="/tags/llvm/">llvm<span>1</span></a></li>
+			<li><a href="/tags/PWN/">PWN<span>28</span></a></li>
+		
+			<li><a href="/tags/heap/">heap<span>6</span></a></li>
 		
 			<li><a href="/tags/magic-gadget/">magic_gadget<span>1</span></a></li>
 		
-			<li><a href="/tags/ROP/">ROP<span>2</span></a></li>
+			<li><a href="/tags/BUU/">BUU<span>1</span></a></li>
+		
+			<li><a href="/tags/docker/">docker<span>1</span></a></li>
+		
+			<li><a href="/tags/diary/">diary<span>14</span></a></li>
 		
 			<li><a href="/tags/libc-got/">libc_got<span>1</span></a></li>
+		
+			<li><a href="/tags/计组/">计组<span>4</span></a></li>
+		
+			<li><a href="/tags/llvm/">llvm<span>1</span></a></li>
+		
+			<li><a href="/tags/图灵完备/">图灵完备<span>4</span></a></li>
+		
+			<li><a href="/tags/protobuf/">protobuf<span>2</span></a></li>
+		
+			<li><a href="/tags/IO-FILE/">IO_FILE<span>2</span></a></li>
+		
+			<li><a href="/tags/WP/">WP<span>17</span></a></li>
+		
+			<li><a href="/tags/ROP/">ROP<span>2</span></a></li>
 		
 		 
 		</ul>
@@ -538,6 +538,10 @@
 <div class="widget">
   <h4>最新文章</h4>
   <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2024/12/09/2024GCBCTF-wp/"  title="2024国城杯初赛，pwn题挺水的，被打烂了" ><i class="fa fa-file-o"></i>『国城杯2024』PWN WP</a>
+      </li>
     
       <li>
         <a href="/2024/11/28/first-llvm-pass-pwn/"  title="llvm pass pwn 入门" ><i class="fa fa-file-o"></i>llvm pass pwn 入门</a>
@@ -553,10 +557,6 @@
     
       <li>
         <a href="/2024/10/24/Turing-Complete-3/"  title="本攻略没有那么追求极致的效率和布局，大佬轻喷。" ><i class="fa fa-file-o"></i>『图灵完备』完全攻略之存储器（三）</a>
-      </li>
-    
-      <li>
-        <a href="/2024/10/23/Turing-Complete-2/"  title="第一章写文字讲述理解写得我好累，这一章开始，想到什么讲什么，想不到就只有图了。顺带一提，本攻略没有那么追求极致的效率和布局，大佬轻喷。" ><i class="fa fa-file-o"></i>『图灵完备』完全攻略之算数运算（二）</a>
       </li>
     
   </ul>
