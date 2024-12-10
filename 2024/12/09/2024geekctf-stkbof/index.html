@@ -154,8 +154,8 @@
 <li>立即数和一些存放数据的寄存器前面会加一些井号，##表示必须用32位偏移量，#是必须不能用32位偏移量，没加井号意味着必要时才用32为偏移量。</li>
 <li>函数传参按照寄存器编号顺序来使用，例如有四个参数就用R0-R3寄存器。</li>
 </ul>
-<p><img src="https://c-lby.top/images/hexagon%E6%A0%88%E7%BB%93%E6%9E%84.png" alt="hexagon栈结构"></p>
-<p><img src="https://c-lby.top/images/hexagon%E6%A0%88%E5%BC%80%E8%BE%9F%E4%B8%8E%E9%94%80%E6%AF%81.png" alt="hexagon栈开辟与销毁"></p>
+<p><img src="https://c-lby.top/images/2024geekctf-stkbof/hexagon%E6%A0%88%E7%BB%93%E6%9E%84.png" alt="hexagon栈结构"></p>
+<p><img src="https://c-lby.top/images/2024geekctf-stkbof/hexagon%E6%A0%88%E5%BC%80%E8%BE%9F%E4%B8%8E%E9%94%80%E6%AF%81.png" alt="hexagon栈开辟与销毁"></p>
 <h2 id="题目分析-动调"><a href="#题目分析-动调" class="headerlink" title="题目分析&amp;动调"></a>题目分析&amp;动调</h2><h3 id="qemu-hexagon调试方法"><a href="#qemu-hexagon调试方法" class="headerlink" title="qemu-hexagon调试方法"></a>qemu-hexagon调试方法</h3><p>先讲讲动调的问题。原本我尝试使用gdb-multiarch来调试，但是发现无论如何都会报错，估计是gdb-multiarch的问题，应该是有解决办法的但暂时懒得管了，先放一边。</p>
 <figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">**</span><br><span class="line">ERROR:../../target/hexagon/gdbstub.c:33:hexagon_gdb_read_register: code should not be reached</span><br><span class="line">Bail out! ERROR:../../target/hexagon/gdbstub.c:33:hexagon_gdb_read_register: code should not be reached</span><br><span class="line">Segmentation fault (core dumped)</span><br></pre></td></tr></table></figure>
 
