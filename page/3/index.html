@@ -133,6 +133,34 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2024/06/11/first-docker/" title="记录第一次出PWN题可能会遇到的docker相关问题及其解决办法，还有其他可能用得上的一些命令">出PWN题可能会遇到的docker相关问题及其解决办法</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2024-06-11  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h3 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h3><p>最近给战队出了一道pwn题，第一次体验完整的出题流程，涉及到docker的使用。因为是第一次使用docker来封装题目环境，所以遇到了很多问题。网上有一些关于出pwn题的使用方法，但是有些问题没有提到，所以这里记录一下我遇到的问题，还有解决方法。docker的安装网上教程很多这里不多赘述。</p>
+<p>顺带一提，我的操作环境是wsl2的Ubuntu 22.04.3 LTS，若有因环境不同而引起的操作不同，具体请查询其他资料。</p>
+	
+	</div>
+  <a type="button" href="/2024/06/11/first-docker/#more" class="btn btn-default more">阅读此文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2024/06/04/largebin-attack/" title="largebin attack分为2.30前和2.30后两种情况。这里记录2.30后的攻击方法，2.30前的可以看[hollk师傅](https://blog.csdn.net/qq_41202237/article/details/112825556)的讲解。">『Heap Exploitation』largebin_attack</a>
 		</h3>
 		</div>
@@ -380,34 +408,6 @@
 </div>
 
 		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2024/03/02/glibc-unsortedbin/" title="glibc_2.23，除非特别说明，否则下文默认为此版本下的分析。">『glibc源码补完计划』UnsortedBin</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2024-03-02  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<h2 id="UnsortedBin"><a href="#UnsortedBin" class="headerlink" title="UnsortedBin"></a>UnsortedBin</h2><p>最近学习堆题的时候接触到了unsortedbin的利用，感觉还挺有意思的，所以先把它的源码读了，方便以后构建利用思路。之所以这里分析glibc2.23的代码而非2.35的代码，是因为从2.29开始，unsortedbin加入了一坨检查机制以至于它在高版本下难以被攻击，所以索性读低版本的了。</p>
-<p>glibc2.23在unsortedbin中取chunk的时候的检查：</p>
-	
-	</div>
-  <a type="button" href="/2024/03/02/glibc-unsortedbin/#more" class="btn btn-default more">阅读此文</a>
-</div>
-
-		
 
 		</div>
 
@@ -457,7 +457,7 @@
 		
 			<li><a href="/categories/Heap-Exploitation/">Heap Exploitation<span>3</span></a></li>
 		
-			<li><a href="/categories/WP/">WP<span>14</span></a></li>
+			<li><a href="/categories/WP/">WP<span>15</span></a></li>
 		
 			<li><a href="/categories/cpp异常处理机制/">cpp异常处理机制<span>1</span></a></li>
 		
@@ -492,41 +492,43 @@
 		
 			<li><a href="/tags/计组/">计组<span>4</span></a></li>
 		
-			<li><a href="/tags/IO-FILE/">IO_FILE<span>2</span></a></li>
-		
-			<li><a href="/tags/libc-got/">libc_got<span>1</span></a></li>
-		
-			<li><a href="/tags/ret2dlresolve/">ret2dlresolve<span>1</span></a></li>
-		
-			<li><a href="/tags/cpp异常处理机制/">cpp异常处理机制<span>1</span></a></li>
-		
-			<li><a href="/tags/图灵完备/">图灵完备<span>4</span></a></li>
+			<li><a href="/tags/PWN/">PWN<span>29</span></a></li>
 		
 			<li><a href="/tags/BUU/">BUU<span>1</span></a></li>
 		
 			<li><a href="/tags/diary/">diary<span>14</span></a></li>
 		
-			<li><a href="/tags/CTF/">CTF<span>24</span></a></li>
-		
-			<li><a href="/tags/编译原理/">编译原理<span>1</span></a></li>
-		
-			<li><a href="/tags/exit-hook/">exit_hook<span>2</span></a></li>
-		
-			<li><a href="/tags/WP/">WP<span>17</span></a></li>
-		
-			<li><a href="/tags/magic-gadget/">magic_gadget<span>1</span></a></li>
-		
 			<li><a href="/tags/heap/">heap<span>6</span></a></li>
 		
-			<li><a href="/tags/ROP/">ROP<span>2</span></a></li>
+			<li><a href="/tags/图灵完备/">图灵完备<span>4</span></a></li>
 		
 			<li><a href="/tags/llvm/">llvm<span>1</span></a></li>
 		
+			<li><a href="/tags/WP/">WP<span>18</span></a></li>
+		
 			<li><a href="/tags/protobuf/">protobuf<span>2</span></a></li>
 		
-			<li><a href="/tags/PWN/">PWN<span>28</span></a></li>
+			<li><a href="/tags/cpp异常处理机制/">cpp异常处理机制<span>1</span></a></li>
 		
 			<li><a href="/tags/docker/">docker<span>1</span></a></li>
+		
+			<li><a href="/tags/ROP/">ROP<span>2</span></a></li>
+		
+			<li><a href="/tags/IO-FILE/">IO_FILE<span>2</span></a></li>
+		
+			<li><a href="/tags/编译原理/">编译原理<span>1</span></a></li>
+		
+			<li><a href="/tags/magic-gadget/">magic_gadget<span>1</span></a></li>
+		
+			<li><a href="/tags/CTF/">CTF<span>25</span></a></li>
+		
+			<li><a href="/tags/exit-hook/">exit_hook<span>2</span></a></li>
+		
+			<li><a href="/tags/ret2dlresolve/">ret2dlresolve<span>1</span></a></li>
+		
+			<li><a href="/tags/libc-got/">libc_got<span>1</span></a></li>
+		
+			<li><a href="/tags/hexagon/">hexagon<span>1</span></a></li>
 		
 		 
 		</ul>
@@ -538,6 +540,10 @@
 <div class="widget">
   <h4>最新文章</h4>
   <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2024/12/09/2024geekctf-stkbof/"  title="非常好架构，使我的DPS旋转" ><i class="fa fa-file-o"></i>『2024GeekCTF』stkbof-初识hexag...</a>
+      </li>
     
       <li>
         <a href="/2024/12/09/2024GCBCTF-wp/"  title="2024国城杯初赛，pwn题挺水的，被打烂了" ><i class="fa fa-file-o"></i>『国城杯2024』PWN WP</a>
@@ -553,10 +559,6 @@
     
       <li>
         <a href="/2024/10/25/Turing-Complete-4/"  title="我发现上面的关卡写完之后，前面的也会同步，所以直接展示图灵完备那一关，并且展示各个元件好了。至此，你完成了一台可运行的计算机。" ><i class="fa fa-file-o"></i>『图灵完备』完全攻略之处理器架构（四）</a>
-      </li>
-    
-      <li>
-        <a href="/2024/10/24/Turing-Complete-3/"  title="本攻略没有那么追求极致的效率和布局，大佬轻喷。" ><i class="fa fa-file-o"></i>『图灵完备』完全攻略之存储器（三）</a>
       </li>
     
   </ul>
