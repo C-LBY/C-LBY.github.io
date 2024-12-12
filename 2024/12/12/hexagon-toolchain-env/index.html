@@ -1,0 +1,373 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  <meta name="baidu-site-verification" content="codeva-0Qx7wvY9gP" />
+  
+  <title>hexagon LLVM编译环境搭建 | C_LBY&#39;s BLOG</title>
+  <meta name="author" content="鎏柏鱼">
+  
+  <meta name="description" content="波折的，hexagon架构LLVM编译环境搭建">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="hexagon LLVM编译环境搭建"/>
+  <meta property="og:site_name" content="C_LBY&#39;s BLOG"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+    <link rel="alternative" href="/atom.xml" title="C_LBY&#39;s BLOG" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">C_LBY&#39;s BLOG</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/diary" title="fashion little junk">
+			  <i class="fa fa-tasks"></i>Diary
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class="fa fa-rss"></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> hexagon LLVM编译环境搭建</h1>
+		</div>
+	
+
+
+
+	<div class="row post">
+		<!-- cols -->
+		
+			<div id="top_meta"></div>
+			<div class="col-md-9">
+				
+
+							<!-- content -->
+							<div class="mypage">
+								
+									<div class="alert alert-success description">
+										<i class="fa fa-info-circle"></i> 波折的，hexagon架构LLVM编译环境搭建
+									</div> <!-- alert -->
+									
+
+										<h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><p><a target="_blank" rel="noopener" href="https://github.com/quic/toolchain_for_hexagon">toolchain for hexagon</a>这是高通官方的hexagon架构编译工具链源码。是的没错你要自己编译这个环境。当然github上面也给出了编译好的release版本，开箱即用。经历一些波折之后我觉得似乎还是开箱即用比较方便（</p>
+<p>搭建步骤大致如下：</p>
+<ol>
+<li>下载依赖项源码</li>
+<li>设置依赖项源码路径的环境变量</li>
+<li>逐项编译</li>
+</ol>
+<h2 id="在本地构建"><a href="#在本地构建" class="headerlink" title="在本地构建"></a>在本地构建</h2><p>local文件夹下的README有提到方法</p>
+<p>首先要先安装依赖项，这些依赖在dockerfile中有提到</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">bison \</span><br><span class="line">cmake \</span><br><span class="line">flex \</span><br><span class="line">rsync \</span><br><span class="line">wget \</span><br><span class="line">build-essential \</span><br><span class="line">python-is-python3 \</span><br><span class="line">python3.<span class="number">8</span> \</span><br><span class="line">python3.<span class="number">8</span>-venv \</span><br><span class="line">curl \</span><br><span class="line">xz-utils \</span><br><span class="line">zstd \</span><br><span class="line">ca-certificates \</span><br><span class="line">ccache \</span><br><span class="line">git \</span><br><span class="line">software-properties-common \</span><br><span class="line">bc \</span><br><span class="line">ninja-build \</span><br><span class="line">cpio \</span><br><span class="line">python3-psutil \</span><br><span class="line">unzip</span><br></pre></td></tr></table></figure>
+
+<p>cmake如果直接用apt管理器下载版本会太旧，因此需要从kitware下载。后面将在容器里搭建会讲到。</p>
+<p>然后运行脚本</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">./get-src-repos.sh $&#123;PWD&#125; $&#123;PWD&#125;/install/manifest     &lt;-获取源码</span><br><span class="line"></span><br><span class="line">cd llvm-test-suite</span><br><span class="line">git am ../test-suite-patches/0001-Add-cycle-read-for-hexagon.patch   &lt;-打个补丁</span><br><span class="line"></span><br><span class="line">TOOLCHAIN_INSTALL=$&#123;PWD&#125;/install \</span><br><span class="line">ROOT_INSTALL=$&#123;PWD&#125;/rootfs \</span><br><span class="line">ARTIFACT_BASE=$&#123;PWD&#125;/artifacts \</span><br><span class="line">ARTIFACT_TAG=main \</span><br><span class="line">    ./build-toolchain.sh     &lt;-设置变量后运行编译脚本</span><br></pre></td></tr></table></figure>
+
+<p>编译好之后可以运行<code>test-toolchain.sh</code>来检验，变量在build脚本的基础上加多一个<code>TEST_TOOLCHAIN=1</code>即可。然后就可以使用<code>hexagon-unknown-linux-musl-clang(++)</code>来编译项目了。默认是没有开PIE和canary的，partial relro。虽然hexagon是有类似保护机制的，还有待探究。</p>
+<h2 id="在容器构建"><a href="#在容器构建" class="headerlink" title="在容器构建"></a>在容器构建</h2><p>需要设置一个变量<code>ARTIFACT_TAG</code>，可以划分版本。比如现在hexagon最新可稳定支持的版本是19.1.5。不同版本的源码可以在项目分支tags中找到。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">export ARTIFACT_TAG=19.1.5</span><br><span class="line"></span><br><span class="line">./build-in-container.sh</span><br></pre></td></tr></table></figure>
+
+<p>这样就可以自动构建了。编译时间很长需要耐心等待。</p>
+<p>dockerfile由于网络问题，有些地方需要进行修改。以下是我给出可以在国内正常下载的修改过的dockerfile：</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">FROM</span> ubuntu:<span class="number">20.04</span>@sha256:<span class="number">6</span>d8d9799fe6ab3221965efac00b4c34a2bcc102c086a58dff9e19a08b913c7ef</span><br><span class="line"></span><br><span class="line"><span class="keyword">ENV</span> HOST_CLANG_VER <span class="number">19</span></span><br><span class="line"><span class="keyword">ENV</span> PATH=<span class="string">&quot;/opt/zig-linux-x86_64-0.11.0:$PATH&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Install common build utilities</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> sed -i <span class="string">&quot;s/http:\/\/archive.ubuntu.com/http:\/\/mirrors.tuna.tsinghua.edu.cn/g&quot;</span> /etc/apt/sources.list</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> apt update &amp;&amp; \</span></span><br><span class="line"><span class="language-bash">	DEBIAN_FRONTEND=noninteractive apt install -yy \</span></span><br><span class="line"><span class="language-bash">	apt-transport-https ca-certificates \</span></span><br><span class="line"><span class="language-bash">	eatmydata software-properties-common wget gpgv2 unzip &amp;&amp; \</span></span><br><span class="line"><span class="language-bash">	DEBIAN_FRONTEND=noninteractive eatmydata \</span></span><br><span class="line"><span class="language-bash">	add-apt-repository ppa:deadsnakes/ppa &amp;&amp; \</span></span><br><span class="line"><span class="language-bash">	DEBIAN_FRONTEND=noninteractive eatmydata \</span></span><br><span class="line"><span class="language-bash">	wget --quiet https://ziglang.org/download/0.11.0/zig-linux-x86_64-0.11.0.tar.xz &amp;&amp; \</span></span><br><span class="line"><span class="language-bash">	tar xf ./zig-linux-x86_64-0.11.0.tar.xz --directory /opt &amp;&amp; \</span></span><br><span class="line"><span class="language-bash">	wget https://apt.llvm.org/llvm.sh &amp;&amp; \</span></span><br><span class="line"><span class="language-bash">	<span class="built_in">chmod</span> +x ./llvm.sh &amp;&amp; \</span></span><br><span class="line"><span class="language-bash">	bash -x ./llvm.sh  <span class="variable">$&#123;HOST_CLANG_VER&#125;</span> &amp;&amp; \</span></span><br><span class="line"><span class="language-bash">	wget https://github.com/ninja-build/ninja/releases/download/v1.10.2/ninja-linux.zip &amp;&amp; \</span></span><br><span class="line"><span class="language-bash">	unzip -d /usr/local/bin ninja-linux.zip &amp;&amp; \</span></span><br><span class="line"><span class="language-bash">	update-alternatives --install /usr/bin/ninja ninja /usr/local/bin/ninja 1 --force</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2&gt;/dev/null |  apt-key add - &amp;&amp; \</span></span><br><span class="line"><span class="language-bash">	apt-add-repository <span class="string">&#x27;deb https://apt.kitware.com/ubuntu/ focal main&#x27;</span> &amp;&amp; \</span></span><br><span class="line"><span class="language-bash">	apt-get update</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-<span class="variable">$&#123;HOST_CLANG_VER&#125;</span> 100 &amp;&amp; \</span></span><br><span class="line"><span class="language-bash">	update-alternatives --install /usr/bin/clang clang /usr/bin/clang-<span class="variable">$&#123;HOST_CLANG_VER&#125;</span> 100 &amp;&amp; \</span></span><br><span class="line"><span class="language-bash">	DEBIAN_FRONTEND=noninteractive eatmydata apt update &amp;&amp; \</span></span><br><span class="line"><span class="language-bash">	DEBIAN_FRONTEND=noninteractive eatmydata \</span></span><br><span class="line"><span class="language-bash">	apt install -y --no-install-recommends \</span></span><br><span class="line"><span class="language-bash">	bison \</span></span><br><span class="line"><span class="language-bash">	cmake \</span></span><br><span class="line"><span class="language-bash">	flex \</span></span><br><span class="line"><span class="language-bash">	rsync \</span></span><br><span class="line"><span class="language-bash">	wget \</span></span><br><span class="line"><span class="language-bash">	build-essential \</span></span><br><span class="line"><span class="language-bash">	python-is-python3 \</span></span><br><span class="line"><span class="language-bash">	python3.8 \</span></span><br><span class="line"><span class="language-bash">	python3.8-venv \</span></span><br><span class="line"><span class="language-bash">	curl \</span></span><br><span class="line"><span class="language-bash">	xz-utils \</span></span><br><span class="line"><span class="language-bash">	zstd \</span></span><br><span class="line"><span class="language-bash">	ca-certificates \</span></span><br><span class="line"><span class="language-bash">	ccache \</span></span><br><span class="line"><span class="language-bash">	git \</span></span><br><span class="line"><span class="language-bash">	software-properties-common \</span></span><br><span class="line"><span class="language-bash">	bc \</span></span><br><span class="line"><span class="language-bash">	ninja-build \</span></span><br><span class="line"><span class="language-bash">	cpio \</span></span><br><span class="line"><span class="language-bash">	python3-psutil \</span></span><br><span class="line"><span class="language-bash">	unzip</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> <span class="built_in">cat</span> /etc/apt/sources.list | sed <span class="string">&quot;s/^deb\ /deb-src /&quot;</span> &gt;&gt; /etc/apt/sources.list</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> apt update &amp;&amp; \</span></span><br><span class="line"><span class="language-bash">	DEBIAN_FRONTEND=noninteractive eatmydata \</span></span><br><span class="line"><span class="language-bash">	apt build-dep -yy --arch-only qemu clang python3</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># From env.sh</span></span><br><span class="line"><span class="keyword">ARG</span> QEMU_REPO</span><br><span class="line"><span class="keyword">ARG</span> QEMU_REF=hexagon-sysemu-<span class="number">04</span>-oct-<span class="number">2024</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">ARG</span> ARTIFACT_BASE</span><br><span class="line"><span class="keyword">ARG</span> ARTIFACT_TAG</span><br><span class="line"></span><br><span class="line"><span class="keyword">ENV</span> VER <span class="number">19.1</span>.<span class="number">5</span></span><br><span class="line"><span class="keyword">ENV</span> TOOLCHAIN_INSTALL /usr/local/clang+llvm-$&#123;VER&#125;-cross-hexagon-unknown-linux-musl/</span><br><span class="line"><span class="keyword">ENV</span> ROOT_INSTALL /usr/local/hexagon-unknown-linux-musl-rootfs</span><br><span class="line"><span class="keyword">ENV</span> MAKE_TARBALLS <span class="number">1</span></span><br><span class="line"><span class="comment">#ENV HOST_LLVM_VERSION 10</span></span><br><span class="line"><span class="comment">#ENV CMAKE_VER 3.16.6</span></span><br><span class="line"><span class="comment">#ENV CMAKE_URL https://github.com/Kitware/CMake/releases/download/v3.16.6/cmake-3.16.6-Linux-x86_64.tar.gz</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">ENV</span> LLVM_SRC_URL https://github.com/llvm/llvm-project/archive/llvmorg-$&#123;VER&#125;.tar.gz</span><br><span class="line"><span class="keyword">ENV</span> LLVM_TESTS_SRC_URL https://github.com/llvm/llvm-test-suite/archive/llvmorg-$&#123;VER&#125;.tar.gz</span><br><span class="line"><span class="keyword">ENV</span> MUSL_SRC_URL https://github.com/quic/musl/archive/d125203fcb134febcde6ca32181554560b67c790.tar.gz</span><br><span class="line"><span class="keyword">ENV</span> HEXMVM_SRC_URL https://github.com/quic/hexagonMVM/archive/v0.<span class="number">1.1</span>.tar.gz</span><br><span class="line"><span class="keyword">ENV</span> LINUX_SRC_URL https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-<span class="number">6.7</span>.<span class="number">11</span>.tar.xz</span><br><span class="line"><span class="keyword">ENV</span> BUSYBOX_SRC_URL https://busybox.net/downloads/busybox-<span class="number">1.36</span>.<span class="number">1</span>.tar.bz2</span><br><span class="line"><span class="keyword">ENV</span> BUILDROOT_SRC_URL https://github.com/quic/buildroot/archive/hexagon-<span class="number">2024.11</span>.<span class="number">26</span>.tar.gz</span><br><span class="line"></span><br><span class="line"><span class="comment">#ENV PYTHON_SRC_URL https://www.python.org/ftp/python/3.9.5/Python-3.9.5.tar.xz</span></span><br><span class="line"><span class="comment">#ADD get-host-clang-cmake-python.sh /root/hexagon-toolchain/get-host-clang-cmake-python.sh</span></span><br><span class="line"><span class="comment">#RUN cd /root/hexagon-toolchain &amp;&amp; ./get-host-clang-cmake-python.sh</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">ADD</span><span class="language-bash"> test-suite-patches /root/hexagon-toolchain/test-suite-patches</span></span><br><span class="line"><span class="keyword">ADD</span><span class="language-bash"> get-src-tarballs.sh /root/hexagon-toolchain/get-src-tarballs.sh</span></span><br><span class="line"><span class="keyword">ADD</span><span class="language-bash"> *.cmake /root/hexagon-toolchain/</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> <span class="built_in">cd</span> /root/hexagon-toolchain &amp;&amp; ./get-src-tarballs.sh <span class="variable">$&#123;PWD&#125;</span> <span class="variable">$&#123;TOOLCHAIN_INSTALL&#125;</span>/manifest</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">ADD</span><span class="language-bash"> test_init/test_init.c test_init/Makefile /root/hexagon-toolchain/test_init/</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">ENV</span> IN_CONTAINER <span class="number">1</span></span><br><span class="line"><span class="keyword">ADD</span><span class="language-bash"> build-toolchain.sh /root/hexagon-toolchain/build-toolchain.sh</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> <span class="built_in">cd</span> /root/hexagon-toolchain &amp;&amp; ./build-toolchain.sh <span class="variable">$&#123;ARTIFACT_TAG&#125;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">ADD</span><span class="language-bash"> build-buildroot.sh /root/hexagon-toolchain/build-buildroot.sh</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> <span class="built_in">cd</span> /root/hexagon-toolchain &amp;&amp; ./build-buildroot.sh</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">ARG</span> TEST_TOOLCHAIN=<span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">ADD</span><span class="language-bash"> build-rootfs.sh /root/hexagon-toolchain/build-rootfs.sh</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> <span class="built_in">cd</span> /root/hexagon-toolchain &amp;&amp; ./build-rootfs.sh</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">ADD</span><span class="language-bash"> test-toolchain.sh /root/hexagon-toolchain/test-toolchain.sh</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> <span class="built_in">cd</span> /root/hexagon-toolchain &amp;&amp; ./test-toolchain.sh</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="开箱即用"><a href="#开箱即用" class="headerlink" title="开箱即用"></a>开箱即用</h2><p>目前（2024.12.12）release最高版本是19.1.2，musl的版本对应的是1.2.5，clang版本为19。这里以linux x86_64版本为例。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wget https://artifacts.codelinaro.org/artifactory/codelinaro-toolchain-for-hexagon/19.1.2/clang+llvm-19.1.2-cross-hexagon-unknown-linux-musl_x86_64-linux-musl.tar.xz</span><br><span class="line">sudo tar xf clang+llvm-19.1.2-cross-hexagon-unknown-linux-musl_x86_64-linux-musl.tar.xz -C /path/to/install</span><br><span class="line">export PATH=/path/to/your/clang+llvm-19.1.2-cross-hexagon-unknown-linux-musl/x86_64-linux-musl/bin:$PATH</span><br></pre></td></tr></table></figure>
+
+<p>解压过程有点久。整个包大小解压后在29G左右，请预留好空间。接下来就可以正常编译程序了。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexagon-linux-musl-clang -o ./example example.c</span><br></pre></td></tr></table></figure>
+
+<p>运行的时候如果提示找不到ld，可以将interpreter patchelf到你的<code>path/to/your/clang+llvm-19.1.2-cross-hexagon-unknown-linux-musl/x86_64-linux-musl/target/hexagon-unknown-linux-musl/lib/ld-musl-hexagon.so.1</code>.</p>
+<p>或者你将解压出来的lib文件夹下的libc.so通过软链接的方式链接到&#x2F;lib文件夹下也可以。但是如果是cpp程序，那动态链接库就有点多了，这时候就需要将解压出来的lib文件夹设置为LD路径。这个网上有很多教程。</p>
+<p>顺带一提，可以通过<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43749411/article/details/108521312#:~:text=export%E6%96%B9%E5%BC%8F%E5%9C%A8%E9%87%8D%E5%90%AF%E5%90%8E%E5%A4%B1%E6%95%88%EF%BC%8C%E6%83%B3%E8%A6%81%E6%B0%B8%E4%B9%85%E6%B7%BB%E5%8A%A0%E5%8F%AF%E4%BB%A5vim,%2Fetc%2Fbashrc%EF%BC%8C%E4%BF%AE%E6%94%B9%E5%85%B6%E4%B8%AD%E7%9A%84LD_LIBRARY_PATH%E5%8F%98%E9%87%8F%E3%80%82%20%E4%BE%8B%E5%A6%82%EF%BC%9ALD_LIBRARY_PATH%3D%24LD_LIBRARY_PATH%3A%2Fopt%2Fau1200%2Fbin%E3%80%82">修改<code>~/.bashrc</code>文件</a>的方式使得PATH永久化。export来设置路径是一次性的。</p>
+<h2 id="musl调试符号构建"><a href="#musl调试符号构建" class="headerlink" title="musl调试符号构建"></a>musl调试符号构建</h2><p>现在<a target="_blank" rel="noopener" href="https://musl.libc.org/">官网</a>下载对应版本源码。然后进入root用户，否则编译到后面他才会告诉你路径没有权限访问。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./configure --prefix=/usr/local/musl CFLAGS=&#x27;-O2 -v&#x27; --enable-debug &amp;&amp; make &amp;&amp; make install</span><br></pre></td></tr></table></figure>
+
+<p>等编译完成。这样在gdb调试musl程序的时候就会有符号了。</p>
+<h2 id="波折"><a href="#波折" class="headerlink" title="波折"></a>波折</h2><p>算了这部分懒得写了</p>
+
+											<div class="article-footer-copyright">
+
+    本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0
+        国际许可协议(CC BY-NC-SA 4.0) 发布.</a></br>
+    因本人技术水平和知识面有限, 内容如有纰漏或者需要修正的地方, 欢迎大家指正。转载请注明来自<a href="https://c-lby.github.io" target="_blank">C_LBY's blog</a>！
+</div>
+							</div>
+
+							
+									
+										<span data-path="/2024/12/12/hexagon-toolchain-env/">
+											<em class="post-meta-item-text"> Page View <i
+													class="waline-pageview-count"></i></em>
+										</span>
+
+										
+											<div>
+												<center>
+
+													<div class="pagination">
+
+    
+    
+    <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>上一页</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2024/12/09/2024geekctf-stkbof/" type="button" class="btn btn-default ">下一页<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+
+												</center>
+											</div>
+
+											<!-- comment -->
+											<!--
+<section id="comment">
+    <h2 class="title">留言</h2>
+
+    
+</section>
+
+-->
+											
+													
+														<section id="comments" class="comments">
+															<!-- <link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css" />
+<div id="waline"></div>
+<script type="module">
+  import { init } from 'https://unpkg.com/@waline/client@v2/dist/waline.mjs';
+  var walineConfig = 
+    walineConfig.el='#waline';
+  Waline.init(walineConfig);
+</script> -->
+
+<link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css" />
+<div id="waline"></div>
+<script type="module">
+  import { init } from 'https://unpkg.com/@waline/client@v2/dist/waline.mjs';
+
+  init({
+    enable: true,
+    el: '#waline',
+    serverURL: 'https://blog-s-comment-three.vercel.app',
+    dark: true,
+    pageview: true,
+    lang: 'zh-CN',
+    requiredMeta: ['nick', 'mail'],
+    locale:
+      { placeholder: 'Say something……' },
+    highlighter: true,
+    search: false,
+    emoji: [
+      '//unpkg.com/@waline/emojis@1.2.0/weibo',
+      '//unpkg.com/@waline/emojis@1.2.0/bmoji',
+      '//unpkg.com/@waline/emojis@1.2.0/bilibili',
+      'https://unpkg.com/@waline/emojis@1.2.0/qq',
+    ],
+    imageUploader: false,
+  });
+</script>
+														</section>
+														
+															
+					</div> <!-- col-md-9/col-md-12 -->
+
+
+					
+						<div id="side_meta">
+							<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2024-12-12 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/hexagon/">hexagon<span>2</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/llvm/">llvm<span>2</span></a></li> <li><a href="/tags/hexagon/">hexagon<span>2</span></a></li>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+		   <span class="toc-title">Contents</span>
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%87%86%E5%A4%87"><span class="toc-article-text">准备</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%9C%A8%E6%9C%AC%E5%9C%B0%E6%9E%84%E5%BB%BA"><span class="toc-article-text">在本地构建</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%9C%A8%E5%AE%B9%E5%99%A8%E6%9E%84%E5%BB%BA"><span class="toc-article-text">在容器构建</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%BC%80%E7%AE%B1%E5%8D%B3%E7%94%A8"><span class="toc-article-text">开箱即用</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#musl%E8%B0%83%E8%AF%95%E7%AC%A6%E5%8F%B7%E6%9E%84%E5%BB%BA"><span class="toc-article-text">musl调试符号构建</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%B3%A2%E6%8A%98"><span class="toc-article-text">波折</span></a></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+
+
+						</div>
+
+						
+
+			</div><!-- row -->
+
+			<!--
+ -->
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+    &copy; 2024
+      鎏柏鱼's Blog
+        
+                powered by <a href="http://hexo.io/" target="_blank">Hexo</a> | Theme by <a
+                  href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>

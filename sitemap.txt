@@ -1,3 +1,4 @@
+https://c-lby.top/2024/12/12/hexagon-toolchain-env/
 https://c-lby.top/2024/12/09/2024geekctf-stkbof/
 https://c-lby.top/2024/12/09/2024GCBCTF-wp/
 https://c-lby.top/2024/11/28/first-llvm-pass-pwn/
@@ -85,3 +86,4 @@ https://c-lby.top/categories/magic-gadget/
 https://c-lby.top/categories/ret2dlresolve/
 https://c-lby.top/categories/ret2-libc-start-main/
 https://c-lby.top/categories/protobuf/
+https://c-lby.top/categories/hexagon/
