@@ -1,0 +1,360 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  <meta name="baidu-site-verification" content="codeva-0Qx7wvY9gP" />
+  
+  <title>『图灵完备』完全攻略之存储器（三） | C_LBY&#39;s BLOG</title>
+  <meta name="author" content="鎏柏鱼">
+  
+  <meta name="description" content="本攻略没有那么追求极致的效率和布局，大佬轻喷。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="『图灵完备』完全攻略之存储器（三）"/>
+  <meta property="og:site_name" content="C_LBY&#39;s BLOG"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+    <link rel="alternative" href="/atom.xml" title="C_LBY&#39;s BLOG" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">C_LBY&#39;s BLOG</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/diary" title="fashion little junk">
+			  <i class="fa fa-tasks"></i>Diary
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class="fa fa-rss"></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> 『图灵完备』完全攻略之存储器（三）</h1>
+		</div>
+	
+
+
+
+	<div class="row post">
+		<!-- cols -->
+		
+			<div id="top_meta"></div>
+			<div class="col-md-9">
+				
+
+							<!-- content -->
+							<div class="mypage">
+								
+									<div class="alert alert-success description">
+										<i class="fa fa-info-circle"></i> 本攻略没有那么追求极致的效率和布局，大佬轻喷。
+									</div> <!-- alert -->
+									
+
+										<h2 id="循环依赖"><a href="#循环依赖" class="headerlink" title="循环依赖"></a>循环依赖</h2><p>要你搭建一个输出决定输入的错误电路。</p>
+<p><img src="https://c-lby.top/images/Turing-Complete/3/%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96.png" alt="循环依赖"></p>
+<h2 id="延迟线"><a href="#延迟线" class="headerlink" title="延迟线"></a>延迟线</h2><p>延迟线元件的体验关卡，根据预期输出可以看到输入延迟了两刻才输出。</p>
+<p><img src="https://c-lby.top/images/Turing-Complete/3/%E5%BB%B6%E8%BF%9F%E7%BA%BF.png" alt="延迟线"></p>
+<h2 id="奇变偶不变"><a href="#奇变偶不变" class="headerlink" title="奇变偶不变"></a>奇变偶不变</h2><p>关卡告诉我们在延迟的情况下，输出是可以决定输入的。本关卡需要在偶数刻输出高电平，我们利用异或和延迟输出可以做到这一点。</p>
+<p><img src="https://c-lby.top/images/Turing-Complete/3/%E5%A5%87%E5%8F%98%E5%81%B6%E4%B8%8D%E5%8F%98.png" alt="奇变偶不变"></p>
+<p>手册解锁了“循环依赖白名单”词条，讲了三种锁存器的实现是不受循环依赖的限制的。</p>
+<h2 id="1位取反器"><a href="#1位取反器" class="headerlink" title="1位取反器"></a>1位取反器</h2><p>根据反转位决定是否需要对输入进行取反后输出。观察真值表可以发现性质和异或门完全一样。</p>
+<p><img src="https://c-lby.top/images/Turing-Complete/3/1%E4%BD%8D%E5%8F%96%E5%8F%8D%E5%99%A8.png" alt="1位取反器"></p>
+<h2 id="1位开关"><a href="#1位开关" class="headerlink" title="1位开关"></a>1位开关</h2><p>用2个开关和2个非门搭建一个异或门。</p>
+<p><img src="https://c-lby.top/images/Turing-Complete/3/1%E4%BD%8D%E5%BC%80%E5%85%B3.png" alt="1位开关"></p>
+<h2 id="数据选择器"><a href="#数据选择器" class="headerlink" title="数据选择器"></a>数据选择器</h2><p>根据选通输入选择一个输入端发送给输出，利用开关和非门就能完成这个电路</p>
+<p><img src="https://c-lby.top/images/Turing-Complete/3/%E6%95%B0%E6%8D%AE%E9%80%89%E6%8B%A9%E5%99%A8.png" alt="数据选择器"></p>
+<h2 id="总线"><a href="#总线" class="headerlink" title="总线"></a>总线</h2><p>我们可以先布置好每个输入到每个输出的线路，然后再通过布置开关来控制某条线路是否允许通过即可。</p>
+<p><img src="https://c-lby.top/images/Turing-Complete/3/%E6%80%BB%E7%BA%BF1.png" alt="总线1"></p>
+<p>但是显然这样子不够优雅，并且也没有体现标题总线。我们知道在一次发送中一定只有一个输入一个输出，因此我们只需要一条线进行数据传输，其他端口都接入这条总线即可。</p>
+<p><img src="https://c-lby.top/images/Turing-Complete/3/%E6%80%BB%E7%BA%BF2.png" alt="总线2"></p>
+<h2 id="优雅存储"><a href="#优雅存储" class="headerlink" title="优雅存储"></a>优雅存储</h2><p>这关其实不难想。延迟线的作用是延迟一刻输出，并且延迟后的输出可以给到输入，那么储存一个数，我们是否可以理解为一直输出这个数，延迟无数刻。那么我只要把延迟后的输出再传入到延迟之前的电路，那我就可以一直输出同一个数字了。那我们要更新数字的时候怎么办呢？只要切断延迟输出回到输入这条路，切换成待写入的值给延迟线即可。</p>
+<p><img src="https://c-lby.top/images/Turing-Complete/3/%E4%BC%98%E9%9B%85%E5%AD%98%E5%82%A8.png" alt="优雅存储"></p>
+<h2 id="存储一字节"><a href="#存储一字节" class="headerlink" title="存储一字节"></a>存储一字节</h2><p>利用1位存储器搭建8位存储器</p>
+<p><img src="https://c-lby.top/images/Turing-Complete/3/%E5%AD%98%E5%82%A8%E4%B8%80%E5%AD%97%E8%8A%82.png" alt="存储一字节"></p>
+<h2 id="小盒子"><a href="#小盒子" class="headerlink" title="小盒子"></a>小盒子</h2><p><img src="https://c-lby.top/images/Turing-Complete/3/%E5%B0%8F%E7%9B%92%E5%AD%90.png" alt="小盒子"></p>
+<h2 id="计数器"><a href="#计数器" class="headerlink" title="计数器"></a>计数器</h2><p><img src="https://c-lby.top/images/Turing-Complete/3/%E8%AE%A1%E6%95%B0%E5%99%A8.png" alt="计数器"></p>
+
+											<div class="article-footer-copyright">
+
+    本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0
+        国际许可协议(CC BY-NC-SA 4.0) 发布.</a></br>
+    因本人技术水平和知识面有限, 内容如有纰漏或者需要修正的地方, 欢迎大家指正。转载请注明来自<a href="https://c-lby.github.io" target="_blank">C_LBY's blog</a>！
+</div>
+							</div>
+
+							
+									
+										<span data-path="/2024/Turing-Complete-3/">
+											<em class="post-meta-item-text"> Page View <i
+													class="waline-pageview-count"></i></em>
+										</span>
+
+										
+											<div>
+												<center>
+
+													<div class="pagination">
+
+    
+    
+    <a href="/2024/Turing-Complete-4/" type="button" class="btn btn-default"><i
+                class="fa fa-arrow-circle-o-left"></i> 上一页</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2024/Turing-Complete-2/" type="button" class="btn btn-default ">下一页<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+
+												</center>
+											</div>
+
+											<!-- comment -->
+											<!--
+<section id="comment">
+    <h2 class="title">留言</h2>
+
+    
+</section>
+
+-->
+											
+													
+														<section id="comments" class="comments">
+															<!-- <link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css" />
+<div id="waline"></div>
+<script type="module">
+  import { init } from 'https://unpkg.com/@waline/client@v2/dist/waline.mjs';
+  var walineConfig = 
+    walineConfig.el='#waline';
+  Waline.init(walineConfig);
+</script> -->
+
+<link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css" />
+<div id="waline"></div>
+<script type="module">
+  import { init } from 'https://unpkg.com/@waline/client@v2/dist/waline.mjs';
+
+  init({
+    enable: true,
+    el: '#waline',
+    serverURL: 'https://blog-s-comment-three.vercel.app',
+    dark: true,
+    pageview: true,
+    lang: 'zh-CN',
+    requiredMeta: ['nick', 'mail'],
+    locale:
+      { placeholder: 'Say something……' },
+    highlighter: true,
+    search: false,
+    emoji: [
+      '//unpkg.com/@waline/emojis@1.2.0/weibo',
+      '//unpkg.com/@waline/emojis@1.2.0/bmoji',
+      '//unpkg.com/@waline/emojis@1.2.0/bilibili',
+      'https://unpkg.com/@waline/emojis@1.2.0/qq',
+    ],
+    imageUploader: false,
+  });
+</script>
+														</section>
+														
+															
+					</div> <!-- col-md-9/col-md-12 -->
+
+
+					
+						<div id="side_meta">
+							<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2024-10-24 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/图灵完备/">图灵完备<span>4</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/图灵完备/">图灵完备<span>4</span></a></li> <li><a href="/tags/计组/">计组<span>4</span></a></li>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+		   <span class="toc-title">Contents</span>
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96"><span class="toc-article-text">循环依赖</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%BB%B6%E8%BF%9F%E7%BA%BF"><span class="toc-article-text">延迟线</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%A5%87%E5%8F%98%E5%81%B6%E4%B8%8D%E5%8F%98"><span class="toc-article-text">奇变偶不变</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#1%E4%BD%8D%E5%8F%96%E5%8F%8D%E5%99%A8"><span class="toc-article-text">1位取反器</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#1%E4%BD%8D%E5%BC%80%E5%85%B3"><span class="toc-article-text">1位开关</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%95%B0%E6%8D%AE%E9%80%89%E6%8B%A9%E5%99%A8"><span class="toc-article-text">数据选择器</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%80%BB%E7%BA%BF"><span class="toc-article-text">总线</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%BC%98%E9%9B%85%E5%AD%98%E5%82%A8"><span class="toc-article-text">优雅存储</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%AD%98%E5%82%A8%E4%B8%80%E5%AD%97%E8%8A%82"><span class="toc-article-text">存储一字节</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%B0%8F%E7%9B%92%E5%AD%90"><span class="toc-article-text">小盒子</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E8%AE%A1%E6%95%B0%E5%99%A8"><span class="toc-article-text">计数器</span></a></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+
+
+						</div>
+
+						
+
+			</div><!-- row -->
+
+			<!--
+ -->
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+    &copy; 2024
+      鎏柏鱼's Blog
+        
+                powered by <a href="http://hexo.io/" target="_blank">Hexo</a> | Theme by <a
+                  href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>

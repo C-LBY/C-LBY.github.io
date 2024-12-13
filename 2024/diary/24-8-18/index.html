@@ -1,0 +1,356 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  <meta name="baidu-site-verification" content="codeva-0Qx7wvY9gP" />
+  
+  <title>日志 24-8-18 | C_LBY&#39;s BLOG</title>
+  <meta name="author" content="鎏柏鱼">
+  
+  <meta name="description" content="三项待办">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="日志 24-8-18"/>
+  <meta property="og:site_name" content="C_LBY&#39;s BLOG"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+    <link rel="alternative" href="/atom.xml" title="C_LBY&#39;s BLOG" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">C_LBY&#39;s BLOG</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/diary" title="fashion little junk">
+			  <i class="fa fa-tasks"></i>Diary
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class="fa fa-rss"></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> 日志 24-8-18</h1>
+		</div>
+	
+
+
+
+	<div class="row post">
+		<!-- cols -->
+		
+			<div id="top_meta"></div>
+			<div class="col-md-9">
+				
+
+							<!-- content -->
+							<div class="mypage">
+								
+									<div class="alert alert-success description">
+										<i class="fa fa-info-circle"></i> 三项待办
+									</div> <!-- alert -->
+									
+
+										<p>今天学的内容，是路由器固件漏洞挖掘和杀软漏洞挖掘。没有讲到环境模拟和固件提取，专注于讲漏洞挖掘。学到很多东西。捋一下</p>
+<ul>
+<li>实战中，IDA逆向分析的入手点一般是字符串。像路由器和杀软这样的二进制程序，会产生大量的日志，写这些日志就会有很多字符串留存在程序当中，而且其实一般不会像CTF一样各种隐藏。所以可以把具体位置的日志信息当做注释来看，辅助分析。</li>
+<li>有些攻击面，有些漏洞，其实要结合web的知识，尤其是逻辑漏洞。比如没有过滤字符导致的目录穿越、sql注入等等。不要只带着二进制漏洞的思想去看iot中的漏挖</li>
+<li>一般路由器（包括其他IOT设备）最好是挖未授权，授权后的漏洞一般利用条件比较难。</li>
+<li>不要和别人挤破头都去找大热门被挖烂了的攻击面，找些冷门的。</li>
+<li>不要放过任何一个小洞，可能可以和其他洞组合成一个大洞。</li>
+<li>有些路由器是可以ssh上去的（比如华硕）</li>
+</ul>
+<p>初次体验了一下fuzz，用winafl，虽然最后因为环境配置问题（主要还是那个RIO），没跑成功。RIO如果要在本地编译需要安装perl，现在安装这玩意真是鬼死麻烦，已下载安装包，<strong>未配置，有时间再跑一下</strong>。讲讲收获：</p>
+<ul>
+<li>如何在cpp中静、动态调用dll，封装想要调试的函数（或流程）。</li>
+<li>fuzz一个封装了想要测试的接口的程序，比测试原本的程序更快更方便。</li>
+<li>winafl的参数设置，<strong>后面专门写一篇博客分析一下</strong>，还有写多开主次线程的批处理文件方法。</li>
+<li>对于二进制插桩有了更深一层的理解，但是感觉还远远不够。</li>
+<li><a target="_blank" rel="noopener" href="https://libuv-docs-chinese.readthedocs.io/zh/latest/api.html">libuv库</a></li>
+</ul>
+<p>同学来问关于wsl代理的问题，我也是该<strong>找时间研究一下</strong>了，自己使用起来也是有点麻烦的，包括git终端也是不走代理，很难受。关于<a target="_blank" rel="noopener" href="https://blog.dejavu.moe/posts/cfw-tun/">tun</a>和<a target="_blank" rel="noopener" href="https://clashforwindows.cc/tun-%E6%A8%A1%E5%BC%8F/">tun</a>。</p>
+<p>VM的vmdk磁盘文件可以通过ovf加载整台虚拟机，如果遇到hash对不上的情况，删掉打包的时候带有的mf文件即可。</p>
+
+											<div class="article-footer-copyright">
+
+    本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0
+        国际许可协议(CC BY-NC-SA 4.0) 发布.</a></br>
+    因本人技术水平和知识面有限, 内容如有纰漏或者需要修正的地方, 欢迎大家指正。转载请注明来自<a href="https://c-lby.github.io" target="_blank">C_LBY's blog</a>！
+</div>
+							</div>
+
+							
+									
+										<span data-path="/2024/diary/24-8-18/">
+											<em class="post-meta-item-text"> Page View <i
+													class="waline-pageview-count"></i></em>
+										</span>
+
+										
+											<div>
+												<center>
+
+													<div class="pagination">
+
+    
+    
+    <a href="/2024/diary/24-8-19/" type="button" class="btn btn-default"><i
+                class="fa fa-arrow-circle-o-left"></i> 上一页</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2024/diary/24-8-17/" type="button" class="btn btn-default ">下一页<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+
+												</center>
+											</div>
+
+											<!-- comment -->
+											<!--
+<section id="comment">
+    <h2 class="title">留言</h2>
+
+    
+</section>
+
+-->
+											
+													
+														<section id="comments" class="comments">
+															<!-- <link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css" />
+<div id="waline"></div>
+<script type="module">
+  import { init } from 'https://unpkg.com/@waline/client@v2/dist/waline.mjs';
+  var walineConfig = 
+    walineConfig.el='#waline';
+  Waline.init(walineConfig);
+</script> -->
+
+<link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css" />
+<div id="waline"></div>
+<script type="module">
+  import { init } from 'https://unpkg.com/@waline/client@v2/dist/waline.mjs';
+
+  init({
+    enable: true,
+    el: '#waline',
+    serverURL: 'https://blog-s-comment-three.vercel.app',
+    dark: true,
+    pageview: true,
+    lang: 'zh-CN',
+    requiredMeta: ['nick', 'mail'],
+    locale:
+      { placeholder: 'Say something……' },
+    highlighter: true,
+    search: false,
+    emoji: [
+      '//unpkg.com/@waline/emojis@1.2.0/weibo',
+      '//unpkg.com/@waline/emojis@1.2.0/bmoji',
+      '//unpkg.com/@waline/emojis@1.2.0/bilibili',
+      'https://unpkg.com/@waline/emojis@1.2.0/qq',
+    ],
+    imageUploader: false,
+  });
+</script>
+														</section>
+														
+															
+					</div> <!-- col-md-9/col-md-12 -->
+
+
+					
+						<div id="side_meta">
+							<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2024-08-18 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/diary/">diary<span>14</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/diary/">diary<span>14</span></a></li>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+		   <span class="toc-title">Contents</span>
+			
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+
+
+						</div>
+
+						
+
+			</div><!-- row -->
+
+			<!--
+ -->
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+    &copy; 2024
+      鎏柏鱼's Blog
+        
+                powered by <a href="http://hexo.io/" target="_blank">Hexo</a> | Theme by <a
+                  href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>

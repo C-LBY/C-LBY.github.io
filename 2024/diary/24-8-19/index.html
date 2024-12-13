@@ -1,0 +1,352 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  <meta name="baidu-site-verification" content="codeva-0Qx7wvY9gP" />
+  
+  <title>日志 24-8-19 | C_LBY&#39;s BLOG</title>
+  <meta name="author" content="鎏柏鱼">
+  
+  <meta name="description" content="Windows内核漏洞挖掘，这下就是真正意义上的还没学会走就要学跑了。不过也学了个大概的思路。如果未来考虑走挖洞这条路，最好是平时多调试多复现一些老的漏洞，积累经验和手感。但是其实国内大多数二进制岗位都是应急响应比较多，像赛博昆仑这样的注重挖洞的公司是很少见的。
+cve的解析
+k0shl师傅的博客"> 
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="日志 24-8-19"/>
+  <meta property="og:site_name" content="C_LBY&#39;s BLOG"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+    <link rel="alternative" href="/atom.xml" title="C_LBY&#39;s BLOG" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">C_LBY&#39;s BLOG</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/diary" title="fashion little junk">
+			  <i class="fa fa-tasks"></i>Diary
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class="fa fa-rss"></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> 日志 24-8-19</h1>
+		</div>
+	
+
+
+
+	<div class="row post">
+		<!-- cols -->
+		
+			<div id="top_meta"></div>
+			<div class="col-md-9">
+				
+
+							<!-- content -->
+							<div class="mypage">
+								
+
+										<p>Windows内核漏洞挖掘，这下就是真正意义上的还没学会走就要学跑了。不过也学了个大概的思路。如果未来考虑走挖洞这条路，最好是平时多调试多复现一些老的漏洞，积累经验和手感。但是其实国内大多数二进制岗位都是应急响应比较多，像赛博昆仑这样的注重挖洞的公司是很少见的。</p>
+<p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/6008?time__1311=n4+xnD0DgDc7mqCqGNnmexRm7balgbD#toc-1">cve的解析</a></p>
+<p><a target="_blank" rel="noopener" href="https://whereisk0shl.top/post/a-trick-the-story-of-cve-2024-26230">k0shl师傅的博客</a></p>
+<p><a target="_blank" rel="noopener" href="https://xiaodaozhi.com/exploit/122.html">https://xiaodaozhi.com/exploit/122.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/leeqwind/HolicPOC/blob/master/windows/win32k/CVE-2015-2546/README.md">https://github.com/leeqwind/HolicPOC/blob/master/windows/win32k/CVE-2015-2546/README.md</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/pangshaohua/article/details/6592390#:~:text=%E8%AE%BE%E7%BD%AE%E6%96%B9%E6%B3%95%EF%BC%9A%20%E2%80%9C%E6%88%91%E7%9A%84%E7%94%B5%E8%84%91%E2%80%9D%E5%B1%9E%E6%80%A7%E4%B8%AD%EF%BC%8C%E9%AB%98%E7%BA%A7%E8%AE%BE%E7%BD%AE%E9%87%8C%EF%BC%8C%20%E6%9C%89%E4%B8%AA%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%EF%BC%8C%20%E5%8F%98%E9%87%8F%E5%90%8D%EF%BC%9A_NT_SYMBOL_PATH,%E5%8F%98%E9%87%8F%E5%80%BC%EF%BC%9ASRV%2A%20%7B%24Path%7D%2Ahttp%3A%2F%2Fmsdl.microsoft.com%2Fdownload%2Fsymbols%2F%20%E5%B0%86%E2%80%9C%20%7B%24Path%7D%E2%80%9D%E6%9B%BF%E6%8D%A2%E4%B8%BA%E8%A6%81%E5%AD%98%E5%82%A8pdb%E7%AC%A6%E5%8F%B7%E8%A1%A8%E6%96%87%E4%BB%B6%E7%9A%84%E8%B7%AF%E5%BE%84%EF%BC%8C%E6%AF%94%E5%A6%82%EF%BC%9AC%3APDB">windbg&#x2F;ida自动下载符号表的设置方法</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/84911">cve复现</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/AabyssZG/Docker-TCP-Scan">曾哥的新工具</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.4hou.com/posts/n7V5">驱动漏洞挖掘入门</a></p>
+<p>可以说是第一次接触到域渗透，一点经验也没有。菜就多练。</p>
+<p>永恒之蓝的使用是基于139和445端口的开放，且特定漏洞版本下才能使用。使用msf框架可以比较方便地对此进行检测盒利用。kali中使用msfconsole。</p>
+<p>445端口是可以直接在cmd中用<code>net use \\ip\ipc$ password /user:username</code>连接的</p>
+<p>如果有完整权限，可以用psexec工具并接管其cmd。这个工具是微软官方的，也可以用\impacket-examples-windows的。</p>
+<p>linux用多了，Windows的命令不会用一点，平时都是用的gui界面，要多学习Windows命令才行</p>
+<p>要开始学习Windows开发等知识了，不然到时候练PoC都看不懂。</p>
+<p>顺便记录一下今天想到的新生赛出题思路。之前忘记是做什么题了，一道简单的ret2text，然而传参却是往后推了一个的，也就是从rdx开始传。所以可以给一个这样的思路：给一个pop rdx，给一个mov rdi,rdx的gadget，然后组合传参。或者能不能自己写一个简单的so库，so中实现一个自定义的system函数，传两个参数，用其他东西占用一个参数位置，让其他参数顺延（也可以用execve）。</p>
+<p>另一个出题想法是给<code>pop r8``call r8</code>这样的gadget，配合固定地址的mmap写shellcode，但是要自己利用栈溢出来执行shellcode。诶等等但是这样岂不是可以把地址写到ret位置上？可以给传入的参数加上字符过滤就好了。比如0x114514这样的地址，一般来说是不合法的，那么就可以在检查字符串的时候提示，地址非法。检查的话，为了防止加偏移绕过，可以用白名单的方式，比如检查是否来自程序基址段或者libc地址段上。</p>
+
+											<div class="article-footer-copyright">
+
+    本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0
+        国际许可协议(CC BY-NC-SA 4.0) 发布.</a></br>
+    因本人技术水平和知识面有限, 内容如有纰漏或者需要修正的地方, 欢迎大家指正。转载请注明来自<a href="https://c-lby.github.io" target="_blank">C_LBY's blog</a>！
+</div>
+							</div>
+
+							
+									
+										<span data-path="/2024/diary/24-8-19/">
+											<em class="post-meta-item-text"> Page View <i
+													class="waline-pageview-count"></i></em>
+										</span>
+
+										
+											<div>
+												<center>
+
+													<div class="pagination">
+
+    
+    
+    <a href="/2024/diary/24-8-20/" type="button" class="btn btn-default"><i
+                class="fa fa-arrow-circle-o-left"></i> 上一页</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2024/diary/24-8-18/" type="button" class="btn btn-default ">下一页<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+
+												</center>
+											</div>
+
+											<!-- comment -->
+											<!--
+<section id="comment">
+    <h2 class="title">留言</h2>
+
+    
+</section>
+
+-->
+											
+													
+														<section id="comments" class="comments">
+															<!-- <link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css" />
+<div id="waline"></div>
+<script type="module">
+  import { init } from 'https://unpkg.com/@waline/client@v2/dist/waline.mjs';
+  var walineConfig = 
+    walineConfig.el='#waline';
+  Waline.init(walineConfig);
+</script> -->
+
+<link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css" />
+<div id="waline"></div>
+<script type="module">
+  import { init } from 'https://unpkg.com/@waline/client@v2/dist/waline.mjs';
+
+  init({
+    enable: true,
+    el: '#waline',
+    serverURL: 'https://blog-s-comment-three.vercel.app',
+    dark: true,
+    pageview: true,
+    lang: 'zh-CN',
+    requiredMeta: ['nick', 'mail'],
+    locale:
+      { placeholder: 'Say something……' },
+    highlighter: true,
+    search: false,
+    emoji: [
+      '//unpkg.com/@waline/emojis@1.2.0/weibo',
+      '//unpkg.com/@waline/emojis@1.2.0/bmoji',
+      '//unpkg.com/@waline/emojis@1.2.0/bilibili',
+      'https://unpkg.com/@waline/emojis@1.2.0/qq',
+    ],
+    imageUploader: false,
+  });
+</script>
+														</section>
+														
+															
+					</div> <!-- col-md-9/col-md-12 -->
+
+
+					
+						<div id="side_meta">
+							<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2024-08-19 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/diary/">diary<span>14</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/diary/">diary<span>14</span></a></li>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+		   <span class="toc-title">Contents</span>
+			
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+
+
+						</div>
+
+						
+
+			</div><!-- row -->
+
+			<!--
+ -->
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+    &copy; 2024
+      鎏柏鱼's Blog
+        
+                powered by <a href="http://hexo.io/" target="_blank">Hexo</a> | Theme by <a
+                  href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>
