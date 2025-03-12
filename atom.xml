@@ -6,7 +6,7 @@
   <link href="https://c-lby.top/atom.xml" rel="self"/>
   
   <link href="https://c-lby.top/"/>
-  <updated>2025-02-09T16:58:28.591Z</updated>
+  <updated>2025-03-12T10:02:06.853Z</updated>
   <id>https://c-lby.top/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>解决ubuntu桌面中opera浏览无法支持html5的问题</title>
+    <link href="https://c-lby.top/2025/ubuntu-opera-html5/"/>
+    <id>https://c-lby.top/2025/ubuntu-opera-html5/</id>
+    <published>2025-03-12T09:48:19.000Z</published>
+    <updated>2025-03-12T10:02:06.853Z</updated>
+    
+    <content type="html"><![CDATA[<p>昨天给一台笔记本装了一个纯净完整的Ubuntu24.04，中间遇到了很多软件适配问题。本文提出的问题截止目前为止，网上找不到有效的解决方案，因为ubuntu24太新了，很多包已经失效了。</p><p>当在ubuntu中用Opera浏览器打开B站看视频的时候会发现播放器提示“该浏览器不支持html5，请更换浏览器”等字样。这是因为opera在安装时有一个库没有安装。opera的内核也是基于谷歌的，因此解决方案是：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo apt install chromium-browser</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo <span class="built_in">cp</span> /snap/chromium/3060/usr/lib/chromium-browser/libffmpeg.so /usr/lib/x86_64-linux-gnu/opera/libffmpeg.so</span></span><br></pre></td></tr></table></figure><p>然后重启opera浏览器就OK了。其实网上有旧版本对于opera无法播放的解决办法，都是给opera补这个缺失的libc，但是旧版的谷歌浏览器安装好后lib文件在<code>/usr/lib/chromium-browser</code>，新版的位置发生了很大的改变，因此记录一下。</p>]]></content>
+    
+    
+    <summary type="html">2025.03.12</summary>
+    
+    
+    
+    <category term="Linux" scheme="https://c-lby.top/categories/Linux/"/>
+    
+    
+    <category term="ubuntu" scheme="https://c-lby.top/tags/ubuntu/"/>
+    
+    <category term="linux" scheme="https://c-lby.top/tags/linux/"/>
+    
+  </entry>
   
   <entry>
     <title>『2025VNCTF』hexagon出题小记&amp;&amp;hexagon架构一种新的利用方式</title>
@@ -477,29 +500,6 @@
     <summary type="html">&lt;p&gt;今天把终端搞了一下，忽然发现其实自己不是很喜欢zsh那种花里胡哨的风格，也许会在wsl上装（短时间内其实也不是很想），但是虚拟机或者未来装纯净ubuntu的时候不是很想装zsh这种，如果只是光改颜色的话其实也还行，但是并没有目色到合适的，还是用回原生吧，只是把终端背景的透明度改了一改能看到背景了而已，这样子就已经和舒服了。&lt;/p&gt;
 &lt;p&gt;可能老了，不喜欢太花里胡哨的东西了（&lt;/p&gt;
 &lt;p&gt;今天学了钓鱼的技术，其实总结一下就是gophish的使用，不过这个东西能部署在服务器上，集成一个总的邮件服务器，比settools方便，不过目前可能还是社工钓鱼用得比较多，很少邮件钓鱼了，除非需要大规模测试的，所以也就是学个过程体验个流程，不过确实学到了和学校课程不一样的地方，更多的实际案例和实操其实更能加深我对某个概念事务的印象。&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="diary" scheme="https://c-lby.top/categories/diary/"/>
-    
-    
-    <category term="diary" scheme="https://c-lby.top/tags/diary/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>日志 24-8-21</title>
-    <link href="https://c-lby.top/2024/diary/24-8-21/"/>
-    <id>https://c-lby.top/2024/diary/24-8-21/</id>
-    <published>2024-08-21T04:00:36.000Z</published>
-    <updated>2024-08-21T17:34:01.763Z</updated>
-    
-    <content type="html"><![CDATA[<p><a href="https://blog.csdn.net/ghostyusheng/article/details/80321483">docker-ce解决官网无法连接的问题</a></p><p>docker换源之后记得要<code>systemctl daemon-reload</code> <code>systemctl restart docker.service</code>重启一下docker相关的服务。</p><p>关于ubuntu22美化的资料：</p><p><a href="https://blog.csdn.net/weixin_44348719/article/details/132521680">https://blog.csdn.net/weixin_44348719/article/details/132521680</a></p><p><a href="https://blog.csdn.net/2301_76911706/article/details/133000145">https://blog.csdn.net/2301_76911706/article/details/133000145</a></p><p><a href="https://blog.csdn.net/qq_44928822/article/details/129358224">https://blog.csdn.net/qq_44928822/article/details/129358224</a></p><p><a href="https://blog.51cto.com/zhangxueliang/5376229">https://blog.51cto.com/zhangxueliang/5376229</a></p><p><a href="https://www.gnome-look.org/browse/">https://www.gnome-look.org/browse/</a></p><p><a href="https://www.cnblogs.com/WHU-TD/p/14010786.html">https://www.cnblogs.com/WHU-TD/p/14010786.html</a></p><p>主界面配置得差不多了，很满意。接下来就是自定义terminal了，交给明天的我来处理吧！</p><p>大概给终端加个背景图片就差不多了，还有就是修改一下pwndbg的显示，依然用wsl里用的模板就行，和tmux一起真的是天作之合，可惜还不熟悉tmux的操作，还得多练。</p><p>gnome-tweaks是可以直接在终端输入后打开UI界面的。gnome的那些插件在安装之前一定要在火狐或者chrome上安装拓展。打开这个网站<code>https://extensions.gnome.org</code>之后就会提示你安装插件了。在火狐上安装插件之后，要手动在插件界面允许与本地gnome交互，不然插件是无效的。然后就可以开始安装拓展了。想要调拓展的设置，要在<code>installed extends</code>界面，就有设置可以调了。</p><p>哦对，本地还要安装<code>gnome-chrome-connector</code>这个软件包。22以前的的软件包名字和23开始名字不一样，但是官网有提示。</p><p>全场最佳，那个跟随鼠标的眼睛（</p><p>有时间还是详细写一篇博文记录一下吧。</p><p>shit忽然想起来时钟插件忘了装，一样明天再装好了。<a href="https://blog.csdn.net/2301_76911706/article/details/133000145">教程</a></p><p>如果可以，真的像买台笔记本专门装一个ubuntu来使用。一定很舒服</p>]]></content>
-    
-    
-    <summary type="html">&lt;p&gt;&lt;a href=&quot;https://blog.csdn.net/ghostyusheng/article/details/80321483&quot;&gt;docker-ce解决官网无法连接的问题&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;docker换源之后记得要&lt;code&gt;systemctl daemon-reload&lt;/code&gt; &lt;code&gt;systemctl restart docker.service&lt;/code&gt;重启一下docker相关的服务。&lt;/p&gt;
-&lt;p&gt;关于ubuntu22美化的资料：&lt;/p&gt;</summary>
     
     
     

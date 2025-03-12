@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>解决ubuntu桌面中opera浏览无法支持html5的问题</title>
+      <link href="/2025/ubuntu-opera-html5/"/>
+      <url>/2025/ubuntu-opera-html5/</url>
+      
+        <content type="html"><![CDATA[<p>昨天给一台笔记本装了一个纯净完整的Ubuntu24.04，中间遇到了很多软件适配问题。本文提出的问题截止目前为止，网上找不到有效的解决方案，因为ubuntu24太新了，很多包已经失效了。</p><p>当在ubuntu中用Opera浏览器打开B站看视频的时候会发现播放器提示“该浏览器不支持html5，请更换浏览器”等字样。这是因为opera在安装时有一个库没有安装。opera的内核也是基于谷歌的，因此解决方案是：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo apt install chromium-browser</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo <span class="built_in">cp</span> /snap/chromium/3060/usr/lib/chromium-browser/libffmpeg.so /usr/lib/x86_64-linux-gnu/opera/libffmpeg.so</span></span><br></pre></td></tr></table></figure><p>然后重启opera浏览器就OK了。其实网上有旧版本对于opera无法播放的解决办法，都是给opera补这个缺失的libc，但是旧版的谷歌浏览器安装好后lib文件在<code>/usr/lib/chromium-browser</code>，新版的位置发生了很大的改变，因此记录一下。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Linux </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> ubuntu </tag>
+            
+            <tag> linux </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>『2025VNCTF』hexagon出题小记&amp;&amp;hexagon架构一种新的利用方式</title>
       <link href="/2025/2025vnctf-hexagon/"/>
       <url>/2025/2025vnctf-hexagon/</url>
