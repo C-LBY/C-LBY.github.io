@@ -1,0 +1,403 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  <meta name="baidu-site-verification" content="codeva-0Qx7wvY9gP" />
+  <meta name="msvalidate.01" content="FB02A8AFF2CE6EF90657A5C51EA59F68" />
+  
+  <title>chroot&amp;namespace逃逸总结 | C_LBY&#39;s BLOG</title>
+  <meta name="author" content="鎏柏鱼">
+  
+  <meta name="description" content="https://pwn.college/system-security/sandboxing/  并不一定适用于所有发行版，有些发行版可能已经修复这些漏洞了（实测ubuntu24已经修复chroot工作目录的漏洞了，但是fd漏洞可以用；ubuntu20都可以用）">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="chroot&amp;namespace逃逸总结"/>
+  <meta property="og:site_name" content="C_LBY&#39;s BLOG"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+    <link rel="alternative" href="/atom.xml" title="C_LBY&#39;s BLOG" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">C_LBY&#39;s BLOG</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/diary" title="fashion little junk">
+			  <i class="fa fa-tasks"></i>Diary
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class="fa fa-rss"></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> chroot&amp;namespace逃逸总结</h1>
+		</div>
+	
+
+
+
+	<div class="row post">
+		<!-- cols -->
+		
+			<div id="top_meta"></div>
+			<div class="col-md-9">
+				
+
+							<!-- content -->
+							<div class="mypage">
+								
+									<div class="alert alert-success description">
+										<i class="fa fa-info-circle"></i> https://pwn.college/system-security/sandboxing/  并不一定适用于所有发行版，有些发行版可能已经修复这些漏洞了（实测ubuntu24已经修复chroot工作目录的漏洞了，但是fd漏洞可以用；ubuntu20都可以用）
+									</div> <!-- alert -->
+									
+
+										<h2 id="0x00-参考文章（前置知识）"><a href="#0x00-参考文章（前置知识）" class="headerlink" title="0x00 参考文章（前置知识）"></a>0x00 参考文章（前置知识）</h2><p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1756158">超细节的 Namespace 机制讲解</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/457403125">超详解的Linux内核进程描述符task_struct结构体</a></p>
+<p><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000044787027">Linux nsenter命令全面解析</a></p>
+<h2 id="0x01-chroot"><a href="#0x01-chroot" class="headerlink" title="0x01 chroot"></a>0x01 chroot</h2><h3 id="功能简述"><a href="#功能简述" class="headerlink" title="功能简述"></a>功能简述</h3><p>chroot 系统调用执行时需要 privilege，一般情况下需要 root 权限。被执行的命令或程序，需要在被限制的目录下，如<code>sudo chroot /tmp /bin/bash</code>，这种情况下，在 &#x2F;tmp&#x2F;bin 目录中需要有bash文件。</p>
+<p>简单来说，chroot的功能是改变<code>/</code>对于当前进程的含义。例如执行了<code>chroot /tmp/jail /bin/bash</code>，那么你的bash的根目录就会被视作是从<code>/tmp/jail</code>开始的，如果在jail中输入<code>/</code>，在宿主机中相当于会跳转到<code>/tmp/jail</code>。chroot的功能有且仅有改变根目录的作用，其他的一律没有做隔离，所以chroot是非常脆弱的，如果被错误配置（例如jail拥有root权限、未设置工作目录等），并且运行的服务有被rce的可能，是能够结合在一起做到逃逸的。</p>
+<h3 id="从内核视角看chroot"><a href="#从内核视角看chroot" class="headerlink" title="从内核视角看chroot"></a>从内核视角看chroot</h3><p>Linux内核通过一个被称为进程描述符的task_struct结构体来管理进程，这个结构体包含了一个进程所需的所有信息。在task_struct中和文件相关的成员是这些：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* file system info */</span></span><br><span class="line"><span class="type">int</span> link_count, total_link_count;</span><br><span class="line"><span class="comment">/* filesystem information */</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">fs_struct</span> *<span class="title">fs</span>;</span></span><br><span class="line"><span class="comment">/* open file information */</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">files_struct</span> *<span class="title">files</span>;</span></span><br></pre></td></tr></table></figure>
+
+<p>其中<code>fs_struct</code>结构体长这样：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">fs_struct</span> &#123;</span></span><br><span class="line"> <span class="type">atomic_t</span> count;</span><br><span class="line"> <span class="type">rwlock_t</span> lock;</span><br><span class="line"> <span class="type">int</span> umask;</span><br><span class="line"> <span class="class"><span class="keyword">struct</span> <span class="title">dentry</span> * <span class="title">root</span>, * <span class="title">pwd</span>, * <span class="title">altroot</span>;</span></span><br><span class="line"> <span class="class"><span class="keyword">struct</span> <span class="title">vfsmount</span> * <span class="title">rootmnt</span>, * <span class="title">pwdmnt</span>, * <span class="title">altrootmnt</span>;</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>root：根目录的目录项<br>pwd：当前工作目录的目录项<br>altroot：模拟根目录的目录项</p>
+<p>files_struct长这样：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">files_struct</span> &#123;</span></span><br><span class="line"> <span class="type">atomic_t</span> count;</span><br><span class="line"> <span class="class"><span class="keyword">struct</span> <span class="title">fdtable</span> *<span class="title">fdt</span>;</span></span><br><span class="line"> <span class="class"><span class="keyword">struct</span> <span class="title">fdtable</span> <span class="title">fdtab</span>;</span></span><br><span class="line"></span><br><span class="line"> <span class="type">spinlock_t</span> file_lock ____cacheline_aligned_in_smp;</span><br><span class="line"> <span class="type">int</span> next_fd;</span><br><span class="line"> <span class="class"><span class="keyword">struct</span> <span class="title">embedded_fd_set</span> <span class="title">close_on_exec_init</span>;</span></span><br><span class="line"> <span class="class"><span class="keyword">struct</span> <span class="title">embedded_fd_set</span> <span class="title">open_fds_init</span>;</span></span><br><span class="line"> <span class="class"><span class="keyword">struct</span> <span class="title">file</span> * <span class="title">fd_array</span>[<span class="title">NR_OPEN_DEFAULT</span>];</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">fdtable</span> &#123;</span></span><br><span class="line"> <span class="type">unsigned</span> <span class="type">int</span> max_fds;</span><br><span class="line"> <span class="type">int</span> max_fdset;</span><br><span class="line"> <span class="class"><span class="keyword">struct</span> <span class="title">file</span> ** <span class="title">fd</span>;</span>      <span class="comment">/* current fd array */</span></span><br><span class="line"> fd_set *close_on_exec;</span><br><span class="line"> fd_set *open_fds;</span><br><span class="line"> <span class="class"><span class="keyword">struct</span> <span class="title">rcu_head</span> <span class="title">rcu</span>;</span></span><br><span class="line"> <span class="class"><span class="keyword">struct</span> <span class="title">files_struct</span> *<span class="title">free_files</span>;</span></span><br><span class="line"> <span class="class"><span class="keyword">struct</span> <span class="title">fdtable</span> *<span class="title">next</span>;</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="meta">#<span class="keyword">define</span> NR_OPEN_DEFAULT BITS_PER_LONG</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> BITS_PER_LONG 32  <span class="comment">/* asm-i386 */</span></span></span><br></pre></td></tr></table></figure>
+
+<p>而chroot仅改变了fs_struct下的root成员。</p>
+<h3 id="未显性设置工作目录到jail中（ubuntu24不适用）"><a href="#未显性设置工作目录到jail中（ubuntu24不适用）" class="headerlink" title="未显性设置工作目录到jail中（ubuntu24不适用）"></a>未显性设置工作目录到jail中（ubuntu24不适用）</h3><p>从根目录开始展开的文件路径叫绝对路径，那么在jail中绝对路径一定会从<code>/tmp/jail</code>开始，没法逃逸，那么相对路径呢？相对路径是相对于工作目录开始的，然而chroot只改变了进程的根目录，并不会改变工作目录。换句话来说，如果并没有在chroot之后，人为地调用<code>chdir(&quot;/&quot;)</code>，那么我们的工作目录可能依然在jail之外，那么就可以通过相对路径来获取到jail外的文件信息，甚至rce。</p>
+<p>例子：&#x2F;flag需要root权限才能读取，有一个被运行于&#x2F;tmp&#x2F;jail中的低版本busybox（拥有suid权限），工作目录在&#x2F;tmp，那么可以在jail中使用<code>cat ../flag </code>利用程度的suid权限读取到jail外的flag。</p>
+<p>如果工作目录设置了在jail内，那么相对路径无论再怎么穿越目录也只会停留在&#x2F;tmp&#x2F;jail中</p>
+<h3 id="在进程被jail之前有打开且可用的目录fd"><a href="#在进程被jail之前有打开且可用的目录fd" class="headerlink" title="在进程被jail之前有打开且可用的目录fd"></a>在进程被jail之前有打开且可用的目录fd</h3><p>正如一开始所说，chroot只改变了根目录，其他东西一律没有隔离，fd也不例外。假如某个程序在开启chroot之前先行打开了某个jail外的目录，fd为3，那么后续我们可以利用fchdir系统调用来将工作目录跳转到刚刚打开的那个目录。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">chdir</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *path)</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">fchdir</span><span class="params">(<span class="type">int</span> fd)</span>;</span><br></pre></td></tr></table></figure>
+
+<p>同理，如果设置了工作目录在jail内，那么chdir也没办法改变工作目录，但是fd则不受限制。</p>
+<p>如果只是想打开文件，那么也可以考虑使用openat，如果pathname是一个相对路径，那么相对的就是fd对应的目录：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">openat</span><span class="params">(<span class="type">int</span> dirfd, <span class="type">const</span> <span class="type">char</span> *pathname, <span class="type">int</span> flags, <span class="type">mode_t</span> mode)</span>;</span><br><span class="line">openat(<span class="number">3</span>,<span class="string">&quot;flag&quot;</span>,<span class="number">0</span>,<span class="number">0</span>)  <span class="comment">// 记得一定不要加上/</span></span><br></pre></td></tr></table></figure>
+
+<p>如果openat被禁用了，也可以考虑使用linkat，创建指向现有文件的新链接，支持相对路径和绝对路径的处理（假如已打开的目录是&#x2F;，fd为3）：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">linkat</span><span class="params">(<span class="type">int</span> efd, <span class="type">const</span> <span class="type">char</span> *existingpath, <span class="type">int</span> nfd, <span class="type">const</span> <span class="type">char</span> *newpath, <span class="type">int</span> flags)</span>;</span><br><span class="line">linkat(<span class="number">3</span>,<span class="string">&quot;flag&quot;</span>,<span class="number">4</span>,<span class="string">&quot;/flag&quot;</span>,<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+
+<p>这样就可以将原本根目录下的flag链接到<code>/tmp/jail/flag</code>，后续就可以通过&#x2F;flag来打开源文件了</p>
+<h3 id="嵌套chroot逃逸（ubuntu24不适用）"><a href="#嵌套chroot逃逸（ubuntu24不适用）" class="headerlink" title="嵌套chroot逃逸（ubuntu24不适用）"></a>嵌套chroot逃逸（ubuntu24不适用）</h3><p>前面讲到task_struct结构体用来管理进程，如果在jail中可以使用chroot（有这个程序并且有root权限），那么在jail中执行一个新的chroot，就会覆盖掉task_struct结构体原本的root路径，然后不设置工作目录，这样一来，工作目录又存在于jail之外了，又可以利用相对路径来访问jail外的文件了。这是最经典的chroot逃逸方法。</p>
+<h3 id="利用root权限kill进程"><a href="#利用root权限kill进程" class="headerlink" title="利用root权限kill进程"></a>利用root权限kill进程</h3><p>如果chroot没设置权限，默认root权限进入jail的情况下，在jail中使用<code>kill -9 &lt;pid&gt;</code>来强制kill掉chroot进程。当然如果有守护进程或者没有root权限，那这个办法就无效了。ubuntu24下实测有效。</p>
+<p>关于这个方法，网上更多的说法是另开一个shell来kill，但我想不到这个做法的意义，既然能够另外开一个shell在jail外而且有权限kill那为什么还要……</p>
+<h2 id="0x02-namespace"><a href="#0x02-namespace" class="headerlink" title="0x02 namespace"></a>0x02 namespace</h2><p>命名空间是一个较为现代化的内核级别环境隔离的方法，而且提供了较多的隔离选项，包含了对 UTS、IPC、Mount、PID、Network、User 等的隔离机制，不像chroot只能隔离根目录。namespace同时也是容器技术的隔离底层实现。</p>
+<p>在这些隔离选项当中，mount是出现最早、应用最广泛的隔离选项。</p>
+<p>namespace 有三个系统调用可以使用：</p>
+<ul>
+<li><code>clone()</code> — 实现线程的系统调用，用来创建一个新的进程，并可以通过设计上述参数达到隔离。</li>
+<li><code>unshare()</code> — 使某个进程脱离某个 namespace</li>
+<li><code>setns(int fd, int nstype)</code> — 把某进程加入到某个 namespace</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">clone</span><span class="params">(<span class="type">int</span> (*func)(<span class="type">void</span> *), <span class="type">void</span> *child_stack, <span class="type">int</span> flags, <span class="type">void</span> *func_arg, ...)</span>;</span><br><span class="line"><span class="type">int</span> container_id = clone(container_main, container_stack + STACK_SIZE, CLONE_NEWNS | SIGCHLD, <span class="literal">NULL</span>);</span><br></pre></td></tr></table></figure>
+
+<p>如上面所示，表示使用clone从父进程建立一个子进程，并且使用mount隔离，子进程执行container_main这个函数。</p>
+<h3 id="mount隔离下，-bin文件夹可读可写"><a href="#mount隔离下，-bin文件夹可读可写" class="headerlink" title="mount隔离下，&#x2F;bin文件夹可读可写"></a>mount隔离下，&#x2F;bin文件夹可读可写</h3><p>尽管挂载是独立的，但是在子命名空间中对文件的修改是<a target="_blank" rel="noopener" href="https://unix.stackexchange.com/questions/281844/why-does-child-with-mount-namespace-affect-parent-mounts">会影响到父命名空间</a>的（共享挂载的情况下）。那么我们可以通过子进程中的root权限使得&#x2F;bin&#x2F;cat（或者其他命令）获得suid，然后退出后，就可以cat root权限的flag了。</p>
+<h3 id="没有隔离pid的情况下，利用nsenter命令逃逸"><a href="#没有隔离pid的情况下，利用nsenter命令逃逸" class="headerlink" title="没有隔离pid的情况下，利用nsenter命令逃逸"></a>没有隔离pid的情况下，利用nsenter命令逃逸</h3><p><code>nsenter</code>命令允许用户从一个命名空间切换到另一个命名空间，执行命令或启动一个新的shell</p>
+<p>如果没有隔离pid，并且&#x2F;proc被挂在到了子命名空间内，bin文件夹不可写的情况下，可以使用以下语句将用户切换至父命名空间的shell。pid1是众所周知的init进程，所以一定是在最初始的命名空间中的。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nsenter --mount=/proc/1/ns/mnt /bin/bash</span><br><span class="line">cat /flag</span><br></pre></td></tr></table></figure>
+
+<p>但是既然proc也绑定到了子进程中的话，还可以利用&#x2F;proc&#x2F;fd&#x2F;root访问到原本fs中的文件<code>cat /proc/1/root/flag</code>。</p>
+<h3 id="在进程被jail之前有打开且可用的目录fd-1"><a href="#在进程被jail之前有打开且可用的目录fd-1" class="headerlink" title="在进程被jail之前有打开且可用的目录fd"></a>在进程被jail之前有打开且可用的目录fd</h3><p>和chroot同理，利用openat、linkat一类的系统调用可以实现读取jail外的文件</p>
+<h3 id="利用setns系统调用逃逸"><a href="#利用setns系统调用逃逸" class="headerlink" title="利用setns系统调用逃逸"></a>利用setns系统调用逃逸</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">setns</span><span class="params">(<span class="type">int</span> fd, <span class="type">int</span> nstype)</span>;</span><br></pre></td></tr></table></figure>
+
+<p><code>fd</code>：要加入的 namespace 的文件描述符，一般为 <code>/proc/[pid]/ns</code> 下某个对应类型 namespace 的软链接；</p>
+<p><code>nstype</code>：调用进程想要加入的 namesapce 的类型，其类型对应上文的表格中的 7 种 Namespace 类型：</p>
+<ul>
+<li><code>0</code>：允许加入任何类型的 namespace；</li>
+<li><code>CLONE_NEWCGROUP</code>：<code>fd</code> 必须指向一个 cgroup 的 namespace；</li>
+<li><code>CLONE_NEWIPC</code>：<code>fd</code> 必须指向一个 IPC 的 namespace；</li>
+<li><code>CLONE_NEWNET</code>：<code>fd</code> 必须指向一个 network 的 namespace；</li>
+<li><code>CLONE_NEWNS</code>：<code>fd</code> 必须指向一个 mount 的 namespace；</li>
+<li><code>CLONE_NEWPID</code>：<code>fd</code> 必须指向一个 pid 的 namespace；</li>
+<li><code>CLONE_NEWUSER</code>：<code>fd</code> 必须指向一个 user 的 namespace；</li>
+<li><code>CLONE_NEWUTS</code>：<code>fd</code> 必须指向一个 UTS 的 namespace；</li>
+</ul>
+<p>如果能访问到&#x2F;proc&#x2F;[pid]&#x2F;ns文件夹，那么可以先open想要加入的namespace，获得目录的fd，然后<code>setns(3,0)</code>，即可加入到相应的命名空间中实现逃逸。但此时权限依然是子进程的用户权限，如果是root，就可以以此来实现提权。</p>
+
+											<div class="article-footer-copyright">
+
+    本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0
+        国际许可协议(CC BY-NC-SA 4.0) 发布.</a></br>
+    因本人技术水平和知识面有限, 内容如有纰漏或者需要修正的地方, 欢迎大家指正。转载请注明来自<a href="https://c-lby.github.io" target="_blank">C_LBY's blog</a>！
+</div>
+							</div>
+
+							
+									
+										<span data-path="/2025/chroot-ns-escape/">
+											<em class="post-meta-item-text"> Page View <i
+													class="waline-pageview-count"></i></em>
+										</span>
+
+										
+											<div>
+												<center>
+
+													<div class="pagination">
+
+    
+    
+    <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>上一页</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2025/ubuntu-opera-html5/" type="button" class="btn btn-default ">下一页<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+
+												</center>
+											</div>
+
+											<!-- comment -->
+											<!--
+<section id="comment">
+    <h2 class="title">留言</h2>
+
+    
+</section>
+
+-->
+											
+													
+														<section id="comments" class="comments">
+															<!-- <link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css" />
+<div id="waline"></div>
+<script type="module">
+  import { init } from 'https://unpkg.com/@waline/client@v2/dist/waline.mjs';
+  var walineConfig = 
+    walineConfig.el='#waline';
+  Waline.init(walineConfig);
+</script> -->
+
+<link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css" />
+<div id="waline"></div>
+<script type="module">
+  import { init } from 'https://unpkg.com/@waline/client@v2/dist/waline.mjs';
+
+  init({
+    enable: true,
+    el: '#waline',
+    serverURL: 'https://blog-s-comment-three.vercel.app',
+    dark: true,
+    pageview: true,
+    lang: 'zh-CN',
+    requiredMeta: ['nick', 'mail'],
+    locale:
+      { placeholder: 'Say something……' },
+    highlighter: true,
+    search: false,
+    emoji: [
+      '//unpkg.com/@waline/emojis@1.2.0/weibo',
+      '//unpkg.com/@waline/emojis@1.2.0/bmoji',
+      '//unpkg.com/@waline/emojis@1.2.0/bilibili',
+      'https://unpkg.com/@waline/emojis@1.2.0/qq',
+    ],
+    imageUploader: false,
+  });
+</script>
+														</section>
+														
+															
+					</div> <!-- col-md-9/col-md-12 -->
+
+
+					
+						<div id="side_meta">
+							<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2025-05-09 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/逃逸/">逃逸<span>1</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/chroot/">chroot<span>1</span></a></li> <li><a href="/tags/namespace/">namespace<span>1</span></a></li> <li><a href="/tags/逃逸/">逃逸<span>1</span></a></li>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+		   <span class="toc-title">Contents</span>
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x00-%E5%8F%82%E8%80%83%E6%96%87%E7%AB%A0%EF%BC%88%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86%EF%BC%89"><span class="toc-article-text">0x00 参考文章（前置知识）</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x01-chroot"><span class="toc-article-text">0x01 chroot</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%8A%9F%E8%83%BD%E7%AE%80%E8%BF%B0"><span class="toc-article-text">功能简述</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E4%BB%8E%E5%86%85%E6%A0%B8%E8%A7%86%E8%A7%92%E7%9C%8Bchroot"><span class="toc-article-text">从内核视角看chroot</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E6%9C%AA%E6%98%BE%E6%80%A7%E8%AE%BE%E7%BD%AE%E5%B7%A5%E4%BD%9C%E7%9B%AE%E5%BD%95%E5%88%B0jail%E4%B8%AD%EF%BC%88ubuntu24%E4%B8%8D%E9%80%82%E7%94%A8%EF%BC%89"><span class="toc-article-text">未显性设置工作目录到jail中（ubuntu24不适用）</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%9C%A8%E8%BF%9B%E7%A8%8B%E8%A2%ABjail%E4%B9%8B%E5%89%8D%E6%9C%89%E6%89%93%E5%BC%80%E4%B8%94%E5%8F%AF%E7%94%A8%E7%9A%84%E7%9B%AE%E5%BD%95fd"><span class="toc-article-text">在进程被jail之前有打开且可用的目录fd</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%B5%8C%E5%A5%97chroot%E9%80%83%E9%80%B8%EF%BC%88ubuntu24%E4%B8%8D%E9%80%82%E7%94%A8%EF%BC%89"><span class="toc-article-text">嵌套chroot逃逸（ubuntu24不适用）</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%88%A9%E7%94%A8root%E6%9D%83%E9%99%90kill%E8%BF%9B%E7%A8%8B"><span class="toc-article-text">利用root权限kill进程</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#0x02-namespace"><span class="toc-article-text">0x02 namespace</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#mount%E9%9A%94%E7%A6%BB%E4%B8%8B%EF%BC%8C-bin%E6%96%87%E4%BB%B6%E5%A4%B9%E5%8F%AF%E8%AF%BB%E5%8F%AF%E5%86%99"><span class="toc-article-text">mount隔离下，&#x2F;bin文件夹可读可写</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E6%B2%A1%E6%9C%89%E9%9A%94%E7%A6%BBpid%E7%9A%84%E6%83%85%E5%86%B5%E4%B8%8B%EF%BC%8C%E5%88%A9%E7%94%A8nsenter%E5%91%BD%E4%BB%A4%E9%80%83%E9%80%B8"><span class="toc-article-text">没有隔离pid的情况下，利用nsenter命令逃逸</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%9C%A8%E8%BF%9B%E7%A8%8B%E8%A2%ABjail%E4%B9%8B%E5%89%8D%E6%9C%89%E6%89%93%E5%BC%80%E4%B8%94%E5%8F%AF%E7%94%A8%E7%9A%84%E7%9B%AE%E5%BD%95fd-1"><span class="toc-article-text">在进程被jail之前有打开且可用的目录fd</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%88%A9%E7%94%A8setns%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E9%80%83%E9%80%B8"><span class="toc-article-text">利用setns系统调用逃逸</span></a></li></ol></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+
+
+						</div>
+
+						
+
+			</div><!-- row -->
+
+			<!--
+ -->
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+    &copy; 2025
+      鎏柏鱼's Blog
+        
+                powered by <a href="http://hexo.io/" target="_blank">Hexo</a> | Theme by <a
+                  href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>

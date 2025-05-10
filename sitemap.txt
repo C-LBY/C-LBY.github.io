@@ -1,3 +1,5 @@
+https://c-lby.top/2024/2024xsctf-QQbot-wp/
+https://c-lby.top/2025/chroot-ns-escape/
 https://c-lby.top/2025/ubuntu-opera-html5/
 https://c-lby.top/2025/2025vnctf-hexagon/
 https://c-lby.top/2024/2024geekctf-stkbof/
@@ -76,6 +78,9 @@ https://c-lby.top/tags/ROP/
 https://c-lby.top/tags/hexagon/
 https://c-lby.top/tags/ubuntu/
 https://c-lby.top/tags/linux/
+https://c-lby.top/tags/chroot/
+https://c-lby.top/tags/namespace/
+https://c-lby.top/tags/%E9%80%83%E9%80%B8/
 https://c-lby.top/categories/glibc%E6%BA%90%E7%A0%81%E8%A1%A5%E5%AE%8C%E8%AE%A1%E5%88%92/
 https://c-lby.top/categories/diary/
 https://c-lby.top/categories/WP/
@@ -91,3 +96,4 @@ https://c-lby.top/categories/ret2-libc-start-main/
 https://c-lby.top/categories/protobuf/
 https://c-lby.top/categories/hexagon/
 https://c-lby.top/categories/Linux/
+https://c-lby.top/categories/%E9%80%83%E9%80%B8/

