@@ -1,0 +1,383 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  <meta name="baidu-site-verification" content="codeva-0Qx7wvY9gP" />
+  <meta name="msvalidate.01" content="FB02A8AFF2CE6EF90657A5C51EA59F68" />
+  
+  <title>v8漏洞利用初探之环境搭建 | C_LBY&#39;s BLOG</title>
+  <meta name="author" content="鎏柏鱼">
+  
+  <meta name="description" content="V8，真男人开V8！">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="v8漏洞利用初探之环境搭建"/>
+  <meta property="og:site_name" content="C_LBY&#39;s BLOG"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+    <link rel="alternative" href="/atom.xml" title="C_LBY&#39;s BLOG" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">C_LBY&#39;s BLOG</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/diary" title="fashion little junk">
+			  <i class="fa fa-tasks"></i>Diary
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class="fa fa-rss"></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> v8漏洞利用初探之环境搭建</h1>
+		</div>
+	
+
+
+
+	<div class="row post">
+		<!-- cols -->
+		
+			<div id="top_meta"></div>
+			<div class="col-md-9">
+				
+
+							<!-- content -->
+							<div class="mypage">
+								
+									<div class="alert alert-success description">
+										<i class="fa fa-info-circle"></i> V8，真男人开V8！
+									</div> <!-- alert -->
+									
+
+										<h1 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h1><p><strong>测试环境</strong>：ubuntu 24.04.2 | Dell Inspiron 3501 | i5-1135G7（对的，是物理机，后面编译时间仅供参考）</p>
+<h2 id="依赖安装"><a href="#依赖安装" class="headerlink" title="依赖安装"></a>依赖安装</h2><p><strong>大前提：科学上网！！！如果你用的是<strong><strong>虚拟机</strong></strong>或者wsl环境，请确保你能正常访问谷歌和<strong><strong>github</strong></strong>。另外确保正确安装了make。</strong></p>
+<p>先装一些基础依赖，但是这里大部分都是正常做题环境已经装了的</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install bison cdbs curl flex g++ git vim pkg-config</span><br></pre></td></tr></table></figure>
+
+<p>后续大概率（因为试过编译没用到的情况，但是不知道怎么触发）需要用到python2，因为我用的是ubuntu24已经不支持软件管理包下载python2了，这里记录一下从源码编译。这个编译很快就可以完成，大概也就一两分钟。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">下载源码压缩包</span></span><br><span class="line">wget https://www.python.org/ftp/python/2.7.18/Python-2.7.18.tar.xz</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">解压</span></span><br><span class="line">tar -xJf Python-2.7.18.tar.xz</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">切入源码目录</span></span><br><span class="line">cd Python-2.7.18</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">设置编译选项并写入 Makefile</span></span><br><span class="line">./configure</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">编译</span></span><br><span class="line">make</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装</span></span><br><span class="line">sudo make install</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">测试，正常来说python可以直接启动python2, 但python3需要写上3</span></span><br><span class="line">python --version</span><br></pre></td></tr></table></figure>
+
+<h2 id="安装depot-tools"><a href="#安装depot-tools" class="headerlink" title="安装depot_tools"></a>安装depot_tools</h2><p>先找好存放这些工具的目录，然后👇</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git</span><br><span class="line"></span><br><span class="line">echo &quot;export PATH=$(pwd)/depot_tools:$&#123;PATH&#125;&quot; &gt;&gt; ~/.bashrc</span><br></pre></td></tr></table></figure>
+
+<p>后面这个bashrc取决于你的shell是什么，如果你是zsh，那就是zshrc。然后重启shell来使环境变量生效，后续部分命令会来自于这个文件夹。</p>
+<h2 id="安装ninja"><a href="#安装ninja" class="headerlink" title="安装ninja"></a>安装ninja</h2><p>ninja可以加速大型项目编译</p>
+<p>先找好要安装ninja的位置，这个的安装也是很快就能完成</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/ninja-build/ninja.git</span><br><span class="line">cd ninja &amp;&amp; ./configure.py --bootstrap &amp;&amp; cd ..</span><br><span class="line">echo &quot;export PATH=$(pwd)/ninja:$&#123;PATH&#125;&quot; &gt;&gt; ~/.bashrc</span><br></pre></td></tr></table></figure>
+
+<p>然后重启shell来使环境变量生效，后续部分命令会来自于这个文件夹。注意上面的两次重启需要分别进行，不然……不然你看看你的bashrc呢（doge</p>
+<h2 id="获取v8源码"><a href="#获取v8源码" class="headerlink" title="获取v8源码"></a>获取v8源码</h2><p>官方文档推荐用tools里的fetch来下载源码，而非简单地从github上拉取，实际上两个我都试过了，但是fetch虽然上网的问题比较麻烦，但是后续编译起来是发生问题最少的。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fetch v8</span><br></pre></td></tr></table></figure>
+
+<p>这个fetch是来自于depot_tools的，当你环境变量不生效，告诉你fetch不存在时，千万别用snap安装，那个是不一样的。你可以从depot_tools文件夹手动引用这个程序来执行。fetch v8需要一点时间，下载下来的文件大概有两个G，所以请确保<strong>科学上网。</strong></p>
+<p>一些tips：</p>
+<ol>
+<li>fetch这个程序不会告诉你进度，所以到底有没有在下载东西是看不到的，他的超时时间很长所以当你看到他告诉你连接失败的时候会有点红温。解决办法是，将depot_tools文件夹下的cipd_bin_setup.sh文件第26行<code>-log-level</code>参数改成info，这样就能看到实时进度，看看有没有卡住。</li>
+<li>如果发现明明挂了代理，但是还是连接失败的，可以试试先在浏览器或者ping一下<code>https://chromium.googlesource.com/v8/v8.git</code>，估计是会有缓存啥的，如果浏览器里能正常打开的话，再fetch就能联通了，真神奇。</li>
+</ol>
+<h2 id="编译d8"><a href="#编译d8" class="headerlink" title="编译d8"></a>编译d8</h2><p>终于到了激动人心的编译环节，v8编译出来的可执行文件叫d8，其实是用来调试v8的文件，也就是debug for v8（我的理解），我们要调试和pwn的东西也就是这个d8。</p>
+<h3 id="编译最新版d8"><a href="#编译最新版d8" class="headerlink" title="编译最新版d8"></a>编译最新版d8</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">cd</span> v8</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">同步并安装一些依赖</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">gclient <span class="built_in">sync</span></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">jinja编译文件生成</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">gn gen out/x64.release --args=<span class="string">&#x27;v8_monolithic=true v8_use_external_startup_data=false is_component_build=false is_debug=false target_cpu=&quot;x64&quot; use_goma=false goma_dir=&quot;None&quot; v8_enable_backtrace=true v8_enable_disassembler=true v8_enable_object_print=true v8_enable_verify_heap=true&#x27;</span></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">编译</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">ninja -C out/x64.release</span></span><br></pre></td></tr></table></figure>
+
+<p>gclient是来自depot_tools文件夹的，gn和ninja来自ninja文件夹。</p>
+<p><code>v8_monolithic=true</code>这一句允许d8文件单独迁移。</p>
+<p>d8会生成在<code>&#123;pwd&#125;/out/x64.release</code>中</p>
+<p>这里也有一些tips：</p>
+<ol>
+<li>可以打开System Monitor，在运行gclient的时候看看网络有没有动，如果没动，回显也卡住了的话，大概率是网络寄了。</li>
+<li>如果已经不是第一次编译了，运行的环境已经安装好了的话，可以考虑只编译d8这一个文件，使用这行命令<code>ninja -C out/x64.release d8</code>。全部编译需要编译2300+文件，耗时20多分钟，只编译d8则需要编译1200+文件，耗时不到十分钟。</li>
+</ol>
+<h3 id="编译题目patch后的d8"><a href="#编译题目patch后的d8" class="headerlink" title="编译题目patch后的d8"></a>编译题目patch后的d8</h3><p>用starctf2019那题oob做例子</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">git <span class="built_in">clone</span> https://github.com/sixstars/starctf2019.git</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">cd</span> v8</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">git reset --hard 6dc88c191f5ecc5389dc26efa3ca0907faef3598</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">git apply ../starctf2019/pwn-OOB/oob.diff</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">gclient <span class="built_in">sync</span></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">gn gen out/x64_starctf.release --args=<span class="string">&#x27;v8_monolithic=true v8_use_external_startup_data=false is_component_build=false is_debug=false target_cpu=&quot;x64&quot; use_goma=false goma_dir=&quot;None&quot; v8_enable_backtrace=true v8_enable_disassembler=true v8_enable_object_print=true v8_enable_verify_heap=true&#x27;</span></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">ninja -C out/x64_starctf.release d8</span></span><br></pre></td></tr></table></figure>
+
+<p>主要是reset控制源码版本，apply加入出题人的人造漏洞。其他步骤相同。</p>
+<h2 id="gdb载入v8调试脚本"><a href="#gdb载入v8调试脚本" class="headerlink" title="gdb载入v8调试脚本"></a>gdb载入v8调试脚本</h2><p>先下载这个文件<a target="_blank" rel="noopener" href="https://chromium.googlesource.com/v8/v8.git/+/refs/heads/main/tools/gdb-v8-support.py">https://chromium.googlesource.com/v8/v8.git/+/refs/heads/main/tools/gdb-v8-support.py</a></p>
+<p>然后下载这个文件<a target="_blank" rel="noopener" href="https://chromium.googlesource.com/v8/v8.git/+/refs/heads/main/tools/gdbinit">https://chromium.googlesource.com/v8/v8.git/+/refs/heads/main/tools/gdbinit</a></p>
+<p>在你的<code>~/.gdbinit</code>开头中加入<code>source /path/to/your/gdb-v8-support.py</code></p>
+<p>然后将下载下来的gdbinit的内容加入到你的gdbinit文件的后面。这样在pwndbg中就可以用官方的调试命令来调试v8了。</p>
+<p>然后就开始开心地调试v8吧</p>
+
+											<div class="article-footer-copyright">
+
+    本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0
+        国际许可协议(CC BY-NC-SA 4.0) 发布.</a></br>
+    因本人技术水平和知识面有限, 内容如有纰漏或者需要修正的地方, 欢迎大家指正。转载请注明来自<a href="https://c-lby.github.io" target="_blank">C_LBY's blog</a>！
+</div>
+							</div>
+
+							
+									
+										<span data-path="/2025/v8-first-try/">
+											<em class="post-meta-item-text"> Page View <i
+													class="waline-pageview-count"></i></em>
+										</span>
+
+										
+											<div>
+												<center>
+
+													<div class="pagination">
+
+    
+    
+    <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>上一页</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2025/chroot-ns-escape/" type="button" class="btn btn-default ">下一页<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+
+												</center>
+											</div>
+
+											<!-- comment -->
+											<!--
+<section id="comment">
+    <h2 class="title">留言</h2>
+
+    
+</section>
+
+-->
+											
+													
+														<section id="comments" class="comments">
+															<!-- <link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css" />
+<div id="waline"></div>
+<script type="module">
+  import { init } from 'https://unpkg.com/@waline/client@v2/dist/waline.mjs';
+  var walineConfig = 
+    walineConfig.el='#waline';
+  Waline.init(walineConfig);
+</script> -->
+
+<link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css" />
+<div id="waline"></div>
+<script type="module">
+  import { init } from 'https://unpkg.com/@waline/client@v2/dist/waline.mjs';
+
+  init({
+    enable: true,
+    el: '#waline',
+    serverURL: 'https://blog-s-comment-three.vercel.app',
+    dark: true,
+    pageview: true,
+    lang: 'zh-CN',
+    requiredMeta: ['nick', 'mail'],
+    locale:
+      { placeholder: 'Say something……' },
+    highlighter: true,
+    search: false,
+    emoji: [
+      '//unpkg.com/@waline/emojis@1.2.0/weibo',
+      '//unpkg.com/@waline/emojis@1.2.0/bmoji',
+      '//unpkg.com/@waline/emojis@1.2.0/bilibili',
+      'https://unpkg.com/@waline/emojis@1.2.0/qq',
+    ],
+    imageUploader: false,
+  });
+</script>
+														</section>
+														
+															
+					</div> <!-- col-md-9/col-md-12 -->
+
+
+					
+						<div id="side_meta">
+							<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2025-05-20 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/V8/">V8<span>1</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/CTF/">CTF<span>27</span></a></li> <li><a href="/tags/PWN/">PWN<span>31</span></a></li> <li><a href="/tags/WP/">WP<span>20</span></a></li> <li><a href="/tags/v8/">v8<span>1</span></a></li>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+		   <span class="toc-title">Contents</span>
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA"><span class="toc-article-text">环境搭建</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%BE%9D%E8%B5%96%E5%AE%89%E8%A3%85"><span class="toc-article-text">依赖安装</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%AE%89%E8%A3%85depot-tools"><span class="toc-article-text">安装depot_tools</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%AE%89%E8%A3%85ninja"><span class="toc-article-text">安装ninja</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E8%8E%B7%E5%8F%96v8%E6%BA%90%E7%A0%81"><span class="toc-article-text">获取v8源码</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E7%BC%96%E8%AF%91d8"><span class="toc-article-text">编译d8</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E7%BC%96%E8%AF%91%E6%9C%80%E6%96%B0%E7%89%88d8"><span class="toc-article-text">编译最新版d8</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E7%BC%96%E8%AF%91%E9%A2%98%E7%9B%AEpatch%E5%90%8E%E7%9A%84d8"><span class="toc-article-text">编译题目patch后的d8</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#gdb%E8%BD%BD%E5%85%A5v8%E8%B0%83%E8%AF%95%E8%84%9A%E6%9C%AC"><span class="toc-article-text">gdb载入v8调试脚本</span></a></li></ol></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+
+
+						</div>
+
+						
+
+			</div><!-- row -->
+
+			<!--
+ -->
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+    &copy; 2025
+      鎏柏鱼's Blog
+        
+                powered by <a href="http://hexo.io/" target="_blank">Hexo</a> | Theme by <a
+                  href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>

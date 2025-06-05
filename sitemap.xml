@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://c-lby.top/2025/v8-first-try/</loc>
+    
+    <lastmod>2025-06-05</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://c-lby.top/2024/2024xsctf-QQbot-wp/</loc>
     
     <lastmod>2025-05-10</lastmod>
@@ -517,7 +526,7 @@
 
   <url>
     <loc>https://c-lby.top/</loc>
-    <lastmod>2025-05-10</lastmod>
+    <lastmod>2025-06-05</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -525,175 +534,182 @@
   
   <url>
     <loc>https://c-lby.top/tags/CTF/</loc>
-    <lastmod>2025-05-10</lastmod>
+    <lastmod>2025-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/tags/PWN/</loc>
-    <lastmod>2025-05-10</lastmod>
+    <lastmod>2025-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/tags/heap/</loc>
-    <lastmod>2025-05-10</lastmod>
+    <lastmod>2025-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/tags/diary/</loc>
-    <lastmod>2025-05-10</lastmod>
+    <lastmod>2025-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/tags/WP/</loc>
-    <lastmod>2025-05-10</lastmod>
+    <lastmod>2025-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/tags/%E5%9B%BE%E7%81%B5%E5%AE%8C%E5%A4%87/</loc>
-    <lastmod>2025-05-10</lastmod>
+    <lastmod>2025-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/tags/%E8%AE%A1%E7%BB%84/</loc>
-    <lastmod>2025-05-10</lastmod>
+    <lastmod>2025-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/tags/protobuf/</loc>
-    <lastmod>2025-05-10</lastmod>
+    <lastmod>2025-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/tags/cpp%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E6%9C%BA%E5%88%B6/</loc>
-    <lastmod>2025-05-10</lastmod>
+    <lastmod>2025-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/tags/BUU/</loc>
-    <lastmod>2025-05-10</lastmod>
+    <lastmod>2025-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/tags/exit-hook/</loc>
-    <lastmod>2025-05-10</lastmod>
+    <lastmod>2025-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/tags/IO-FILE/</loc>
-    <lastmod>2025-05-10</lastmod>
+    <lastmod>2025-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/tags/docker/</loc>
-    <lastmod>2025-05-10</lastmod>
+    <lastmod>2025-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/tags/llvm/</loc>
-    <lastmod>2025-05-10</lastmod>
+    <lastmod>2025-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/tags/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/</loc>
-    <lastmod>2025-05-10</lastmod>
+    <lastmod>2025-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/tags/libc-got/</loc>
-    <lastmod>2025-05-10</lastmod>
+    <lastmod>2025-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/tags/magic-gadget/</loc>
-    <lastmod>2025-05-10</lastmod>
+    <lastmod>2025-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/tags/ret2dlresolve/</loc>
-    <lastmod>2025-05-10</lastmod>
+    <lastmod>2025-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/tags/ROP/</loc>
-    <lastmod>2025-05-10</lastmod>
+    <lastmod>2025-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/tags/hexagon/</loc>
-    <lastmod>2025-05-10</lastmod>
+    <lastmod>2025-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/tags/ubuntu/</loc>
-    <lastmod>2025-05-10</lastmod>
+    <lastmod>2025-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/tags/linux/</loc>
-    <lastmod>2025-05-10</lastmod>
+    <lastmod>2025-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/tags/chroot/</loc>
-    <lastmod>2025-05-10</lastmod>
+    <lastmod>2025-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/tags/namespace/</loc>
-    <lastmod>2025-05-10</lastmod>
+    <lastmod>2025-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/tags/%E9%80%83%E9%80%B8/</loc>
-    <lastmod>2025-05-10</lastmod>
+    <lastmod>2025-06-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://c-lby.top/tags/v8/</loc>
+    <lastmod>2025-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
@@ -702,112 +718,119 @@
   
   <url>
     <loc>https://c-lby.top/categories/glibc%E6%BA%90%E7%A0%81%E8%A1%A5%E5%AE%8C%E8%AE%A1%E5%88%92/</loc>
-    <lastmod>2025-05-10</lastmod>
+    <lastmod>2025-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/categories/diary/</loc>
-    <lastmod>2025-05-10</lastmod>
+    <lastmod>2025-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/categories/WP/</loc>
-    <lastmod>2025-05-10</lastmod>
+    <lastmod>2025-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/categories/%E5%9B%BE%E7%81%B5%E5%AE%8C%E5%A4%87/</loc>
-    <lastmod>2025-05-10</lastmod>
+    <lastmod>2025-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/categories/cpp%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E6%9C%BA%E5%88%B6/</loc>
-    <lastmod>2025-05-10</lastmod>
+    <lastmod>2025-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/categories/docker/</loc>
-    <lastmod>2025-05-10</lastmod>
+    <lastmod>2025-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/categories/llvm-pass/</loc>
-    <lastmod>2025-05-10</lastmod>
+    <lastmod>2025-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/categories/hijack-libc-got/</loc>
-    <lastmod>2025-05-10</lastmod>
+    <lastmod>2025-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/categories/Heap-Exploitation/</loc>
-    <lastmod>2025-05-10</lastmod>
+    <lastmod>2025-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/categories/magic-gadget/</loc>
-    <lastmod>2025-05-10</lastmod>
+    <lastmod>2025-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/categories/ret2dlresolve/</loc>
-    <lastmod>2025-05-10</lastmod>
+    <lastmod>2025-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/categories/ret2-libc-start-main/</loc>
-    <lastmod>2025-05-10</lastmod>
+    <lastmod>2025-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/categories/protobuf/</loc>
-    <lastmod>2025-05-10</lastmod>
+    <lastmod>2025-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/categories/hexagon/</loc>
-    <lastmod>2025-05-10</lastmod>
+    <lastmod>2025-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/categories/Linux/</loc>
-    <lastmod>2025-05-10</lastmod>
+    <lastmod>2025-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://c-lby.top/categories/%E9%80%83%E9%80%B8/</loc>
-    <lastmod>2025-05-10</lastmod>
+    <lastmod>2025-06-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://c-lby.top/categories/V8/</loc>
+    <lastmod>2025-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>

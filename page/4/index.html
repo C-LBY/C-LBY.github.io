@@ -134,6 +134,35 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2024/exit-hook-first-try/" title="从这道题学习exit hook的一种打法和查找偏移的方法">『2024sdpctf(山警校赛)』magic_write</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2024-05-12  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h3 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> __fastcall <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">const</span> <span class="type">char</span> **argv, <span class="type">const</span> <span class="type">char</span> **envp)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">int</span> v4; <span class="comment">// [rsp+1Ch] [rbp-24h] BYREF</span></span><br><span class="line">  <span class="type">char</span> buf[<span class="number">20</span>]; <span class="comment">// [rsp+20h] [rbp-20h] BYREF</span></span><br><span class="line">  <span class="type">unsigned</span> <span class="type">int</span> v6; <span class="comment">// [rsp+34h] [rbp-Ch]</span></span><br><span class="line">  <span class="type">unsigned</span> <span class="type">int</span> v7; <span class="comment">// [rsp+38h] [rbp-8h]</span></span><br><span class="line">  <span class="type">unsigned</span> <span class="type">int</span> seed; <span class="comment">// [rsp+3Ch] [rbp-4h]</span></span><br><span class="line"></span><br><span class="line">  myinit(argc, argv, envp);</span><br><span class="line">  <span class="built_in">puts</span>(<span class="string">&quot;please enter this challenge&quot;</span>);</span><br><span class="line">  __isoc99_scanf(<span class="string">&quot;%d&quot;</span>, &amp;v4);</span><br><span class="line">  seed = time(<span class="number">0LL</span>);</span><br><span class="line">  srand(seed);</span><br><span class="line">  v7 = rand();</span><br><span class="line">  v6 = v7 % <span class="number">0x6E</span>;</span><br><span class="line">  <span class="keyword">if</span> ( v7 % <span class="number">0x6E</span> == v4 )</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">&quot;Give you a gift&quot;</span>);</span><br><span class="line">    gift();</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">&quot;Do you know any address to write&quot;</span>);</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">&quot;Come and try it out&quot;</span>);</span><br><span class="line">    read(<span class="number">0</span>, buf, <span class="number">0x2E</span>uLL);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>main函数开头要我们绕过一个随机数检查才有输入点。gift函数会打印puts函数的libc地址，libc地址不请自来。接着read函数溢出14个字节，只能覆盖六个字节到ret地址，所以想要在这里写one gadget是不可能的了，因为libc地址占七个字节。</p>
+	
+	</div>
+  <a type="button" href="/2024/exit-hook-first-try/#more" class="btn btn-default more">阅读此文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2024/2024xyctf-pwn-wp/" title="让新生重获新生的新生赛">『XYCTF2024』 PWN WP</a>
 		</h3>
 		</div>
@@ -402,6 +431,8 @@
 		
 			<li><a href="/categories/Linux/">Linux<span>1</span></a></li>
 		
+			<li><a href="/categories/V8/">V8<span>1</span></a></li>
+		
 			<li><a href="/categories/WP/">WP<span>15</span></a></li>
 		
 			<li><a href="/categories/cpp异常处理机制/">cpp异常处理机制<span>1</span></a></li>
@@ -439,48 +470,48 @@
 		<h4>标签云</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/图灵完备/">图灵完备<span>4</span></a></li>
-		
-			<li><a href="/tags/magic-gadget/">magic_gadget<span>1</span></a></li>
-		
-			<li><a href="/tags/llvm/">llvm<span>2</span></a></li>
-		
-			<li><a href="/tags/heap/">heap<span>6</span></a></li>
-		
-			<li><a href="/tags/ROP/">ROP<span>2</span></a></li>
-		
-			<li><a href="/tags/编译原理/">编译原理<span>1</span></a></li>
-		
-			<li><a href="/tags/WP/">WP<span>19</span></a></li>
-		
-			<li><a href="/tags/cpp异常处理机制/">cpp异常处理机制<span>1</span></a></li>
-		
-			<li><a href="/tags/ubuntu/">ubuntu<span>1</span></a></li>
-		
-			<li><a href="/tags/PWN/">PWN<span>30</span></a></li>
-		
-			<li><a href="/tags/namespace/">namespace<span>1</span></a></li>
-		
-			<li><a href="/tags/chroot/">chroot<span>1</span></a></li>
-		
-			<li><a href="/tags/ret2dlresolve/">ret2dlresolve<span>1</span></a></li>
-		
-			<li><a href="/tags/CTF/">CTF<span>26</span></a></li>
-		
-			<li><a href="/tags/hexagon/">hexagon<span>3</span></a></li>
-		
-			<li><a href="/tags/linux/">linux<span>1</span></a></li>
+			<li><a href="/tags/diary/">diary<span>14</span></a></li>
 		
 			<li><a href="/tags/逃逸/">逃逸<span>1</span></a></li>
 		
-			<li><a href="/tags/docker/">docker<span>1</span></a></li>
+			<li><a href="/tags/WP/">WP<span>20</span></a></li>
 		
-			<li><a href="/tags/BUU/">BUU<span>1</span></a></li>
+			<li><a href="/tags/heap/">heap<span>6</span></a></li>
+		
+			<li><a href="/tags/v8/">v8<span>1</span></a></li>
+		
+			<li><a href="/tags/IO-FILE/">IO_FILE<span>2</span></a></li>
 		
 			<li><a href="/tags/protobuf/">protobuf<span>2</span></a></li>
 		
+			<li><a href="/tags/llvm/">llvm<span>2</span></a></li>
 		
-		   <li><a href="/tags">...<span>25</span></a></li>
+			<li><a href="/tags/计组/">计组<span>4</span></a></li>
+		
+			<li><a href="/tags/CTF/">CTF<span>27</span></a></li>
+		
+			<li><a href="/tags/PWN/">PWN<span>31</span></a></li>
+		
+			<li><a href="/tags/magic-gadget/">magic_gadget<span>1</span></a></li>
+		
+			<li><a href="/tags/chroot/">chroot<span>1</span></a></li>
+		
+			<li><a href="/tags/图灵完备/">图灵完备<span>4</span></a></li>
+		
+			<li><a href="/tags/cpp异常处理机制/">cpp异常处理机制<span>1</span></a></li>
+		
+			<li><a href="/tags/ret2dlresolve/">ret2dlresolve<span>1</span></a></li>
+		
+			<li><a href="/tags/ubuntu/">ubuntu<span>1</span></a></li>
+		
+			<li><a href="/tags/docker/">docker<span>1</span></a></li>
+		
+			<li><a href="/tags/linux/">linux<span>1</span></a></li>
+		
+			<li><a href="/tags/exit-hook/">exit_hook<span>2</span></a></li>
+		
+		
+		   <li><a href="/tags">...<span>26</span></a></li>
 		 
 		</ul>
 	</div>
@@ -491,6 +522,10 @@
 <div class="widget">
   <h4>最新文章</h4>
   <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2025/v8-first-try/"  title="V8，真男人开V8！" ><i class="fa fa-file-o"></i>v8漏洞利用初探之环境搭建</a>
+      </li>
     
       <li>
         <a href="/2025/chroot-ns-escape/"  title="https://pwn.college/system-security/sandboxing/  并不一定适用于所有发行版，有些发行版可能已经修复这些漏洞了（实测ubuntu24已经修复chroot工作目录的漏洞了，但是fd漏洞可以用；ubuntu20都可以用）" ><i class="fa fa-file-o"></i>chroot&amp;namespace逃逸总结</a>
@@ -506,10 +541,6 @@
     
       <li>
         <a href="/2024/hexagon-toolchain-env/"  title="波折的，hexagon架构LLVM编译环境搭建" ><i class="fa fa-file-o"></i>hexagon LLVM编译环境搭建</a>
-      </li>
-    
-      <li>
-        <a href="/2024/2024geekctf-stkbof/"  title="非常好架构，使我的IDA旋转" ><i class="fa fa-file-o"></i>『2024GeekCTF』stkbof-初识hexag...</a>
       </li>
     
   </ul>
